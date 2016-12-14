@@ -705,6 +705,7 @@ object DashBoardCSS {
     val postResultDescriptionMargin=style(
       marginTop(20.px)
     )
+
   }
 
 }

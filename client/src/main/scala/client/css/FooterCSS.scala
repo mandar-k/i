@@ -9,10 +9,10 @@ object FooterCSS {
       backgroundColor.transparent,
       minHeight(52.px),
       media.maxWidth(375.px)-
-      display.none
+        display.none
 
-    // paddingLeft(7.%%),
-    // paddingRight(7.%%)
+      // paddingLeft(7.%%),
+      // paddingRight(7.%%)
     )
     val footerNavA = style(
       color(c"#FFF"),

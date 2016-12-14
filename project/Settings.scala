@@ -37,7 +37,7 @@ object Settings {
     "com.vmunier" %% "scalajs-scripts" % Versions.scalajsScripts,
     "org.webjars" % "font-awesome" % Versions.fontAwesome % Provided,
     "org.webjars" % "bootstrap" % Versions.bootstrap % Provided,
-    "org.json4s" %% "json4s-jackson" % Versions.json4s
+    "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
   ))
 
   /** Dependencies only used by the JS project (note the use of %%% instead of %%) */

@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                                 controllers.Application.index
+GET     /                                 controllers.Main.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/fonts/glyphicons-halflings-regular.ttf             controllers.Assets.at(path="/public",file="/lib/bootstrap/fonts/glyphicons-halflings-regular.ttf")
@@ -14,8 +14,6 @@ GET     /assets/fonts/fontawesome-webfont.woff                     controllers.A
 GET     /assets/fonts/fontawesome-webfont.woff2                    controllers.Assets.at(path="/public", file= "/lib/font-awesome/fonts/fontawesome-webfont.woff2")
 GET     /assets/*file                                              controllers.Assets.versioned(path="/public", file: Asset)
 
-# Autowire calls
-POST    /api/*path                                                 controllers.Application.autowireApi(path: String)
 
 # Logging
-POST /logging                                                      controllers.Application.logging
+POST /logging                                                      controllers.Main.logging
