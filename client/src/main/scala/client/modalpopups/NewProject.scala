@@ -20,9 +20,11 @@ import org.querki.jquery._
 import shared.models.{ProjectPostContent, ProjectsPost}
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils}
 import diode.AnyAction._
+import org.querki.facades.bootstrap.datepicker._
+
+import scala.scalajs.js
 
 object NewProject {
-
 
 
   @inline private def bss = GlobalStyles.bootstrapStyles
@@ -39,15 +41,16 @@ object NewProject {
       t.modState(s => s.copy(showNewProjectForm = true))
     }
 
-    /*def addProjectForm(): Callback = {
+    def addProjectForm(): Callback = {
+      t.modState(s => s.copy(showNewProjectForm = false))
+    }
+    def addNewProjectForm(/*postProject: Boolean*/): Callback = {
       t.modState(s => s.copy(showNewProjectForm = true))
-    }*/
-    def addNewProjectForm(postProject: Boolean): Callback = {
-      if (postProject) {
-        t.modState(s => s.copy(showNewProjectForm = false))
-      } else {
-        t.modState(s => s.copy(showNewProjectForm = true))
-      }
+//      if (postProject) {
+//        t.modState(s => s.copy(showNewProjectForm = false))
+//      } else {
+//        t.modState(s => s.copy(showNewProjectForm = true))
+//      }
     }
   }
 
@@ -57,8 +60,8 @@ object NewProject {
     .renderPS(($, P, S) => {
       val B = $.backend
       <.div(/*ProjectCSS.Style.displayInitialbtn*/)(
-        Button(Button.Props(B.addNewProjectForm(false), CommonStyle.default, P.addStyles, P.addIcons, P.title, className = "profile-action-buttons"), P.buttonName),
-        if (S.showNewProjectForm) NewProjectForm(NewProjectForm.Props(B.addNewProjectForm))
+        Button(Button.Props(B.addNewProjectForm(), CommonStyle.default, P.addStyles, P.addIcons, P.title, className = "profile-action-buttons"), P.buttonName),
+        if (S.showNewProjectForm) NewProjectForm(NewProjectForm.Props(B.addProjectForm))
         else
           Seq.empty[ReactElement]
       )
@@ -73,30 +76,33 @@ object NewProjectForm {
   // shorthand for styles
   @inline private def bss = GlobalStyles.bootstrapStyles
 
-  case class Props(submitHandler: (Boolean) => Callback)
+  val jobStartDate: js.Object = "#jobStartDate"
+  val jobEndDate: js.Object = "#jobEndDate"
+
+  case class Props(submitHandler: (/*Boolean*/) => Callback)
 
   case class State(projectPost: ProjectPostContent, postProject: Boolean = false, selectizeInputId: String = "postNewJobSelectizeInput")
 
   case class Backend(t: BackendScope[Props, State]) {
-    def hide: react.Callback = Callback {
+    def hide = Callback {
       // instruct Bootstrap to hide the modal
       $(t.getDOMNode()).modal("hide")
     }
 
-    def mounted(props: Props): Callback = Callback {
-
+    def hideModal(): Unit = {
+      $(t.getDOMNode()).modal("hide")
     }
 
     def submitForm(e: ReactEventI): react.Callback = {
       e.preventDefault()
       val state = t.state.runNow()
-      val req = AppUtils.getPostData(state.projectPost, ConnectionsSelectize.getConnectionsFromSelectizeInput(state.selectizeInputId) ++ Seq(ConnectionsUtils.getSelfConnnection(AppModule.PROJECTS_VIEW)),Nil, AppModule.PROJECTS_VIEW)
+      val req = AppUtils.getPostData(state.projectPost, ConnectionsSelectize.getConnectionsFromSelectizeInput(state.selectizeInputId) ++ Seq(ConnectionsUtils.getSelfConnnection(AppModule.PROJECTS_VIEW)), Nil, AppModule.PROJECTS_VIEW)
       ContentUtils.postContent(req)
       t.modState(s => s.copy(postProject = true))
     }
 
     def formClosed(state: State, props: Props): Callback = {
-      props.submitHandler(state.postProject)
+      props.submitHandler(/*state.postProject*/)
     }
 
     def updateName(event: ReactEventI): react.Callback = {
@@ -104,9 +110,14 @@ object NewProjectForm {
       t.modState(s => s.copy(projectPost = s.projectPost.copy(name = value)))
     }
 
-    def updateStartDate(event: ReactEventI): react.Callback = {
-      val value = event.target.value
-      t.modState(s => s.copy(projectPost = s.projectPost.copy(startDate = value)))
+    def updateContractType(event: ReactEventI): react.Callback = {
+      val value = event.target.innerHTML
+      t.modState(s => s.copy(projectPost = s.projectPost.copy(contractType = value)))
+    }
+
+    def updateWorkLocation(event: ReactEventI): react.Callback = {
+      val value = event.target.innerHTML
+      t.modState(s => s.copy(projectPost = s.projectPost.copy(workLocation = value)))
     }
 
     def updateBudget(event: ReactEventI): react.Callback = {
@@ -136,6 +147,30 @@ object NewProjectForm {
 
     def fromSelecize(): Callback = Callback {}
 
+    def initializeDatepicker(): Unit = {
+      val baseOpts = BootstrapDatepickerOptions.
+        autoclose(true).
+        todayHighlight(true).
+        todayBtnLinked().
+        disableTouchKeyboard(true).
+        orientation(Orientation.Bottom)
+      // Iff this Date is Optional, show the Clear button:
+      val opts =
+      if (true)
+        baseOpts.clearBtn(true)
+      else
+        baseOpts
+      $(jobStartDate).datepicker(baseOpts)
+      $(jobEndDate).datepicker(baseOpts)
+      $(jobStartDate).on("changeDate", { rawEvt:JQueryEventObject => println(s"start date =${$(jobStartDate).value().toString }")
+        t.modState(s => s.copy(projectPost = s.projectPost.copy(startDate = $(jobStartDate).value().toString ))).runNow()
+      })
+      $(jobEndDate).on("changeDate", { rawEvt:JQueryEventObject => println(s"end date =${$(jobEndDate).value().toString}")
+        t.modState(s => s.copy(projectPost = s.projectPost.copy(endDate = $(jobEndDate).value().toString))).runNow()
+      })
+
+    }
+
     // scalastyle:off
     def render(s: State, p: Props) = {
       val connectionsProxy = LGCircuit.connect(_.connections)
@@ -148,7 +183,7 @@ object NewProjectForm {
           // this is called after the modal has been hidden (animation is completed)
           closed = () => formClosed(s, p)
         ),
-        <.form(^.onSubmit ==> submitForm)(
+        <.form(^.onSubmit ==> submitForm )(
           <.div(^.className := "row")(
             <.div(^.className := "col-md-6 col-sm-6 col-xs-6")(
               <.div(^.className := "row")(
@@ -164,7 +199,8 @@ object NewProjectForm {
                   <.label(^.`for` := "Start Date", "Start Date")
                 ),
                 <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
-                  <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.value := model.startDate, ^.onChange ==> updateStartDate, ^.required := true)
+                  <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.defaultValue:=model.startDate,
+                    "data-provide".reactAttr := "datepicker", ^.id := "jobStartDate", ^.placeholder := " Start date",  ^.required := true)
                 )
               ),
               <.div(^.className := "row")(
@@ -185,13 +221,14 @@ object NewProjectForm {
                   // <.input(^.`type` := "radio")(" client")
                   <.div(^.className := "btn-group")(
                     <.button(ProjectCSS.Style.projectdropdownbtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Select One  ")(
-                      <.span(^.className := "caret"),
-                      <.ul(^.className := "dropdown-menu")(
-                        <.li()(<.a()("Item 1")),
-                        <.li()(<.a()("Item 2")),
-                        <.li()(<.a()("Item 3"))
-                      )
+                      <.span(^.className := "caret")
+                    ),
+                    <.ul(^.className := "dropdown-menu")(
+                      <.li()(<.a()("Dollar ")),
+                      <.li()(<.a()("INR")),
+                      <.li()(<.a()("Pound"))
                     )
+                    // )
                   )
                 )
               )
@@ -205,36 +242,30 @@ object NewProjectForm {
                   //                <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin ,^.id := "Name")
                   // <.input(^.`type` := "radio")(" client")
                   <.div(^.className := "btn-group")(
-                    <.button(ProjectCSS.Style.projectdropdownbtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Template 1  ")(
+                    <.button(ProjectCSS.Style.projectdropdownbtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown",^.value:=model.contractType)
+                    (if (model.contractType != "") model.contractType else "Contract Type")  (
                       <.span(^.className := "caret")
                     ),
                     <.ul(^.className := "dropdown-menu")(
-                      <.li()(<.a()("Item 1")),
-                      <.li()(<.a()("Item 2")),
-                      <.li()(<.a()("Item 3"))
+                      <.li()(<.a(^.onClick ==> updateContractType)("Item 1")),
+                      <.li()(<.a(^.onClick ==> updateContractType)("Item 2")),
+                      <.li()(<.a(^.onClick ==> updateContractType)("Item 3"))
                     )
                   )
                 )
               ),
+
               <.div(^.className := "row")(
                 <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
                   <.label(^.`for` := "End Date", "End Date")
                 ),
                 <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
-                  //                <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin ,^.id := "Name")
-                  // <.input(^.`type` := "radio")(" client")
-                  <.div(^.className := "btn-group")(
-                    <.button(ProjectCSS.Style.projectdropdownbtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("mm/dd/yy  ")(
-                      <.span(^.className := "caret")
-                    ),
-                    <.ul(^.className := "dropdown-menu")(
-                      <.li()(<.a()("Item 1")),
-                      <.li()(<.a()("Item 2")),
-                      <.li()(<.a()("Item 3"))
-                    )
-                  )
+                  <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin,^.defaultValue:=model.endDate,
+                    "data-provide".reactAttr := "datepicker", ^.id := "jobEndDate", ^.placeholder := " End date",^.required := true)
                 )
               ),
+
+
               <.div(^.className := "row")(
                 <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
                   <.label(^.`for` := "Work Location", "Work Location")
@@ -243,13 +274,14 @@ object NewProjectForm {
                   //                <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin ,^.id := "Name")
                   // <.input(^.`type` := "radio")(" client")
                   <.div(^.className := "btn-group")(
-                    <.button(ProjectCSS.Style.projectdropdownbtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Select One")(
+                    <.button(ProjectCSS.Style.projectdropdownbtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown", ^.value := model.workLocation)
+                    (if (model.workLocation != "") model.workLocation else "Work Location ")(
                       <.span(^.className := "caret")
                     ),
                     <.ul(^.className := "dropdown-menu")(
-                      <.li()(<.a()("Item 1")),
-                      <.li()(<.a()("Item 2")),
-                      <.li()(<.a()("Item 3"))
+                      <.li()(<.a(^.onClick ==> updateWorkLocation)("Pune")),
+                      <.li()(<.a(^.onClick ==> updateWorkLocation)("Bangalore")),
+                      <.li()(<.a(^.onClick ==> updateWorkLocation)("U.S.A"))
                     )
                   )
                 )
@@ -259,13 +291,13 @@ object NewProjectForm {
           <.div(^.className := "row", DashBoardCSS.Style.MarginLeftchkproduct)(
             <.div(DashBoardCSS.Style.marginTop10px)(),
             <.div()(
-              <.input(^.`type` := "textarea", ProjectCSS.Style.textareaWidth, ^.placeholder := "Describe the project:", ^.lineHeight := 4, ^.value := model.description, ^.onChange ==> updateDescription)
+              <.input(^.`type` := "textarea", ProjectCSS.Style.textareaWidth, ^.placeholder := "Describe the project:", ^.lineHeight := 4, ^.value := model.description, ^.onChange ==> updateDescription ,^.required:="true")
             ),
             <.div(DashBoardCSS.Style.marginTop10px)(
-              <.input(^.`type` := "textarea", ProjectCSS.Style.textareaWidth, ^.placeholder := "Message for selected members:", ^.lineHeight := 4, ^.value := model.message, ^.onChange ==> updateMessage)
+              <.input(^.`type` := "textarea", ProjectCSS.Style.textareaWidth, ^.placeholder := "Message for selected members:", ^.lineHeight := 4, ^.value := model.message, ^.onChange ==> updateMessage ,^.required:="true")
             ),
             <.div(DashBoardCSS.Style.marginTop10px)(
-              <.input(^.`type` := "textarea", ProjectCSS.Style.textareaWidth, ^.placeholder := "Skill needed:", ^.lineHeight := 4, ^.value := model.skillNeeded, ^.onChange ==> updateSkillNeeded)
+              <.input(^.`type` := "textarea", ProjectCSS.Style.textareaWidth, ^.placeholder := "Skill needed:", ^.lineHeight := 4, ^.value := model.skillNeeded, ^.onChange ==> updateSkillNeeded ,^.required:="true")
             ),
             <.div(DashBoardCSS.Style.marginTop10px, ^.id := s.selectizeInputId)(
               connectionsProxy(connectionsProxy => ConnectionsSelectize(ConnectionsSelectize.Props(connectionsProxy, s.selectizeInputId, fromSelecize)))
@@ -282,7 +314,7 @@ object NewProjectForm {
             <.div(DashBoardCSS.Style.modalHeaderPadding, ^.className := "text-right")(
               //<.button(^.tpe := "submit",^.className:="btn btn-default","Submit"),
               <.button(^.tpe := "button", ^.className := "btn", DashBoardCSS.Style.btnDefault, DashBoardCSS.Style.marginLeftCloseBtn, ^.onClick --> hide, "Save as Draft"),
-              <.button(^.tpe := "submit", ^.className := "btn", DashBoardCSS.Style.btnDefault, DashBoardCSS.Style.marginLeftCloseBtn, "Submit"),
+              <.button(^.tpe := "submit", ^.className := "btn", DashBoardCSS.Style.btnDefault, DashBoardCSS.Style.marginLeftCloseBtn, "Submit" ),
               <.button(^.tpe := "button", ^.className := "btn", DashBoardCSS.Style.btnDefault, DashBoardCSS.Style.marginLeftCloseBtn, ^.onClick --> hide, "Cancel")
             )
           ),
@@ -291,13 +323,15 @@ object NewProjectForm {
       )
     }
   }
-
   private val component = ReactComponentB[Props]("PostAProjectForm")
     .initialState_P(p => State(new ProjectPostContent("", "", "", "", "", "", "", "", false, 0, "")))
     .renderBackend[Backend]
+    .componentDidMount(scope => Callback {
+      scope.backend.initializeDatepicker()
+    })
     .componentDidUpdate(scope => Callback {
       if (scope.currentState.postProject) {
-        scope.$.backend.hide.runNow()
+        scope.$.backend.hideModal()
       }
     })
     .build

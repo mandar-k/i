@@ -31,7 +31,8 @@ object OfferingResults {
                 )
               ),
               <.div(PresetsCSS.Style.modalBtn)(
-                Offering(Offering.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.briefcase, "Create Offering")),
+              Offering(Offering.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.briefcase, "Create Offering")),
+               // NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
                 <.div(PresetsCSS.Style.overlay)(
                   Icon.plus
                 )

@@ -33,13 +33,14 @@ object Offering {
     def addNewOfferingForm(): Callback = {
       t.modState(s => s.copy(showNewOfferingForm = true))
     }
-    def addOffer(postOffer: Boolean = false): Callback = {
+    def addOffer(/*postOffer: Boolean = false*/): Callback = {
       //log.debug(s"addNewAgent userModel : ${userModel} ,addNewAgent: ${showNewMessageForm}")
-      if (postOffer) {
-        t.modState(s => s.copy(showNewOfferingForm = false))
-      } else {
-        t.modState(s => s.copy(showNewOfferingForm = true))
-      }
+      t.modState(s => s.copy(showNewOfferingForm = false))
+//      if (postOffer) {
+//        t.modState(s => s.copy(showNewOfferingForm = false))
+//      } else {
+//        t.modState(s => s.copy(showNewOfferingForm = true))
+//      }
     }
   }
   val component = ReactComponentB[Props]("NewOffering")
@@ -63,15 +64,17 @@ object Offering {
 object OfferingForm {
   // shorthand for styles
   @inline private def bss = GlobalStyles.bootstrapStyles
-  case class Props(submitHandler: (Boolean) => Callback, header: String)
+  case class Props(submitHandler: (/*Boolean*/) => Callback, header: String)
   case class State(postOffer: Boolean = false)
   case class Backend(t: BackendScope[Props, State]) {
     def hide = Callback {
       $(t.getDOMNode()).modal("hide")
     }
-    def hideModal = {
+
+    def hideModal(): Unit = {
       $(t.getDOMNode()).modal("hide")
     }
+
     def mounted(props: Props): Callback = Callback {
 
     }
@@ -83,7 +86,7 @@ object OfferingForm {
     def formClosed(state: State, props: Props): Callback = {
       // call parent handler with the new item and whether form was OK or cancelled
 //      println(state.postOffer)
-      props.submitHandler(state.postOffer)
+      props.submitHandler(/*state.postOffer*/)
     }
 
     def render(s: State, p: Props) = {
