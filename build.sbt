@@ -66,6 +66,7 @@ lazy val webGateway = (project in file("web-gateway"))
     libraryDependencies ++= Settings.jvmDependencies.value,
     //    commands += ReleaseCmd,
     compile in Compile <<= (compile in Compile) dependsOn scalaJSPipeline,
+    isDevMode in scalaJSPipeline := true,
     // connect to the client project
     scalaJSProjects := clients,
     pipelineStages in Assets := Seq(scalaJSPipeline),
