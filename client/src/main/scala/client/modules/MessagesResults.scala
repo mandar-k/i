@@ -25,13 +25,13 @@ object MessagesResults {
 
   case class Props(proxy: ModelProxy[Pot[MessagesRootModel]])
 
-  case class State(showErrorModal:Boolean =false)
+  case class State(showErrorModal: Boolean = false)
 
   val getServerError = LGCircuit.zoom(_.appRootModel).value
 
   class Backend(t: BackendScope[Props, State]) {
     def mounted(props: Props): react.Callback = Callback {
-//      log.debug("messages view mounted")
+      //      log.debug("messages view mounted")
       /*if (props.proxy().isEmpty) {
         ContentModelHandler.subsForContentAndBeginSessionPing(AppModule.MESSAGES_VIEW)
       }*/
@@ -45,15 +45,15 @@ object MessagesResults {
       }
     }*/
 
-    def serverError(showErrorModal :Boolean = false): Callback = {
-      if(showErrorModal)
+    def serverError(showErrorModal: Boolean = false): Callback = {
+      if (showErrorModal)
         t.modState(s => s.copy(showErrorModal = false))
       else
         t.modState(s => s.copy(showErrorModal = true))
     }
 
 
-    def render(P:Props,S:State) ={
+    def render(P: Props, S: State) = {
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
@@ -111,7 +111,7 @@ object MessagesResults {
             MessagesList(messagesRootModel.messagesModelList)),
           P.proxy().renderFailed(ex => <.div()(
             //<.span(Icon.warning), " Error loading"
-            if(!getServerError.isServerError){
+            if (!getServerError.isServerError) {
               ServerErrorModal(ServerErrorModal.Props(serverError, "Server offline"))
             }
             else
@@ -160,10 +160,10 @@ object MessagesList {
         var fromSender = "unknown"
         if (userId == selfConnectionId) {
           fromSender = "me"
-          for(b <- message.connections ; a <- connections  ; if (a.connection.source.split("/")(2) == b.source.split("/")(2) && a.connection.target.split("/")(2) == b.target.split("/")(2))) yield
+          for (b <- message.connections; a <- connections; if (a.connection.source.split("/")(2) == b.source.split("/")(2) && a.connection.target.split("/")(2) == b.target.split("/")(2))) yield
             toReceiver = a.name
         } else {
-          for(b <- message.connections ; a <- connections  ; if (a.connection.source.split("/")(2) == b.target.split("/")(2) && a.connection.target.split("/")(2) == b.source.split("/")(2))) yield
+          for (b <- message.connections; a <- connections; if (a.connection.source.split("/")(2) == b.target.split("/")(2) && a.connection.target.split("/")(2) == b.source.split("/")(2))) yield
             fromSender = a.name
           // ToDo: Look up name of Sender and use friendly name
           toReceiver = "me"
@@ -179,7 +179,7 @@ object MessagesList {
             <.div(^.className := "col-md-6 col-sm-12")(s"From: ${fromSender}"),
             <.div(^.className := "col-md-6 col-sm-12")(s"To: ${toReceiver}")
           ),
-          <.div(^.className := "msgTime", DashBoardCSS.Style.msgTime, "data-toggle".reactAttr := "tooltip", ^.title := message.created, "data-placement".reactAttr := "right")("Moment(message.created).format(\"LLL\").toLocaleString"),
+          <.div(^.className := "msgTime", DashBoardCSS.Style.msgTime, "data-toggle".reactAttr := "tooltip", ^.title := message.created, "data-placement".reactAttr := "right")(Moment(message.created).format("LLL").toLocaleString),
           // <.div()(s"labels: ${message.labels}"),
           // <.div()(s"uid: ${message.uid}"),
           <.div(^.className := "media-body", ^.paddingTop := "10px")(

@@ -1,5 +1,6 @@
 import sbt.Project.projectToRef
 
+
 organization in ThisBuild := "livelygig"
 
 scalaVersion in ThisBuild := "2.11.8"
@@ -12,7 +13,7 @@ lazy val root = (project in file("."))
 // a special crossProject for configuring a JS/JVM/shared structure
 lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
   .settings(
-//    scalaVersion := Versions.scalaVersion,
+    //    scalaVersion := Versions.scalaVersion,
     libraryDependencies ++= Settings.sharedDependencies.value
   )
   // set up settings specific to the JS project
@@ -32,7 +33,7 @@ lazy val client: Project = (project in file("client"))
   .settings(
     name := "client",
     version := Versions.appVersion,
-//    scalaVersion := Versions.scalaVersion,
+    //    scalaVersion := Versions.scalaVersion,
     scalacOptions ++= Settings.scalacOptions,
     resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"),
     libraryDependencies ++= Seq(lagomScaladslServer),
@@ -65,7 +66,7 @@ lazy val webGateway = (project in file("web-gateway"))
     resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), //add resolver
     libraryDependencies ++= Settings.jvmDependencies.value,
     //    commands += ReleaseCmd,
-    compile in Compile <<= (compile in Compile) dependsOn scalaJSPipeline,
+    compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
     isDevMode in scalaJSPipeline := true,
     // connect to the client project
     scalaJSProjects := clients,

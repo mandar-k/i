@@ -97,7 +97,7 @@ object ProjectResults {
             ),
             <.div(^.className := "pull-right")(
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary")(<.span(Icon.minus)),
-               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief")(<.span(Icon.minus)),
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief")(<.span(Icon.minus)),
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts")(<.span(Icon.minus))
             )
           )
@@ -158,7 +158,7 @@ object ProjectsList {
             project.postContent.name,
             <.div(DashBoardCSS.Style.displayInlineText)("  Posted by: @LivelyGig  "),
             <.div(DashBoardCSS.Style.displayInlineText)("  Posted: "),
-            <.div(DashBoardCSS.Style.displayInlineText, ^.className := "msgTime", "data-toggle".reactAttr := "tooltip", ^.title := project.created, "data-placement".reactAttr := "right")("Moment(project.created).toLocaleString")
+            <.div(DashBoardCSS.Style.displayInlineText, ^.className := "msgTime", "data-toggle".reactAttr := "tooltip", ^.title := project.created, "data-placement".reactAttr := "right")(Moment(project.created).toLocaleString)
           ),
           <.div(^.className := "media-body", ^.paddingLeft := "28px")(
             "Job Type: " + project.postContent.contractType,
