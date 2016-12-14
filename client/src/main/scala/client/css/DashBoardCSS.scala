@@ -219,7 +219,7 @@ object DashBoardCSS {
       verticalAlign.middle
     )
     val inputModalMargin = style(
-      marginBottom(2.%%)
+      marginBottom(4.%%)
     )
     val marginLeftchk = style(
       marginLeft(2.%%)
@@ -695,6 +695,11 @@ object DashBoardCSS {
       marginTop(50.px),
       color(white),
       fontSize(26.px)
+    )
+    val loginHelpBlock = style(
+      marginTop(-3.%%),
+      marginBottom(-1.%%),
+      height(18.px)
     )
   }
 

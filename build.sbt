@@ -69,7 +69,6 @@ lazy val webGateway = (project in file("web-gateway"))
     includeFilter in(Assets, LessKeys.less) := "main.less",
     // compress CSS
     LessKeys.compress in Assets := true
-
   )
 
 def commonSettings: Seq[Setting[_]] = Seq(
