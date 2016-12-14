@@ -1,42 +1,30 @@
-import sbt.Project.projectToRef
+organization in ThisBuild := "com.livelygig"
 
-
-organization in ThisBuild := "livelygig"
-
+// the Scala version that will be used for cross-compiled libraries
 scalaVersion in ThisBuild := "2.11.8"
-
-lazy val root = (project in file("."))
-  .settings(name := "online-auction-scala")
-  .aggregate(client, webGateway)
-  .settings(commonSettings: _*)
 
 // a special crossProject for configuring a JS/JVM/shared structure
 lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
   .settings(
-    //    scalaVersion := Versions.scalaVersion,
     libraryDependencies ++= Settings.sharedDependencies.value
   )
   // set up settings specific to the JS project
   .jsConfigure(_ enablePlugins ScalaJSWeb)
 
-lazy val sharedJVM = shared.jvm.settings(name := "sharedJVM")
-
-lazy val sharedJS = shared.js.settings(name := "sharedJS")
-
+lazy val sharedJvm = shared.jvm
+lazy val sharedJs = shared.js
 // use eliding to drop some debug code in the production build
 lazy val elideOptions = settingKey[Seq[String]]("Set limit for elidable functions")
 
+
 // instantiate the JS project for SBT with some additional settings
 lazy val clientJSDeps = List("prolog_parser.js", "validator.js")
-
 lazy val client: Project = (project in file("client"))
   .settings(
     name := "client",
     version := Versions.appVersion,
-    //    scalaVersion := Versions.scalaVersion,
     scalacOptions ++= Settings.scalacOptions,
     resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"),
-    libraryDependencies ++= Seq(lagomScaladslServer),
     libraryDependencies ++= Settings.scalajsDependencies.value,
     // by default we do development build, no eliding
     elideOptions := Seq(),
@@ -52,20 +40,26 @@ lazy val client: Project = (project in file("client"))
     persistLauncher in Test := false
   )
   .enablePlugins(ScalaJSPlugin, ScalaJSWeb)
-  .dependsOn(sharedJS)
+  .dependsOn(sharedJs)
+
 
 // Client projects (just one in this case)
 lazy val clients = Seq(client)
 
 lazy val webGateway = (project in file("web-gateway"))
+  .settings(commonSettings: _*)
+  .enablePlugins(PlayScala && LagomPlay)
+  .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
+  .dependsOn(sharedJvm)
   .settings(
-    name := "server",
     version := Versions.appVersion,
-    //    scalaVersion := Versions.scalaVersion,
     scalacOptions ++= Settings.scalacOptions,
     resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), //add resolver
     libraryDependencies ++= Settings.jvmDependencies.value,
-    //    commands += ReleaseCmd,
+    libraryDependencies ++= Seq(
+      lagomScaladslServer
+    ),
+    commands += ReleaseCmd,
     compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
     isDevMode in scalaJSPipeline := true,
     // connect to the client project
@@ -77,13 +71,21 @@ lazy val webGateway = (project in file("web-gateway"))
     LessKeys.compress in Assets := true
 
   )
-  .enablePlugins(PlayScala, LagomPlay)
-  .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
-  .aggregate(clients.map(projectToRef): _*)
-  .dependsOn(sharedJVM)
 
 def commonSettings: Seq[Setting[_]] = Seq(
 )
 
-lagomCassandraCleanOnStart in ThisBuild := false
+// Command for building a release
+lazy val ReleaseCmd = Command.command("release") {
+  state => "set elideOptions in client := Seq(\"-Xelide-below\", \"WARNING\")" ::
+    "client/clean" ::
+    "client/test" ::
+    "webGateway/clean" ::
+    "webGateway/test" ::
+    "webGateway/dist" ::
+    "set elideOptions in client := Seq()" ::
+    state
+}
 
+lagomCassandraCleanOnStart in ThisBuild := false
+onLoad in Global := (Command.process("project webGateway", _: State)) compose (onLoad in Global).value
