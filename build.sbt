@@ -46,22 +46,21 @@ lazy val client: Project = (project in file("client"))
 // Client projects (just one in this case)
 lazy val clients = Seq(client)
 
+// web gateway with play server
 lazy val webGateway = (project in file("web-gateway"))
   .settings(commonSettings: _*)
   .enablePlugins(PlayScala && LagomPlay)
+  .dependsOn(userApi)
   .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
   .dependsOn(sharedJvm)
   .settings(
-    version := Versions.appVersion,
     scalacOptions ++= Settings.scalacOptions,
     resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), //add resolver
     libraryDependencies ++= Settings.jvmDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslServer
-    ),
+    libraryDependencies += lagomScaladslServer,
     commands += ReleaseCmd,
     compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
-    isDevMode in scalaJSPipeline := true,
+    devCommands in scalaJSPipeline += "runAll",
     // connect to the client project
     scalaJSProjects := clients,
     pipelineStages in Assets := Seq(scalaJSPipeline),
@@ -69,10 +68,30 @@ lazy val webGateway = (project in file("web-gateway"))
     includeFilter in(Assets, LessKeys.less) := "main.less",
     // compress CSS
     LessKeys.compress in Assets := true
+  )
 
+lazy val userApi = (project in file("user-api"))
+  .settings(commonSettings: _*)
+  .settings(
+    version := "1.0-SNAPSHOT",
+    libraryDependencies ++= Seq(
+      lagomScaladslApi,
+      "org.julienrf" %% "play-json-derived-codecs" % "3.3"
+    )
+  )
+
+lazy val userImpl = (project in file("user-impl"))
+  .settings(commonSettings: _*)
+  .enablePlugins(LagomScala)
+  .dependsOn(userApi)
+  .settings(
+    libraryDependencies ++= Settings.apiImplDependencies.value/*,
+    libraryDependencies +=lagomScaladslPersistenceCassandra*/
   )
 
 def commonSettings: Seq[Setting[_]] = Seq(
+  version := Versions.appVersion,
+  scalacOptions ++= Settings.scalacOptions
 )
 
 // Command for building a release
@@ -86,6 +105,7 @@ lazy val ReleaseCmd = Command.command("release") {
     "set elideOptions in client := Seq()" ::
     state
 }
+
 
 lagomCassandraCleanOnStart in ThisBuild := false
 onLoad in Global := (Command.process("project webGateway", _: State)) compose (onLoad in Global).value

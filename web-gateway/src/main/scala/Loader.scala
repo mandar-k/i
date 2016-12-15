@@ -2,12 +2,13 @@ import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.api.{ServiceAcl, ServiceInfo}
 import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.server.LagomDevModeComponents
+import com.livelygig.product.user.api.UserService
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Mode}
 import play.api.ApplicationLoader.Context
 import play.api.i18n.I18nComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
-import controllers.{Main, Assets}
+import controllers.{Assets, Main}
 import router.Routes
 
 import scala.collection.immutable
@@ -31,6 +32,7 @@ abstract class WebGateway (context: Context) extends BuiltInComponentsFromContex
   }
   implicit val env = context.environment
 
+  lazy val userService = serviceClient.implement[UserService]
   lazy val main = wire[Main]
   lazy val assets = wire[Assets]
 }
