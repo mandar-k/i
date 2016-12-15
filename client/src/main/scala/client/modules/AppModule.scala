@@ -128,8 +128,8 @@ object AppModule {
                     case PROJECTS_VIEW => jobsProxy(ProjectResults(_))
                     case MESSAGES_VIEW => messagesProxy(MessagesResults(_))
                     case CONNECTIONS_VIEW => connectionsProxy(ConnectionsResults(_))
-                    case CONTRACTS_VIEW => ContractResults.component()
-                    case OFFERINGS_VIEW => OfferingResults.component()
+                    case CONTRACTS_VIEW => ContractResults.component(ContractResults.Props())
+                    case OFFERINGS_VIEW => OfferingResults.component(OfferingResults.Props())
                    // case NOTIFICATIONS_VIEW => connectionsProxy(NotificationResults(_))
                   }
                 )

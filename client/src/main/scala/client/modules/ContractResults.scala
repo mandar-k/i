@@ -1,34 +1,54 @@
 package client.modules
 
 import japgolly.scalajs.react.vdom.prefix_<^._
-import japgolly.scalajs.react.{Callback, ReactComponentB}
+import japgolly.scalajs.react._
 import client.components.Icon
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.modals.{NewMessage, WorkContractModal}
-import org.querki.jquery._
+import japgolly.scalajs.react
+
 
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
 
 object ContractResults {
 
+  case class Props()
+
+  case class State()
+
+  class Backend($: BackendScope[ContractResults.Props, State]) {
+    def mounted(props: Props) = Callback {
+      //      log.debug("connection view mounted")
+      //      Callback.when(props.proxy().isEmpty)(props.proxy.dispatch(RefreshConnections()))
+
+    }
+    def dropDownSelected(event: ReactEventI): react.Callback = Callback {
+      val value = event.target.innerHTML
+      event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
+    }
+  }
+
   // create the React component for Dashboard
-  val component = ReactComponentB[Unit]("ContractResults")
-    .render_P(ctl =>
+  val component = ReactComponentB[Props]("ContractResults")
+    .initialState(State())
+    .backend(new Backend(_))
+    .renderPS(($, props, S) => {
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Select Bulk Action ")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("Select Bulk Action "))(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a()("Hide")),
-                  <.li()(<.a()("Favorite")),
-                  <.li()(<.a()("Unhide")),
-                  <.li()(<.a()("Unfavorite"))
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Hide")),
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Favorite")),
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Unhide")),
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Unfavorite"))
                 )
               ),
               <.div(PresetsCSS.Style.modalBtn)(
@@ -43,15 +63,16 @@ object ContractResults {
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("By Date ")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("By Date "))(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a()("By Date")),
-                  <.li()(<.a()("By Experience")),
-                  <.li()(<.a()("By Reputation")),
-                  <.li()(<.a()("By Rate")),
-                  <.li()(<.a()("By Projects Completed"))
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Date")),
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Experience")),
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Reputation")),
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Rate")),
+                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Projects Completed"))
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -93,7 +114,7 @@ object ContractResults {
             )
           )
         )
-      ))
+      )})
     .build
 }
 

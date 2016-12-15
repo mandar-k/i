@@ -10,12 +10,15 @@ import client.css._
 import shared.models.{Label, UserModel}
 import client.services.LGCircuit
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils, LabelsUtils}
+
 import scalacss.ScalaCssReact._
 import org.querki.facades.bootstrap.datepicker._
+
 import scala.scalajs.js
 import org.querki.jquery._
 import org.denigma.selectize._
 import diode.AnyAction._
+import japgolly.scalajs.react
 import shared.dtos.{Expression, ExpressionContent, SubscribeRequest}
 
 
@@ -32,6 +35,7 @@ object Searches {
   val selectState: js.Object = "#selectize"
 
   case class Backend(t: BackendScope[Props, State]) {
+
 
     def searchClick(props: Props): Unit = {
       val sidebtn: js.Object = "#searchContainer"
@@ -118,6 +122,11 @@ object Searches {
 
     }
 
+    def dropDownSelected(event: ReactEventI): react.Callback = Callback {
+      val value = event.target.innerHTML
+      event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
+    }
+
     def render(s: State, p: Props) = {
       //          @tailrec
       def renderLabel(label: Label): ReactTag = {
@@ -145,20 +154,20 @@ object Searches {
             <.div(^.className := "HeaderCSS_Style-searchActionsContainer")(
 
               <.div(^.className := "btn-group")(
-                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Recommended ")(
+                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(<.span("Recommended "))(
                   <.span(^.className := "caret")
                 ),
                 <.ul(/*HeaderCSS.Style.dropdownMenuWidth,*/ ^.className := "dropdown-menu")(
-                  <.li()(<.a(^.href := "#talent")("Recommended Matches")),
-                  <.li()(<.a(^.href := "#talent")("My Profiles")),
-                  <.li()(<.a(^.href := "#talent")("Favorited")),
-                  <.li()(<.a(^.href := "#talent")("Available")),
-                  <.li()(<.a(^.href := "#talent")("Active Unavailable")),
-                  <.li()(<.a(^.href := "#talent")("Inactive")),
-                  <.li()(<.a(^.href := "#talent")("Hidden")),
+                  <.li()(<.a(/*^.href := "#talent"*/ ^.onClick ==> dropDownSelected)("Recommended Matches")),
+                  <.li()(<.a(/*^.href := "#talent"*/^.onClick ==> dropDownSelected)("My Profiles")),
+                  <.li()(<.a(/*^.href := "#talent"*/^.onClick ==> dropDownSelected)("Favorited")),
+                  <.li()(<.a(/*^.href := "#talent"*/^.onClick ==> dropDownSelected)("Available")),
+                  <.li()(<.a(/*^.href := "#talent"*/^.onClick ==> dropDownSelected)("Active Unavailable")),
+                  <.li()(<.a(/*^.href := "#talent"*/^.onClick ==> dropDownSelected)("Inactive")),
+                  <.li()(<.a(/*^.href := "#talent"*/^.onClick ==> dropDownSelected)("Hidden")),
                   <.li(^.className := "divider")(),
-                  <.li()(<.a(^.href := "#talent")("Videographers w/5+ yrs experience")),
-                  <.li()(<.a(^.href := "#talent")("Customize..."))
+                  <.li()(<.a(/*^.href := "#talent"*/^.onClick ==> dropDownSelected)("Videographers w/5+ yrs experience")),
+                  <.li()(<.a(/*^.href := "#talent"*/^.onClick ==> dropDownSelected)("Customize..."))
                 )
               ),
               <.button(^.id := "sidebarbtn", ^.className := "btn HeaderCSS_Style-searchContainerBtn", ^.title := "Search", Icon.search, ^.onClick --> Callback {
@@ -264,16 +273,16 @@ object Searches {
           <.div()(
             <.div(^.className := "HeaderCSS_Style-searchActionsContainer")(
               <.div(^.className := "btn-group")(
-                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Recommended ")(
+                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(<.span("Recommended "))(
                   <.span(^.className := "caret")
                 ),
                 <.ul(/*HeaderCSS.Style.dropdownMenuWidth,*/ ^.className := "dropdown-menu")(
-                  <.li()(<.a(^.href := "#offerings")("Recommended to Me")),
-                  <.li()(<.a(^.href := "#offerings")("My Posted Offerings")),
-                  <.li()(<.a(^.href := "#offerings")("Favorited")),
-                  <.li()(<.a(^.href := "#offerings")("Hidden")),
+                  <.li()(<.a(/*^.href := "#offerings"*/^.onClick ==> dropDownSelected)("Recommended to Me")),
+                  <.li()(<.a(/*^.href := "#offerings"*/^.onClick ==> dropDownSelected)("My Posted Offerings")),
+                  <.li()(<.a(/*^.href := "#offerings"*/^.onClick ==> dropDownSelected)("Favorited")),
+                  <.li()(<.a(/*^.href := "#offerings"*/^.onClick ==> dropDownSelected)("Hidden")),
                   <.li(^.className := "divider")(),
-                  <.li()(<.a(^.href := "#offerings")("Customize..."))
+                  <.li()(<.a(/*^.href := "#offerings"*/^.onClick ==> dropDownSelected)("Customize..."))
                 )
               ),
               <.button(^.id := "sidebarbtn", ^.className := "btn HeaderCSS_Style-searchContainerBtn", ^.title := "Search", Icon.search, ^.onClick --> toggleSidebar)
@@ -348,17 +357,17 @@ object Searches {
           <.div()(
             <.div(^.className := "HeaderCSS_Style-searchActionsContainer")(
               <.div(^.className := "btn-group")(
-                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Recommended ")(
+                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(<.span("Recommended "))(
                   <.span(^.className := "caret")
                 ),
                 <.ul(/*HeaderCSS.Style.dropdownMenuWidth,*/ ^.className := "dropdown-menu")(
-                  <.li()(<.a(^.href := "#projects")("Recommended Matches")),
-                  <.li()(<.a(^.href := "#projects")("Direct from Connection")),
-                  <.li()(<.a(^.href := "#projects")("My Posted Jobs")),
-                  <.li()(<.a(^.href := "#projects")("Favorited")),
-                  <.li()(<.a(^.href := "#projects")("Hidden")),
+                  <.li()(<.a(/*^.href := "#projects"*/^.onClick ==> dropDownSelected)("Recommended Matches")),
+                  <.li()(<.a(/*^.href := "#projects"*/^.onClick ==> dropDownSelected)("Direct from Connection")),
+                  <.li()(<.a(/*^.href := "#projects"*/^.onClick ==> dropDownSelected)("My Posted Jobs")),
+                  <.li()(<.a(/*^.href := "#projects"*/^.onClick ==> dropDownSelected)("Favorited")),
+                  <.li()(<.a(/*^.href := "#projects"*/^.onClick ==> dropDownSelected)("Hidden")),
                   <.li(^.className := "divider")(),
-                  <.li()(<.a(^.href := "#projects")("Customize..."))
+                  <.li()(<.a(/*^.href := "#projects"*/^.onClick ==> dropDownSelected)("Customize..."))
                 )
               ),
               <.button(^.id := "sidebarbtn", ^.className := "btn HeaderCSS_Style-searchContainerBtn", ^.title := "Search", Icon.search, ^.onClick --> Callback {
@@ -537,15 +546,15 @@ object Searches {
           <.div()(
             <.div(^.className := "HeaderCSS_Style-searchActionsContainer")(
               <.div(^.className := "btn-group")(
-                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Active ")(
+                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(<.span("Active "))(
                   <.span(^.className := "caret")
                 ),
                 <.ul(/*HeaderCSS.Style.dropdownMenuWidth,*/ ^.className := "dropdown-menu")(
-                  <.li()(<.a(^.href := "#contract")("Active")),
-                  <.li()(<.a(^.href := "#contract")("Favorited")),
-                  <.li()(<.a(^.href := "#contract")("Hidden")),
+                  <.li()(<.a(/*^.href := "#contract"*/^.onClick ==> dropDownSelected)("Active")),
+                  <.li()(<.a(/*^.href := "#contract"*/^.onClick ==> dropDownSelected)("Favorited")),
+                  <.li()(<.a(/*^.href := "#contract"*/^.onClick ==> dropDownSelected)("Hidden")),
                   <.li(^.className := "divider")(),
-                  <.li()(<.a(^.href := "#contract")("Customize..."))
+                  <.li()(<.a(/*^.href := "#contract"*/^.onClick ==> dropDownSelected)("Customize..."))
                 )
               ),
               <.button(^.id := "sidebarbtn", ^.className := "btn HeaderCSS_Style-searchContainerBtn", ^.title := "Search", Icon.search, ^.onClick --> toggleSidebar)
@@ -674,17 +683,17 @@ object Searches {
             <.div(^.className := "HeaderCSS_Style-searchActionsContainer")(
               /*<.button(^.id:="sidebarbtn",^.className := "btn btn-default HeaderCSS_Style-searchContainerBtn", ^.title := "Search", Icon.search,^.onClick-->)*/
               <.div(^.className := "btn-group")(
-                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Unread ")(
+                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(<.span("Unread "))(
                   <.span(^.className := "caret")
                 ),
                 <.ul(/*HeaderCSS.Style.dropdownMenuWidth,*/ ^.className := "dropdown-menu")(
-                  <.li()(<.a(^.href := "#messages")("Inbox")),
-                  <.li()(<.a(^.href := "#messages")("Sent")),
-                  <.li()(<.a(^.href := "#messages")("Unread")),
-                  <.li()(<.a(^.href := "#messages")("Favorited")),
-                  <.li()(<.a(^.href := "#messages")("Hidden")),
+                  <.li()(<.a(/*^.href := "#messages"*/^.onClick ==> dropDownSelected)("Inbox")),
+                  <.li()(<.a(/*^.href := "#messages"*/^.onClick ==> dropDownSelected)("Sent")),
+                  <.li()(<.a(/*^.href := "#messages"*/^.onClick ==> dropDownSelected)("Unread")),
+                  <.li()(<.a(/*^.href := "#messages"*/^.onClick ==> dropDownSelected)("Favorited")),
+                  <.li()(<.a(/*^.href := "#messages"*/^.onClick ==> dropDownSelected)("Hidden")),
                   <.li(^.className := "divider")(),
-                  <.li()(<.a(^.href := "#messages")("Customize..."))
+                  <.li()(<.a(/*^.href := "#messages"*/^.onClick ==> dropDownSelected)("Customize..."))
                 )
               ),
               <.button(^.tpe := "button", ^.className := "btn HeaderCSS_Style-searchContainerBtn", ^.title := "Search", Icon.search, ^.onClick --> Callback {
@@ -781,16 +790,16 @@ object Searches {
             <.div(^.className := "HeaderCSS_Style-searchActionsContainer")(
               <.button(^.id := "sidebarbtn", ^.className := "btn HeaderCSS_Style-searchContainerBtn", ^.title := "Search", Icon.search, ^.onClick --> toggleSidebar),
               <.div(^.className := "btn-group")(
-                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Favorited ")(
+                <.button(HeaderCSS.Style.presetPickBtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(<.span("Favorited "))(
                   <.span(^.className := "caret")
                 ),
                 <.ul(/*HeaderCSS.Style.dropdownMenuWidth,*/ ^.className := "dropdown-menu")(
-                  <.li()(<.a(^.href := "#connections")("All")),
-                  <.li()(<.a(^.href := "#connections")("Available for Chat")),
-                  <.li()(<.a(^.href := "#connections")("Favorited")),
-                  <.li()(<.a(^.href := "#connections")("Hidden")),
+                  <.li()(<.a(/*^.href := "#connections"*/^.onClick ==> dropDownSelected)("All")),
+                  <.li()(<.a(/*^.href := "#connections"*/^.onClick ==> dropDownSelected)("Available for Chat")),
+                  <.li()(<.a(/*^.href := "#connections"*/^.onClick ==> dropDownSelected)("Favorited")),
+                  <.li()(<.a(/*^.href := "#connections"*/^.onClick ==> dropDownSelected)("Hidden")),
                   <.li(^.className := "divider")(),
-                  <.li()(<.a(^.href := "#connections")("Customize..."))
+                  <.li()(<.a(/*^.href := "#connections"*/^.onClick ==> dropDownSelected)("Customize..."))
                 )
               )
             ),

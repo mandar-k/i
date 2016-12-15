@@ -1,13 +1,15 @@
 package client.modules
 
 import japgolly.scalajs.react.vdom.prefix_<^._
-import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB}
+import japgolly.scalajs.react._
 import client.rootmodel.ConnectionsRootModel
 import diode.react._
 import client.components.Icon
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.modals.{NewConnection, NewMessage, NewRecommendation}
+import japgolly.scalajs.react
 import shared.models.ConnectionsModel
+
 import scalacss.ScalaCssReact._
 
 object ConnectionsResults {
@@ -21,27 +23,29 @@ object ConnectionsResults {
       //      log.debug("connection view mounted")
       //      Callback.when(props.proxy().isEmpty)(props.proxy.dispatch(RefreshConnections()))
     }
-  }
 
-  // create the React component for Dashboard
-  val component = ReactComponentB[Props]("Connection")
-    .initialState(State())
-    .backend(new Backend(_))
-    .renderPS(($, P, S) => {
+    def dropDownSelected(event: ReactEventI): react.Callback = Callback {
+      val value = event.target.innerHTML
+      event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
+    }
+
+    def render(P: Props, S: State) = {
+
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Select Bulk Action ")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("Select Bulk Action "))(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a()("Hide")),
-                  <.li()(<.a()("Favorite")),
-                  <.li()(<.a()("Unhide")),
-                  <.li()(<.a()("Unfavorite"))
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("Hide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("Favorite")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("Unhide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("Unfavorite"))
                 )
               ),
               <.div(PresetsCSS.Style.modalBtn)(
@@ -56,15 +60,16 @@ object ConnectionsResults {
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("By Date ")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("By Date "))(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a()("By Date")),
-                  <.li()(<.a()("By Experience")),
-                  <.li()(<.a()("By Reputation")),
-                  <.li()(<.a()("By Rate")),
-                  <.li()(<.a()("By Projects Completed"))
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Date")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Experience")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Reputation")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Rate")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Projects Completed"))
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -77,13 +82,20 @@ object ConnectionsResults {
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary")(<.span(Icon.minus)),
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief")(<.span(Icon.minus)),
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts")(<.span(Icon.minus))
+            )
           )
-        )
-      ), //col-12
-      <.div(^.id := "resultsContainer")(
-        ConnectionList(P.proxy().connectionsResponse))
+        ), //col-12
+        <.div(^.id := "resultsContainer")(
+          ConnectionList(P.proxy().connectionsResponse))
       ) //mainContainer
-    })
+    }
+  }
+
+  // create the React component for Dashboard
+
+  private val component = ReactComponentB[Props]("Connection")
+    .initialState_P(p => State())
+    .renderBackend[Backend]
     .componentDidMount(scope => scope.backend.mounted(scope.props))
     .build
 
