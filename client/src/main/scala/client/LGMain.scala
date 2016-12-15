@@ -6,7 +6,8 @@ import client.css._
 import client.logger._
 import client.modules._
 import org.scalajs.dom
-import client.services.LGCircuit
+import client.services.{CoreApi, LGCircuit}
+
 import scala.scalajs.js.annotation.JSExport
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
@@ -14,7 +15,9 @@ import japgolly.scalajs.react.{React, ReactDOM}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
 import org.scalajs.dom._
+
 import scala.scalajs.js
+import scala.util.{Failure, Success}
 import scalacss.internal.mutable.GlobalRegistry
 
 // scalastyle:off
@@ -132,6 +135,11 @@ object LGMain extends js.JSApp {
     // create stylesheet
     GlobalStyles.addToDocument()
     AppCSS.load
+    import scala.concurrent.ExecutionContext.Implicits.global
+    CoreApi.loginFromApi().onComplete{
+      case Success(response)=> println(response)
+      case Failure(v) => println("")
+    }
     window.sessionStorage.removeItem("sessionPingTriggered")
     //    standaloneCSS.render[HTMLStyleElement].outerHTML
     GlobalRegistry.addToDocumentOnRegistration()

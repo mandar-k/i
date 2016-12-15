@@ -10,7 +10,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class UserServiceImpl(/*registry: PersistentEntityRegistry, */system: ActorSystem)(implicit ec: ExecutionContext, mat: Materializer) extends UserService {
 
-  override def sayHello = ServiceCall {_ => Future.successful("hello")}
+  override def sayHello = ServiceCall {_ => Future.successful("hello from user service")}
 
 
 }

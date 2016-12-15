@@ -17,3 +17,7 @@ GET     /assets/*file                                              controllers.A
 
 # Logging
 POST /logging                                                      controllers.Main.logging
+
+# User
+
+POST    /api/login                              controllers.Main.login
