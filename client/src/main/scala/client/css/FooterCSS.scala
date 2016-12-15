@@ -30,7 +30,10 @@ object FooterCSS {
         backgroundColor.transparent.important,
         /*color(transparent),*/
         outline(none)
-      )
+      ),
+      media.maxWidth(480.px) -
+        fontSize(1.1.rem)
+
     )
     val footerNavLi = style(
       backgroundColor.transparent,

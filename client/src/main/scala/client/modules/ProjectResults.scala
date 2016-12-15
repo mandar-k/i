@@ -12,14 +12,11 @@ import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
 import client.components._
 import client.css.{DashBoardCSS, HeaderCSS}
-import client.logger._
 import client.modals._
 import client.services.LGCircuit
 import japgolly.scalajs.react
 import org.querki.jquery._
 import org.widok.moment.Moment
-import diode.AnyAction._
-
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
 import scala.language.existentials
@@ -41,6 +38,12 @@ object ProjectResults {
 
     }
 
+    def dropDownSelected(event: ReactEventI): react.Callback = Callback {
+      val value = event.target.innerHTML
+      event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
+    }
+
+
     def serverError(showErrorModal: Boolean = false): Callback = {
       if (showErrorModal)
         t.modState(s => s.copy(showErrorModal = false))
@@ -56,14 +59,15 @@ object ProjectResults {
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Select Bulk Action ")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("Select Bulk Action "))(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a()("Hide")),
-                  <.li()(<.a()("Favorite")),
-                  <.li()(<.a()("Unhide")),
-                  <.li()(<.a()("Unfavorite"))
+                  <.li()(<.a(^.onClick ==> dropDownSelected )("Hide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Favorite")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unhide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unfavorite"))
                 )
               ),
               <.div(PresetsCSS.Style.modalBtn)(
@@ -78,15 +82,16 @@ object ProjectResults {
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("By Date ")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("By Date "))(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a()("By Date")),
-                  <.li()(<.a()("By Experience")),
-                  <.li()(<.a()("By Reputation")),
-                  <.li()(<.a()("By Rate")),
-                  <.li()(<.a()("By Projects Completed"))
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Date")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Experience")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Reputation")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Rate")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Projects Completed"))
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(

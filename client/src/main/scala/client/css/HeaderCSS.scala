@@ -152,10 +152,13 @@ object HeaderCSS {
 
     val presetPickBtn = style(
       backgroundColor(rgba(0, 0, 0, 0)),
+      boxShadow:="none !important",
       color(black),
       fontSize(15.px),
       &.hover(
         color(c"#FFFFFF")
+      ),&.active(
+        boxShadow:="none !important"
       ),
 
       /*mine*/

@@ -93,13 +93,26 @@ object DashBoardCSS {
     )
     val gigMatchButton = style(
       backgroundColor.transparent,
+      paddingTop(5.px),
+      paddingRight(5.px),
+      paddingBottom(5.px),
+     paddingLeft(5.px),
+      border.none,
+      marginLeft(10.px),
       // fontWeight.normal,
       media.maxWidth(1130.px) -
         fontSize(11.px),
       media.minWidth(1131.px) -
         fontSize(15.px),
       media.minWidth(1367.px) -
-        fontSize(1.1.em)
+        fontSize(1.1.em),
+      &.focus(
+        outline.none.important
+      ),
+      &.active(
+        boxShadow:="none"
+      )
+
     )
     val rsltCountHolderDiv = style(
       display.inlineBlock,
@@ -344,8 +357,12 @@ object DashBoardCSS {
         fontSize(15.px),
         borderColor.transparent
       ),
+      media.maxWidth(480.px) -
+        fontSize(1.1.rem)
+      ,
       media.maxWidth(1299.px) -
         paddingTop(12.px)
+
     )
     val replyMarginTop = style(
       marginTop(20.px)
