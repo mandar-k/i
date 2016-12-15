@@ -37,3 +37,5 @@ doc/_book
 node_modules/
 
 *.patch
+
+.toDelete

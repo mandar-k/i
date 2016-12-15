@@ -1,13 +1,14 @@
 package controllers
 
 import com.google.inject.Inject
+import com.livelygig.product.user.api.UserService
 import play.api.mvc._
-import play.api.{Environment}
-import services.ApiService
+import play.api.Environment
 
-class Main @Inject()(implicit env: Environment) extends Controller {
-  val apiService = new ApiService()
+import scala.concurrent.ExecutionContext
 
+class Main(userService: UserService) (implicit env: Environment, ec: ExecutionContext) extends Controller {
+  userService.sayHello.invoke().map(s =>println)
   def index = Action {
     Ok(views.html.index("LivelyGig"))
   }

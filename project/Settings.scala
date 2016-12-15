@@ -29,7 +29,8 @@ object Settings {
   val sharedDependencies = Def.setting(Seq(
     "com.lihaoyi" %%% "upickle" % Versions.upickle,
     "com.lihaoyi" %%% "autowire" % Versions.autowire,
-    "me.chrons" %%% "boopickle" % Versions.booPickle
+    "me.chrons" %%% "boopickle" % Versions.booPickle,
+    "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test"
   ))
 
   /** Dependencies only used by the JVM project */
@@ -69,5 +70,11 @@ object Settings {
     "org.webjars" % "log4javascript" % Versions.log4js / "js/log4javascript_uncompressed.js" minified "js/log4javascript.js" dependsOn "jquery.js",
     "org.webjars" % "selectize.js" % Versions.selectizejs / "js/standalone/selectize.js" minified "js/standalone/selectize.min.js" dependsOn "jquery.js",
     "org.webjars" % "bootstrap-datepicker" % "1.6.1" / "bootstrap-datepicker.js" minified "bootstrap-datepicker.min.js" dependsOn "bootstrap.js"
+  ))
+
+  /*Dependency common to all api service implementation*/
+  val apiImplDependencies = Def.setting(Seq(
+    "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided",
+    "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test"
   ))
 }
