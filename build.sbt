@@ -73,7 +73,6 @@ lazy val webGateway = (project in file("web-gateway"))
 lazy val userApi = (project in file("user-api"))
   .settings(commonSettings: _*)
   .settings(
-    version := "1.0-SNAPSHOT",
     libraryDependencies ++= Seq(
       lagomScaladslApi,
       "org.julienrf" %% "play-json-derived-codecs" % "3.3"
