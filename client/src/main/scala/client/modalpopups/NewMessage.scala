@@ -150,7 +150,7 @@ object NewMessageForm {
         t.modState(s => s.copy(postNewMessage = true))
       }
 
-      t.modState(s => s.copy(postNewMessage = true))
+    /*  t.modState(s => s.copy(postNewMessage = true))*/
 
     }
 

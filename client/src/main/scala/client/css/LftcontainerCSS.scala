@@ -87,6 +87,7 @@ object LftcontainerCSS {
       userSelect:="none",   //main.less
       display.block,     //main.less
       paddingLeft(0.px),
+      cursor.pointer,
       fontSize(1.em),
       fontWeight.normal,
       //  marginLeft(18.px),
@@ -98,8 +99,12 @@ object LftcontainerCSS {
       userSelect:="none",   //main.less
       fontSize(1.em),
       fontWeight.normal,
+      cursor.pointer,
       marginLeft(18.px),
-      display.block
+      display.block,
+      &.hover(
+        fontWeight.bold
+      )
     )
 
     val lftMarginTop = style(

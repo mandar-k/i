@@ -161,13 +161,23 @@ object ProjectsList {
             <.div(DashBoardCSS.Style.displayInlineText, ^.className := "msgTime", "data-toggle".reactAttr := "tooltip", ^.title := project.created, "data-placement".reactAttr := "right")(Moment(project.created).toLocaleString)
           ),
           <.div(^.className := "media-body", ^.paddingLeft := "28px")(
-            "Job Type: " + project.postContent.contractType,
+            <.div(s"Job Type: ${project.postContent.contractType}"),
             <.div(project.postContent.description),
-            <.div(/*^.className := "col-md-4 col-sm-4",*/)(
-              <.br(),
-              "Skills: Java, Financial Apps, cryptography",
-              <.br(),
-              "Recommended By: @Tom"
+            <.div(/*^.className := "col-md-4 col-sm-4",*/DashBoardCSS.Style.postResultDescriptionMargin)(
+
+              <.div( s"skill Needed : ${project.postContent.skillNeeded}" ),
+
+                 s"start date : ${project.postContent.startDate}",
+                 <.br(),
+                 s"end date : ${project.postContent.endDate}",
+                 <.br(),
+                 s"Message : ${ project.postContent.message}",
+                 <.br(),
+                   s"Budget : ${project.postContent.budget}",
+                 <.br(),
+                   s"Work Location: ${project.postContent.workLocation}",
+                   <.br(),
+              <.div( "Recommended By: @Tom")
               // project.pageOfPosts.skills.toString()
             ),
             <.div()(
