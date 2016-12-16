@@ -40,6 +40,13 @@ object CoreApi {
 
   }
 
+  def loginFromApi(): Future[String] = {
+    Ajax.post(
+      url = "/api/login",
+      data = "",
+      headers = Map("Content-Type" -> "application/json;charset=UTF-8")
+    ).map(_.responseText)
+  }
   def createUser(signUpModel: SignUpModel): Future[String] = {
     val srpc = new SRPClient(signUpModel.email, signUpModel.password)
     val requestContent1 = upickle.default.write(ApiRequest(ApiTypes.requestTypes.CREATE_USER_STEP1_REQUEST,

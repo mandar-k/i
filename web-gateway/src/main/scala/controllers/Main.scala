@@ -5,10 +5,10 @@ import com.livelygig.product.user.api.UserService
 import play.api.mvc._
 import play.api.Environment
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class Main(userService: UserService) (implicit env: Environment, ec: ExecutionContext) extends Controller {
-  userService.sayHello.invoke().map(s =>println)
+
   def index = Action {
     Ok(views.html.index("LivelyGig"))
   }
@@ -20,4 +20,12 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
       }
       Ok("")
   }
+
+  def login = Action.async{implicit rh =>
+
+    userService.sayHello.invoke().map{
+      msg => Ok(msg)
+    }
+  }
+
 }
