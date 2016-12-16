@@ -1,6 +1,7 @@
 package client.modules
 
 import japgolly.scalajs.react.ReactComponentB
+import japgolly.scalajs.react.ReactComponentB
 import client.components.Icon
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.modals.{NewMessage, NewRecommendation, Offering}
@@ -34,7 +35,7 @@ object OfferingResults {
     .renderPS(($, props, S) => {
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
-          <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
+     /*     <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -50,14 +51,40 @@ object OfferingResults {
                 )
               ),
               <.div(PresetsCSS.Style.modalBtn)(
-              Offering(Offering.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.briefcase, "Create Offering")),
-               // NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
+                Offering(Offering.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.briefcase, "Create Offering")),
+                // NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
                 <.div(PresetsCSS.Style.overlay)(
                   Icon.plus
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
             )
+          ),*/   <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
+            <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
+            <.div(^.display := "inline-block")(
+              <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("Select Bulk Action "))(
+                  <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
+                ),
+                <.ul(^.className := "dropdown-menu")(
+                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Hide")),
+                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Favorite")),
+                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Unhide")),
+                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Unfavorite"))
+                )
+              ), <.div(PresetsCSS.Style.modalBtn)(
+                Offering(Offering.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.briefcase, "Create Offering")),
+                // NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
+                <.div(PresetsCSS.Style.overlay)(
+                  Icon.plus
+                )
+              )
+            )
+          ),
+          <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
+
+            <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
           ),
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(
@@ -88,11 +115,11 @@ object OfferingResults {
           )
         ), //col-12
         <.div(^.className := "container-fluid", ^.id := "resultsContainer")(
-//          <.div(^.className := "rsltSectionContainer", ^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.padding0px)(
+          //          <.div(^.className := "rsltSectionContainer", ^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.padding0px)(
           <.div(DashBoardCSS.Style.rsltSectionContainer, ^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.padding0px)(
             <.ul(^.className := "media-list")(
               for (i <- 1 to 50) yield {
-               // <.li(^.className := "media profile-description", DashBoardCSS.Style.rsltpaddingTop10p)(
+                // <.li(^.className := "media profile-description", DashBoardCSS.Style.rsltpaddingTop10p)(
                 <.li(^.className := "media",DashBoardCSS.Style.profileDescription, DashBoardCSS.Style.rsltpaddingTop10p)(
                   <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
                   <.span(^.className := "checkbox-lbl"),
@@ -114,6 +141,7 @@ object OfferingResults {
             )
           )
         )
+
       )})
     .build
 }

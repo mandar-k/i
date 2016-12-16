@@ -283,9 +283,9 @@ object DashBoardCSS {
     val marginLeftCloseBtn = style(
       marginLeft(20.px),
       backgroundColor(c"#FF9E00"),
-      /*&.active(
-      backgroundColor(blue)
-    ),*/
+      &.focus(
+     outline.none.important
+    ),
       &.hover(
         backgroundColor(c"#FF7600")
       )
@@ -293,7 +293,10 @@ object DashBoardCSS {
 
     )
     val btnBackground = style(
-      backgroundColor(orange)
+      backgroundColor(orange),
+      &.focus(
+        outline.none.important
+      )
     )
 
     val imgLogoLogin = style(
@@ -348,12 +351,18 @@ object DashBoardCSS {
       fontSize(15.px),
       borderColor.transparent,
       &.active(
-        color(c"#FFF"),
-        backgroundColor.transparent,
-        paddingTop(17.px),
-        fontSize(15.px),
-        borderColor.transparent
+        color(c"#FFF").important,
+        backgroundColor.transparent.important,
+//        paddingTop(17.px),
+//        fontSize(15.px),
+        borderColor.transparent.important,
+        outline.none.important
       ),
+      &.focus(
+        outline.none.important,
+        color(c"#FFF").important,
+        borderColor.transparent.important,
+        backgroundColor.transparent.important),
       &.hover(
         color(c"#fff"),
         backgroundColor.transparent,
@@ -461,20 +470,24 @@ object DashBoardCSS {
     )
 
     val marginResults = style(
-      marginLeft(24.%%),
+     // marginLeft(24.%%),
       marginRight(0.px),
       marginBottom(0.px),
       position.absolute,
-      media.maxWidth(767.px) -
+      media.maxWidth(767.px) (
         marginTop(1.1.%%),
-      media.minWidth(768.px).maxWidth(1499.px) -
-        marginTop(1.4.%%),
+        right(50.px)
+      ),
+      media.minWidth(768.px).maxWidth(1130.px) -
+        marginTop(5.4.%%),
+      media.minWidth(1131.px).maxWidth(1499.px) -
+        marginTop(3.4.%%),
       media.minWidth(1500.px) -
-        marginTop(1.5.%%),
-      media.minWidth(810.px).maxWidth(1238.px) -
-        marginLeft(21.%%),
-      media.maxWidth(808.px) -
-        marginLeft(16.%%)
+        marginTop(3.5.%%)
+    /*  media.minWidth(810.px).maxWidth(1238.px) -
+        marginLeft(21.%%),*/
+    /*  media.maxWidth(808.px) -
+        marginLeft(16.%%)*/
     )
     val padding0px = style(
       padding(0.px)

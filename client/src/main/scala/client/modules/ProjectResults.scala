@@ -57,7 +57,7 @@ object ProjectResults {
 
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
-          <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
+        /*  <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -80,6 +80,31 @@ object ProjectResults {
               ),
               <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
             )
+          ),*/   <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
+            <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
+            <.div(^.display := "inline-block")(
+              <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("Select Bulk Action "))(
+                  <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
+                ),
+                <.ul(^.className := "dropdown-menu")(
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Hide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Favorite")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unhide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unfavorite"))
+                )
+              ), <.div(PresetsCSS.Style.modalBtn)(
+                NewProject(NewProject.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.clipboard, "Create New Job")),
+                <.div(PresetsCSS.Style.overlay)(
+                  Icon.plus
+                )
+              )
+            )
+          ),
+          <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
+
+            <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
           ),
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(

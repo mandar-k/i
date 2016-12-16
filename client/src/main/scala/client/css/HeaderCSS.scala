@@ -54,7 +54,10 @@ object HeaderCSS {
       media.maxWidth(819.px) - (
         fontSize(1.em),
         padding(10.px, 10.px)
-        )
+        ),
+      media.minWidth(1200.px).maxWidth(1220.px)(
+        letterSpacing(0.px)
+      )
     )
 
     val nav = style(
@@ -236,14 +239,20 @@ object HeaderCSS {
 
     val rsltContainerIconBtn = style(
       fontSize(20.px),
-      color(orange),
-      backgroundColor.transparent,
-      border.none,
+      backgroundColor.transparent.important,
+      color(orange).important,
+      border.none.important,
       float.right,
-      &.hover(
+    /*  &.hover(
         backgroundColor.transparent,
         color(orange),
         border.none
+      ),*/
+      &.active(
+        boxShadow :=" none !important"
+      ),
+      &.focus(
+        outline.none.important
       )
     )
     val searchContainerBtn = style(
@@ -276,6 +285,7 @@ object HeaderCSS {
 
 
     val loginbtn = style(
+      boxShadow :="none !important ",
       backgroundColor.transparent,
       paddingLeft(0.px),
       paddingRight(0.px),
@@ -293,8 +303,10 @@ object HeaderCSS {
         backgroundColor.transparent,
         color.white,
         paddingLeft(0.px),
-        paddingRight(0.px)
-      )
+        paddingRight(0.px),
+        boxShadow :="none !important "
+      ),
+      &.visited(boxShadow :="none !important " )
     )
 
     val userpreferences = style(
