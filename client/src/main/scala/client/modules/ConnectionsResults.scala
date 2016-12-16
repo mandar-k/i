@@ -29,8 +29,7 @@ object ConnectionsResults {
 
   case class State(selectedItem: Option[ConnectionsModel] = None)
 
-  class Backend(t: BackendScope[Props, State]) {
-  class Backend(t: BackendScope[Props, State]) {
+   class Backend(t: BackendScope[Props, State]) {
     def mounted(props: Props): Callback = Callback {
       //      log.debug("connection view mounted")
       //      Callback.when(props.proxy().isEmpty)(props.proxy.dispatch(RefreshConnections()))

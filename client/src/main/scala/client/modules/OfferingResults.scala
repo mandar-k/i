@@ -1,5 +1,6 @@
 package client.modules
 
+import client.components.Bootstrap._
 import japgolly.scalajs.react.ReactComponentB
 import japgolly.scalajs.react.ReactComponentB
 import client.components.Icon
@@ -8,6 +9,9 @@ import client.modals.{NewMessage, NewRecommendation, Offering}
 import japgolly.scalajs.react
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
+import org.querki.jquery.$
+
+import scala.scalajs.js
 import scalacss.ScalaCssReact._
 
 
@@ -16,11 +20,12 @@ object OfferingResults {
 
   case class State()
 
-  class Backend($: BackendScope[Props, State]) {
+  class Backend(t: BackendScope[Props, State]) {
     def mounted(props: Props) = Callback {
       //      log.debug("connection view mounted")
       //      Callback.when(props.proxy().isEmpty)(props.proxy.dispatch(RefreshConnections()))
-
+      val addTooltip: js.Object = ".DashBoardCSS_Style-btn"
+      $(addTooltip).tooltip(PopoverOptions.html(true))
     }
     def dropDownSelected(event: ReactEventI): react.Callback = Callback {
       val value = event.target.innerHTML
@@ -32,7 +37,7 @@ object OfferingResults {
   val component = ReactComponentB[Props]("Offerings")
     .initialState(State())
     .backend(new Backend(_))
-    .renderPS(($, props, S) => {
+    .renderPS((t, props, S) => {
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
      /*     <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
@@ -44,10 +49,10 @@ object OfferingResults {
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Hide")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Favorite")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Unhide")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Unfavorite"))
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("Hide")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("Favorite")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("Unhide")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("Unfavorite"))
                 )
               ),
               <.div(PresetsCSS.Style.modalBtn)(
@@ -68,10 +73,10 @@ object OfferingResults {
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Hide")),
-                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Favorite")),
-                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Unhide")),
-                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Unfavorite"))
+                  <.li()(<.a(^.onClick ==> t.backend.dropDownSelected)("Hide")),
+                  <.li()(<.a(^.onClick ==> t.backend.dropDownSelected)("Favorite")),
+                  <.li()(<.a(^.onClick ==> t.backend.dropDownSelected)("Unhide")),
+                  <.li()(<.a(^.onClick ==> t.backend.dropDownSelected)("Unfavorite"))
                 )
               ), <.div(PresetsCSS.Style.modalBtn)(
                 Offering(Offering.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.briefcase, "Create Offering")),
@@ -94,11 +99,11 @@ object OfferingResults {
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Date")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Experience")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Reputation")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Rate")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Projects Completed"))
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("By Date")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("By Experience")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("By Reputation")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("By Rate")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownSelected)("By Projects Completed"))
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -143,6 +148,7 @@ object OfferingResults {
         )
 
       )})
+    .componentDidMount(scope => scope.backend.mounted(scope.props))
     .build
 }
 

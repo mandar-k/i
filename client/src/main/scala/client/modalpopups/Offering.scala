@@ -11,12 +11,15 @@ import client.components.GlobalStyles
 import client.components.Icon
 import client.components.Icon._
 import client.components._
-import client.css.{ DashBoardCSS, HeaderCSS, ProjectCSS }
-import scala.util.{ Failure, Success }
+import client.css.{DashBoardCSS, HeaderCSS, ProjectCSS}
+
+import scala.util.{Failure, Success}
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls
-import org.querki.jquery._
+import org.querki.jquery.{$, _}
+
+import scala.scalajs.js
 
 object Offering {
   @inline private def bss = GlobalStyles.bootstrapStyles
@@ -27,8 +30,10 @@ object Offering {
   }
   class Backend(t: BackendScope[Props, State]) extends RxObserver(t) {
 
-    def mounted(props: Props): Callback = {
+    def mounted(props: Props): Callback = Callback{
       t.modState(s => s.copy(showNewOfferingForm = true))
+      val addTooltip: js.Object = ".DashBoardCSS_Style-btn"
+      $(addTooltip).tooltip(PopoverOptions.html(true))
     }
     def addNewOfferingForm(): Callback = {
       t.modState(s => s.copy(showNewOfferingForm = true))
@@ -114,7 +119,7 @@ object OfferingForm {
   private val component = ReactComponentB[Props]("PostNewMessage")
     .initialState_P(p => State())
     .renderBackend[Backend]
-    .componentDidUpdate(scope => Callback {
+   .componentDidUpdate(scope => Callback {
       if (scope.currentState.postOffer) {
         scope.$.backend.hideModal
       }
