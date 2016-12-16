@@ -103,7 +103,7 @@ object LoginForm {
                 <.div(DashBoardCSS.Style.modalHeaderFont)("Log In with LivelyGig credentials"),
                 <.div(^.className := "form-group")(
                     <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Name",
-                        ^.placeholder := "username", ^.value := s.hostName, ^.onChange ==> updateIp, ^.required := true)
+                        ^.placeholder := "email id", ^.value := s.hostName, ^.onChange ==> updateIp, ^.required := true)
 
 
                 ),

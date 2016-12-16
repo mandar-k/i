@@ -252,7 +252,16 @@ object HeaderCSS {
       color(orange),
       backgroundColor.transparent,
       border.none,
-      float.right
+      float.right,
+      &.focus (
+       outline.none.important,
+        boxShadow:="none",
+        color.orange
+      ),
+    &.active (
+      outline.none.important,
+      boxShadow:="none"
+    )
     )
 
     val searchActionsContainer = style(

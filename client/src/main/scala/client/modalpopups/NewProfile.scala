@@ -171,10 +171,10 @@ object NewProfileForm {
           //            <.div(^.className:="col-md-12 col-sm-12")(<.div(DashBoardCSS.Style.modalHeaderFont)("User Skills"))
           //          ),
           <.div()(
-            "Your persona currently has the following profiles:", <.br(),
-            "Talent: Videographer ", <.a()("edit"), <.br(),
-            "Talent:   .Net Developer ", <.a()("edit"), <.br(),
-            "Talent Agency: Video Now On-Location News Agency ", <.a()("edit"), <.br()
+            <.span("Your persona currently has the following profiles:",DashBoardCSS.Style.newProfModalTitle), <.br(),
+            <.span("Talent: Videographer ",DashBoardCSS.Style.newProfModalTitle), <.a()("edit"), <.br(),
+            <.span("Talent:   .Net Developer ",DashBoardCSS.Style.newProfModalTitle), <.a()("edit"), <.br(),
+            <.span("Talent Agency: Video Now On-Location News Agency ",DashBoardCSS.Style.newProfModalTitle), <.a()("edit"), <.br()
           ),
 
 
@@ -184,7 +184,7 @@ object NewProfileForm {
                 <.label(^.`for` := "Profile Type", "Create New Profile Type")
               ),
               <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
-                <.div(^.className := "btn-group")(
+                <.div(^.className := "btn-group ")(
                   <.button(ProjectCSS.Style.projectdropdownbtn, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")("Talent")(
                     <.span(^.className := "caret")
                   ),
@@ -200,128 +200,128 @@ object NewProfileForm {
           ),
 
 
-          "// For Talent:",
+          <.span("For Talent:",DashBoardCSS.Style.newProfModalTitle),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Name", "Name *")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Name", ^.value := model.talentProfile.name, ^.onChange ==> updateTalentProfileName,
                 ^.required := true)
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Title", "Title *")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Title", ^.value := model.talentProfile.title, ^.onChange ==> updateTalentProfileTitle,
                 ^.required := true)
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
-              <.label(^.`for` := "Capabilities", "Capabilities *")
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
+              <.label(^.`for` := "Capabilities", "Capabilities*")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Capabilities", ^.value := model.talentProfile.capabilities, ^.onChange ==> updateTalentCapabilities,
                 ^.required := true, ^.placeholder := "<Select top 10, ranked>")
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Video2", "Video")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Video2", ^.value := model.talentProfile.video, ^.onChange ==> updateTalentProfileVideo,
                 ^.required := false, ^.placeholder := "A link to a video about yourself")
             )
           ),
-          "// For Talent Profile:", <.br(),
-          "// For Employer:",
+          <.span("For Talent Profile:",DashBoardCSS.Style.newProfModalTitle), <.br(),
+          <.span("For Employer:",DashBoardCSS.Style.newProfModalTitle),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "EmployerName", "Employer Name *")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "EmployerName", /* ^.value := model.employerProfile.name, ^.onChange ==> updateEmployerProfileName,*/
                 ^.required := true)
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Website", "Website")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Website", /*^.value := model.employerProfile.website, ^.onChange ==> updateEmployerProfileWebsite,*/
                 ^.required := false)
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Tagline", "Tagline")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Tagline", /*^.value := model.employerProfile.tagline, ^.onChange ==> updateEmployerProfileTagline,*/
                 ^.required := false, ^.placeholder := "Briefly describe your company")
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Video", "Video")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Video", /*^.value := model.employerProfile.video, ^.onChange ==> updateEmployerProfileVideo,*/
                 ^.required := false, ^.placeholder := "A link to a video about your company")
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Twitter", "Twitter username")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Twitter",/*^.value := model.employerProfile.twitter, ^.onChange ==> updateEmployerProfileTwitter,*/
                 ^.required := false, ^.placeholder := "@yourcompany")
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Logo", "Logo")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Logo",/*^.value := model.employerProfile.logo, ^.onChange ==> updateEmployerProfileLogo,*/
                 ^.required := false, ^.placeholder := "<Choose File>")
             )
           ),
-          "// For Moderator:",
+          <.span("For Moderator:",DashBoardCSS.Style.newProfModalTitle),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Name", "Name *")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Name", /*^.value := model.moderatorProfile.name, ^.onChange ==> updateModeratorProfileName,*/
                 ^.required := true)
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Capabilities", "Capabilities *")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Capabilities", /*^.value := model.moderatorProfile.capabilities, ^.onChange ==> updateModeratorProfileCapabilities,*/
                 ^.required := true, ^.placeholder := "<Select top 10, ranked>")
             )
           ),
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
+            <.div(^.className := "col-md-1 col-sm-1 col-xs-1", DashBoardCSS.Style.slctInputWidthLabel)(
               <.label(^.`for` := "Commission", "Commission *")
             ),
-            <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-10",DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
               <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Commission", /*^.value := model.moderatorProfile.commission, ^.onChange ==> updateModeratorProfileCommission,*/
                 ^.required := true, ^.placeholder := "Enter commission rate, 0% - 2%")
             )
           ),
-          <.div(DashBoardCSS.Style.modalHeaderPadding, ^.className := "text-right")(
+          <.div(^.className := "col-md-12 col-sm-12 col-xs-12",DashBoardCSS.Style.modalHeaderPadding, ^.className := "text-right")(
             <.button(^.tpe := "submit", ^.className := "btn",DashBoardCSS.Style.btnDefault, DashBoardCSS.Style.marginLeftCloseBtn, ^.onClick --> hide, "Submit"),
             <.button(^.tpe := "button", ^.className := "btn",DashBoardCSS.Style.btnDefault, DashBoardCSS.Style.marginLeftCloseBtn, ^.onClick --> hide, "Cancel")
           ),

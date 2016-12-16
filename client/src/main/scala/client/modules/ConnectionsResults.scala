@@ -2,15 +2,21 @@ package client.modules
 
 import japgolly.scalajs.react.vdom.prefix_<^._
 import japgolly.scalajs.react._
+import client.components.Bootstrap._
+import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB}
 import client.rootmodel.ConnectionsRootModel
-import diode.react._
+import client.modals.NewConnection
+import shared.models.ConnectionsModel
 import client.components.Icon
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.modals.{NewConnection, NewMessage, NewRecommendation}
+import diode.react.ModelProxy
 import japgolly.scalajs.react
 import shared.models.ConnectionsModel
-
 import scalacss.ScalaCssReact._
+import org.querki.jquery.$
+
+import scala.scalajs.js
 
 object ConnectionsResults {
 
@@ -18,10 +24,12 @@ object ConnectionsResults {
 
   case class State(selectedItem: Option[ConnectionsModel] = None)
 
-  class Backend($: BackendScope[Props, State]) {
-    def mounted(props: Props) = Callback {
+  class Backend(t: BackendScope[Props, State]) {
+    def mounted(props: Props):Callback = Callback {
       //      log.debug("connection view mounted")
       //      Callback.when(props.proxy().isEmpty)(props.proxy.dispatch(RefreshConnections()))
+      val addTooltip: js.Object = ".DashBoardCSS_Style-btn"
+      $(addTooltip).tooltip(PopoverOptions.html(true))
     }
 
     def dropDownSelected(event: ReactEventI): react.Callback = Callback {
@@ -79,14 +87,14 @@ object ConnectionsResults {
               )
             ),
             <.div(^.className := "pull-right")(
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts")(<.span(Icon.minus))
-            )
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary", "data-placement".reactAttr := "bottom")(<.span(Icon.minus)),
+              <.button(DashBoardCSS.Style.customEqualIconButton,DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief", "data-placement".reactAttr := "bottom")(<.span("=",DashBoardCSS.Style.equalsIcon)),
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts", "data-placement".reactAttr := "bottom")(<.span(Icon.bars))
           )
-        ), //col-12
-        <.div(^.id := "resultsContainer")(
-          ConnectionList(P.proxy().connectionsResponse))
+        )
+      ), //col-12
+      <.div(^.id := "resultsContainer")(
+        ConnectionList(P.proxy().connectionsResponse))
       ) //mainContainer
     }
   }

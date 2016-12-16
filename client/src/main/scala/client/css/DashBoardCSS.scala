@@ -1,6 +1,7 @@
 package client.css
 
 import scalacss.Defaults._
+import scalacss.internal.CanIUse.Prefix.webkit
 import scalacss.internal.LengthUnit.px
 
 object DashBoardCSS {
@@ -160,22 +161,24 @@ object DashBoardCSS {
       width(20.px)
     )
     val slctInputWidthLabel = style(
-      width(170.px),
+     /* width(170.px),
       paddingLeft(5.%%),
       media.maxWidth(1130.px) - (
         fontSize(1.em),
         width(135.px),
         paddingLeft(9.%%)
-      )
+      )*/
+      marginLeft(3.%%),
+      width(13.%%)
     )
 
     val scltInputModalLeftContainerMargin = style(
-      marginLeft(180.px),
+      /*marginLeft(180.px),
       marginRight(60.px),
       media.maxWidth(1130.px) - (
         marginLeft(135.px),
         marginRight(38.px)
-      )
+      )*/
     )
     val scltInputModalContainerMargin = style(
       media.maxWidth(768.px) - (
@@ -722,7 +725,18 @@ object DashBoardCSS {
     val postResultDescriptionMargin=style(
       marginTop(20.px)
     )
-
+    val equalsIcon= style (
+      font :="normal normal 900 24px/1 FontAwesome"
+    )
+    val customEqualIconButton= style (
+      paddingTop(3.px),
+      paddingBottom(3.px),
+      paddingLeft(10.px),
+      paddingRight(10.px)
+    )
+     val newProfModalTitle= style (
+       fontWeight.bold
+     )
   }
 
 }
