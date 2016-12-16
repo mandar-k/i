@@ -35,6 +35,8 @@ object MessagesResults {
       /*if (props.proxy().isEmpty) {
         ContentModelHandler.subsForContentAndBeginSessionPing(AppModule.MESSAGES_VIEW)
       }*/
+      val addTooltip: js.Object = ".DashBoardCSS_Style-btn"
+      $(addTooltip).tooltip(PopoverOptions.html(true))
     }
 
     /*{
@@ -63,7 +65,7 @@ object MessagesResults {
     def render(P: Props, S: State) = {
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
-          <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
+          <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -77,16 +79,19 @@ object MessagesResults {
                   <.li()(<.a(^.onClick ==> dropDownSelected)("Unhide")),
                   <.li()(<.a(^.onClick ==> dropDownSelected)("Unfavorite"))
                 )
-              ),
-              <.div(PresetsCSS.Style.modalBtn)(
-                NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
-                <.div(PresetsCSS.Style.overlay)(
-                  Icon.plus
-                )
-              ),
-              <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
+              ), <.div(PresetsCSS.Style.modalBtn)(
+              NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
+              <.div(PresetsCSS.Style.overlay)(
+                Icon.plus
+              )
+            )
             )
           ),
+          <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
+
+            <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
+          ),
+
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -109,9 +114,9 @@ object MessagesResults {
               )
             ),
             <.div(^.className := "pull-right")(
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts")(<.span(Icon.minus))
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary", "data-placement".reactAttr := "bottom")(<.span(Icon.minus)),
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief", "data-placement".reactAttr := "bottom")(<.span("=",DashBoardCSS.Style.equalsIcon)),
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts", "data-placement".reactAttr := "bottom")(<.span(Icon.bars))
             )
           )
         ), //col-12

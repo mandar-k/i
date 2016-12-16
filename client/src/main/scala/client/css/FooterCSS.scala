@@ -70,7 +70,10 @@ object FooterCSS {
       paddingLeft(7.px)
     )
     val footGlyphContainer = style(
-      paddingTop(14.px)
+      paddingTop(10.px),
+      media.maxWidth(480.px)(
+        paddingTop(7.px)
+      )
     )
     val displayInlineGlyph = style(
       paddingLeft(2.%%),
@@ -86,6 +89,9 @@ object FooterCSS {
       ),
       &.active(
         backgroundColor.transparent
+      ),
+      &.focus(
+        outline.none.important
       )
     )
 

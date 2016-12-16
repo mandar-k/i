@@ -10,6 +10,9 @@ import japgolly.scalajs.react
 
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
+import japgolly.scalajs.react._
+
+
 
 object ContractResults {
 
@@ -36,7 +39,7 @@ object ContractResults {
     .renderPS(($, props, S) => {
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
-          <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
+     /*     <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -59,6 +62,31 @@ object ContractResults {
               ),
               <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
             )
+          ),*/   <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
+            <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
+            <.div(^.display := "inline-block")(
+              <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("Select Bulk Action "))(
+                  <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
+                ),
+                <.ul(^.className := "dropdown-menu")(
+                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Hide")),
+                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Favorite")),
+                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Unhide")),
+                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Unfavorite"))
+                )
+              ), <.div(PresetsCSS.Style.modalBtn)(
+                WorkContractModal(WorkContractModal.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.edit, "Create Contract")),
+                <.div(PresetsCSS.Style.overlay, ^.top:="0.1em")(
+                  Icon.plus
+                )
+              )
+            )
+          ),
+          <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
+
+            <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
           ),
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(
@@ -82,9 +110,9 @@ object ContractResults {
               )
             ),
             <.div(^.className := "pull-right")(
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts")(<.span(Icon.minus))
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary", "data-placement".reactAttr := "bottom")(<.span(Icon.minus)),
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief", "data-placement".reactAttr := "bottom")(<.span("=",DashBoardCSS.Style.equalsIcon)),
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts", "data-placement".reactAttr := "bottom")(<.span(Icon.bars))
             )
           )
         ), //col-12
@@ -92,7 +120,7 @@ object ContractResults {
           <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.padding0px,DashBoardCSS.Style.rsltSectionContainer)(
             <.ul(^.className := "media-list")(
               for (i <- 1 to 50) yield {
-              //  <.li(^.className := "media profile-description", DashBoardCSS.Style.rsltpaddingTop10p)(
+                //  <.li(^.className := "media profile-description", DashBoardCSS.Style.rsltpaddingTop10p)(
                 <.li(^.className := "media",DashBoardCSS.Style.profileDescription, DashBoardCSS.Style.rsltpaddingTop10p)(
                   <.div(^.className := "media-body")(
                     <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),

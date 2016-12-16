@@ -1,5 +1,6 @@
 package client.modules
 
+import client.components.Bootstrap._
 import japgolly.scalajs.react.vdom.prefix_<^._
 import japgolly.scalajs.react._
 import client.components.Icon
@@ -12,9 +13,9 @@ import diode.react.ReactPot._
 import diode.react._
 import diode.data.Pot
 import japgolly.scalajs.react
-
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
+import org.querki.jquery.$
 
 object ProfilesResults {
 
@@ -30,6 +31,8 @@ object ProfilesResults {
       /*if (props.proxy().isEmpty) {
         ContentModelHandler.subsForContentAndBeginSessionPing(AppModule.PROFILES_VIEW)
       }*/
+      val addTooltip: js.Object = ".DashBoardCSS_Style-btn"
+      $(addTooltip).tooltip(PopoverOptions.html(true))
     }
 
     def dropDownSelected(event: ReactEventI): react.Callback = Callback {
@@ -48,7 +51,7 @@ object ProfilesResults {
 
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
-          <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
+    /*      <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -71,6 +74,32 @@ object ProfilesResults {
               ),
               <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
             )
+          ),*/
+          <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
+            <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
+            <.div(^.display := "inline-block")(
+              <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
+                  <.span("Select Bulk Action "))(
+                  <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
+                ),
+                <.ul(^.className := "dropdown-menu")(
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Hide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Favorite")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unhide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unfavorite"))
+                )
+              ), <.div(PresetsCSS.Style.modalBtn)(
+                NewProfile(NewProfile.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.user, "Create Profile")),
+                <.div(PresetsCSS.Style.overlay)(
+                  Icon.plus
+                )
+              )
+            )
+          ),
+          <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
+
+            <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
           ),
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(
@@ -94,9 +123,9 @@ object ProfilesResults {
               )
             ),
             <.div(^.className := "pull-right")(
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts")(<.span(Icon.minus))
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary", "data-placement".reactAttr := "bottom")(<.span(Icon.minus)),
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief", "data-placement".reactAttr := "bottom")(<.span("=",DashBoardCSS.Style.equalsIcon)),
+              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts", "data-placement".reactAttr := "bottom")(<.span(Icon.bars,DashBoardCSS.Style.equalsIcon))
             )
           )
         ), //col-12

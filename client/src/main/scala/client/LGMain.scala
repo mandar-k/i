@@ -88,7 +88,7 @@ object LGMain extends js.JSApp {
         <.div(^.className := "col-lg-1")(),
         <.div(^.className := "col-lg-10")(
           <.div(/*^.className := "navbar-header"*/)(
-            <.div(^.className := "col-md-8 col-sm-8 col-xs-6", DashBoardCSS.Style.padding0px, DashBoardCSS.Style.DisplayFlex)(
+            <.div(^.className := "col-md-10 col-sm-10 col-xs-6", DashBoardCSS.Style.padding0px, DashBoardCSS.Style.DisplayFlex)(
               c.link(LandingLoc)(^.className := "navbar-header", <.img(HeaderCSS.Style.imgLogo, HeaderCSS.Style.logoImage, ^.src := "./assets/images/LivelyGig-logo-symbol.svg")),
               <.button(^.className := "navbar-toggle", "data-toggle".reactAttr := "collapse", HeaderCSS.Style.navbarToggle, "data-target".reactAttr := "#navi-collapse")(
                 r.page match {
@@ -107,7 +107,7 @@ object LGMain extends js.JSApp {
                 userProxy(userProxy => MainMenu(MainMenu.Props(c, r.page, userProxy)))
               )
             ),
-            <.div(^.className := "col-md-4 col-sm-4 col-xs-6 ", DashBoardCSS.Style.padding0px)(userProxy(userProxy => LoggedInUser(LoggedInUser.Props(c, r.page, userProxy))))
+            <.div(^.className := "col-md-2 col-sm-2 col-xs-6 ", DashBoardCSS.Style.padding0px)(userProxy(userProxy => LoggedInUser(LoggedInUser.Props(c, r.page, userProxy))))
           ),
           <.div(^.className := "loggedInUserNav")(
             <.div(^.id := "navi-collapse", ^.className := "collapse navbar-collapse")(
