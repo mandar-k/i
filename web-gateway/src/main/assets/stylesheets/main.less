@@ -237,6 +237,16 @@ a:hover {cursor: hand; cursor: pointer;}
    overflow-y: auto;
    overflow-x: hidden;
 }
+@media (max-width: 659px) {
+  .tab-container
+  {
+   height: calc(~"100vh - 350px");
+     overflow-y: auto;
+     overflow-x: hidden;
+  }
+}
+
+media
 .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
     padding: 5px;
 }
@@ -375,7 +385,7 @@ right:0;
 #navbar.dropdown-menu{
             position: absolute;
             top: 100%;
-            z-index: 1000;
+            z-index: 15;
             float: right;
             min-width: 160px;
             padding: 5px 0;
@@ -833,9 +843,10 @@ right:0;
        width: 100%;
        float: none;
                position: absolute;
-               z-index: 1000;
+               z-index: 11;
                background-color:#005256;
                margin-top: 50px;
+               left :0px;
 
    }
 

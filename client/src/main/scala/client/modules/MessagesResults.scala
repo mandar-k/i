@@ -93,7 +93,7 @@ object MessagesResults {
           ),
 
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
-            <.div(^.display := "inline-block")(
+            <.div(^.display := "inline-block",DashBoardCSS.Style.rsltSortingDropdown)(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
                 <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
                   <.span("By Date "))(

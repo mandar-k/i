@@ -163,13 +163,17 @@ object HeaderCSS {
       ),&.active(
         boxShadow:="none !important"
       ),
-
-      /*mine*/
       textAlign.left,
       media.maxWidth(1306.px).minWidth(993.px) -
         fontSize(15.px),
       media.maxWidth(992.px).minWidth(975.px) -
         fontSize(14.px)
+      /*media.maxWidth(768.px)(
+        width(150.px),
+        whiteSpace.nowrap,
+        overflow.hidden,
+        textOverflow := "ellipsis"
+      )*/
     )
     val recommendMatches = style(
       media.maxWidth(974.px) -

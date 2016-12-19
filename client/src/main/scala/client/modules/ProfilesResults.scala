@@ -108,7 +108,7 @@ object ProfilesResults {
                   <.span("By Date "))(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
-                <.ul(^.className := "dropdown-menu")(
+                <.ul(^.className := "dropdown-menu",DashBoardCSS.Style.rsltSortingDropdown)(
                   <.li()(<.a(^.onClick ==> dropDownSelected )("By Date")),
                   <.li()(<.a(^.onClick ==> dropDownSelected )("By Experience")),
                   <.li()(<.a(^.onClick ==> dropDownSelected )("By Reputation")),
