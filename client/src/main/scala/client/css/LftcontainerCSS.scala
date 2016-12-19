@@ -126,5 +126,9 @@ object LftcontainerCSS {
         )
     )
 
+    val addLabelInputGroupMargin = style(
+      marginTop(-10.px)
+    )
+
   }
 }

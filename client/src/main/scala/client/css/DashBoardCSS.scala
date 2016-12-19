@@ -483,8 +483,10 @@ object DashBoardCSS {
       ),
       media.minWidth(768.px).maxWidth(1130.px) -
         marginTop(5.4.%%),
-      media.minWidth(1131.px).maxWidth(1499.px) -
+      media.minWidth(1131.px).maxWidth(1499.px) (
         marginTop(3.4.%%),
+        marginLeft(-5.%%)
+      ),
       media.minWidth(1500.px) -
         marginTop(3.5.%%)
       /*  media.minWidth(810.px).maxWidth(1238.px) -
@@ -758,6 +760,11 @@ object DashBoardCSS {
         color.blue
       )
     )
+    val rsltSortingDropdown = style(
+      media.minWidth(1200.px).maxWidth(1326.px) -
+      marginLeft(-10.%%)
+    )
+
   }
 
 }
