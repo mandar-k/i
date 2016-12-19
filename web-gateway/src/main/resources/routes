@@ -20,4 +20,4 @@ POST /logging                                                      controllers.M
 
 # User
 
-POST    /api/login                              controllers.Main.login
+POST    /login                              controllers.Main.login

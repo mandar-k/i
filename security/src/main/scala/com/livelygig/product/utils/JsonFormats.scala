@@ -1,4 +1,4 @@
-package com.example.auction.utils
+package com.livelygig.product.utils
 
 import java.time.Duration
 import java.util.UUID

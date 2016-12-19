@@ -1,4 +1,4 @@
-package com.example.auction.utils
+package com.livelygig.product.utils
 
 import play.api.libs.json._
 import play.api.libs.functional.syntax._

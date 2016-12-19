@@ -42,8 +42,8 @@ object CoreApi {
 
   def loginFromApi(): Future[String] = {
     Ajax.post(
-      url = "/api/login",
-      data = "",
+      url = "/login",
+      data = "{}",
       headers = Map("Content-Type" -> "application/json;charset=UTF-8")
     ).map(_.responseText)
   }
