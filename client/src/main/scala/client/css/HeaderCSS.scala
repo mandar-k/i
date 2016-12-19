@@ -54,7 +54,10 @@ object HeaderCSS {
       media.maxWidth(819.px) - (
         fontSize(1.em),
         padding(10.px, 10.px)
-        )
+        ),
+      media.minWidth(1200.px).maxWidth(1220.px)(
+        letterSpacing(0.px)
+      )
     )
 
     val nav = style(
@@ -160,13 +163,17 @@ object HeaderCSS {
       ),&.active(
         boxShadow:="none !important"
       ),
-
-      /*mine*/
       textAlign.left,
       media.maxWidth(1306.px).minWidth(993.px) -
         fontSize(15.px),
       media.maxWidth(992.px).minWidth(975.px) -
         fontSize(14.px)
+      /*media.maxWidth(768.px)(
+        width(150.px),
+        whiteSpace.nowrap,
+        overflow.hidden,
+        textOverflow := "ellipsis"
+      )*/
     )
     val recommendMatches = style(
       media.maxWidth(974.px) -
@@ -236,14 +243,20 @@ object HeaderCSS {
 
     val rsltContainerIconBtn = style(
       fontSize(20.px),
-      color(orange),
-      backgroundColor.transparent,
-      border.none,
+      backgroundColor.transparent.important,
+      color(orange).important,
+      border.none.important,
       float.right,
-      &.hover(
+    /*  &.hover(
         backgroundColor.transparent,
         color(orange),
         border.none
+      ),*/
+      &.active(
+        boxShadow :=" none !important"
+      ),
+      &.focus(
+        outline.none.important
       )
     )
     val searchContainerBtn = style(
@@ -252,7 +265,16 @@ object HeaderCSS {
       color(orange),
       backgroundColor.transparent,
       border.none,
-      float.right
+      float.right,
+      &.focus (
+       outline.none.important,
+        boxShadow:="none",
+        color.orange
+      ),
+    &.active (
+      outline.none.important,
+      boxShadow:="none"
+    )
     )
 
     val searchActionsContainer = style(
@@ -267,6 +289,7 @@ object HeaderCSS {
 
 
     val loginbtn = style(
+      boxShadow :="none !important ",
       backgroundColor.transparent,
       paddingLeft(0.px),
       paddingRight(0.px),
@@ -284,8 +307,10 @@ object HeaderCSS {
         backgroundColor.transparent,
         color.white,
         paddingLeft(0.px),
-        paddingRight(0.px)
-      )
+        paddingRight(0.px),
+        boxShadow :="none !important "
+      ),
+      &.visited(boxShadow :="none !important " )
     )
 
     val userpreferences = style(

@@ -73,7 +73,7 @@ object NewConnection {
 object ConnectionsForm {
   // shorthand for styles
   @inline private def bss = GlobalStyles.bootstrapStyles
-  val usr = window.sessionStorage.getItem("userName")
+
   case class Props(submitHandler: () => Callback, header: String)
 
   case class State(postConnection: Boolean = false, selectizeInputId: String = "pstNewCnxnSelParent",
@@ -87,7 +87,7 @@ object ConnectionsForm {
     }
 
     def mounted(props: Props): Callback =  {
-      val msg = s"Hi <Recipient 1> and <Recipient 2>, \n Here's an introduction for the two of you to connect. \n \n Best regards, \n ${usr}"
+      val msg = s"Hi <Recipient 1> and <Recipient 2>, \n Here's an introduction for the two of you to connect. \n \n Best regards, \n ${LGCircuit.zoom(_.user.name).value}"
      // println("In mounted  = " + msg)
       t.modState(s => s.copy(introConnections =s.introConnections.copy(aMessage = msg)))
     }
@@ -201,9 +201,9 @@ object ConnectionsForm {
     def fromSelecize(): Callback = {
       val cnxns = ConnectionsSelectize.getConnectionNames(t.state.runNow().selectizeInputId)
       val msg =  if (cnxns.length > 1) {
-        s"Hi ${cnxns(0)} and ${cnxns(1)}, \n Here's an introduction for the two of you to connect. \n \n Best regards, \n ${usr}"
+        s"Hi ${cnxns(0)} and ${cnxns(1)}, \n Here's an introduction for the two of you to connect. \n \n Best regards, \n ${LGCircuit.zoom(_.user.name).value}"
       } else {
-        s"Hi <Recipient 1> and <Recipient 2>, \n Here's an introduction for the two of you to connect. \n \n Best regards, \n ${usr}"
+        s"Hi <Recipient 1> and <Recipient 2>, \n Here's an introduction for the two of you to connect. \n \n Best regards, \n ${LGCircuit.zoom(_.user.name).value}"
       }
      // println("msg " + msg)
       t.modState(s => s.copy(introConnections =s.introConnections.copy(aMessage = msg)))

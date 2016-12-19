@@ -10,12 +10,13 @@ import japgolly.scalajs.react.vdom.prefix_<^._
 import client.rootmodel.SearchesRootModel
 import shared.models.Label
 import client.components.Bootstrap._
-import client.css.WorkContractCSS
+import client.css._
 import client.handler.CreateLabels
 import client.logger
 import client.services.{ApiTypes, CoreApi, LGCircuit}
 import japgolly.scalajs.react
 
+import scalacss.ScalaCssReact._
 import scala.scalajs.js
 import org.querki.jquery._
 import org.scalajs.dom
@@ -94,7 +95,7 @@ object LabelsList {
           //            )
           //          ),
           <.br,
-          <.div(^.className:="input-group")(
+          <.div(^.className:="input-group" , LftcontainerCSS.Style.addLabelInputGroupMargin)(
           <.input(^.`type` := "text", ^.className := "form-control", ^.value := state.labelModel.text, ^.onChange ==> updateLabel),
           <.span(^.className:="input-group-addon",^.`type` := "button", "data-toggle".reactAttr := "collapse", "data-target".reactAttr := "#addLabel",^.className := "btn",^.onClick-->Callback{$(addBtn).show()})(Icon.times),
           <.span(^.className:="input-group-addon",^.`type` := "button", "data-toggle".reactAttr := "collapse", "data-target".reactAttr := "#addLabel",^.className := "btn", ^.onClick ==> postLabel)(Icon.check)

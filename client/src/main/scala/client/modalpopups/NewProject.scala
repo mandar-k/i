@@ -185,7 +185,7 @@ object NewProjectForm {
         ),
         <.form(^.onSubmit ==> submitForm )(
           <.div(^.className := "row")(
-            <.div(^.className := "col-md-6 col-sm-6 col-xs-6")(
+            <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
               <.div(^.className := "row")(
                 <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
                   <.label(^.`for` := "Project Name", "Project Name")
@@ -233,7 +233,7 @@ object NewProjectForm {
                 )
               )
             ), //col-md-8
-            <.div(^.className := "col-md-6 col-sm-6 col-xs-6")(
+            <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
               <.div(^.className := "row")(
                 <.div(^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.slctInputWidthLabel)(
                   <.label(^.`for` := "Contact Type", "Contact Type")
