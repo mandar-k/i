@@ -32,10 +32,8 @@ object DashBoardCSS {
         width(100.%%),
       media.minWidth(1200.px) -
         width(98.2.%%),
-      media.minWidth(1200.px) -
-        borderRadius(0.px, 25.px, 25.px, 0.px),
+      borderRadius(0.px, 25.px, 25.px, 0.px),
       marginLeft(-4.px)
-
     )
 
     val dashboardResults2 = style(
@@ -97,7 +95,7 @@ object DashBoardCSS {
       paddingTop(5.px),
       paddingRight(5.px),
       paddingBottom(5.px),
-     paddingLeft(5.px),
+      paddingLeft(5.px),
       border.none,
       marginLeft(10.px),
       // fontWeight.normal,
@@ -161,15 +159,20 @@ object DashBoardCSS {
       width(20.px)
     )
     val slctInputWidthLabel = style(
-     /* width(170.px),
-      paddingLeft(5.%%),
-      media.maxWidth(1130.px) - (
-        fontSize(1.em),
-        width(135.px),
-        paddingLeft(9.%%)
-      )*/
-      marginLeft(3.%%),
-      width(13.%%)
+      /* width(170.px),
+       paddingLeft(5.%%),*/
+      media.minWidth(992.px).maxWidth(1350.px) - (
+        fontSize(74.%%)
+        /*width(135.px),
+        paddingLeft(9.%%)*/
+        ),
+      media.minWidth(992.px)(
+        marginLeft(3.%%),
+        width(13.%%)
+      ),
+      media.maxWidth(992.px)(
+        marginLeft(1.%%)
+      )
     )
 
     val scltInputModalLeftContainerMargin = style(
@@ -284,8 +287,8 @@ object DashBoardCSS {
       marginLeft(20.px),
       backgroundColor(c"#FF9E00"),
       &.focus(
-     outline.none.important
-    ),
+        outline.none.important
+      ),
       &.hover(
         backgroundColor(c"#FF7600")
       )
@@ -353,8 +356,8 @@ object DashBoardCSS {
       &.active(
         color(c"#FFF").important,
         backgroundColor.transparent.important,
-//        paddingTop(17.px),
-//        fontSize(15.px),
+        //        paddingTop(17.px),
+        //        fontSize(15.px),
         borderColor.transparent.important,
         outline.none.important
       ),
@@ -470,7 +473,7 @@ object DashBoardCSS {
     )
 
     val marginResults = style(
-     // marginLeft(24.%%),
+      // marginLeft(24.%%),
       marginRight(0.px),
       marginBottom(0.px),
       position.absolute,
@@ -484,10 +487,10 @@ object DashBoardCSS {
         marginTop(3.4.%%),
       media.minWidth(1500.px) -
         marginTop(3.5.%%)
-    /*  media.minWidth(810.px).maxWidth(1238.px) -
-        marginLeft(21.%%),*/
-    /*  media.maxWidth(808.px) -
-        marginLeft(16.%%)*/
+      /*  media.minWidth(810.px).maxWidth(1238.px) -
+          marginLeft(21.%%),*/
+      /*  media.maxWidth(808.px) -
+          marginLeft(16.%%)*/
     )
     val padding0px = style(
       padding(0.px)
@@ -747,9 +750,14 @@ object DashBoardCSS {
       paddingLeft(10.px),
       paddingRight(10.px)
     )
-     val newProfModalTitle= style (
-       fontWeight.bold
-     )
+    val newProfModalTitle= style (
+      fontWeight.bold
+    )
+    val newProfileModalPopUpAnchorTag= style (
+      &.hover(
+        color.blue
+      )
+    )
   }
 
 }
