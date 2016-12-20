@@ -6,7 +6,7 @@ scalaVersion in ThisBuild := "2.11.8"
 // a special crossProject for configuring a JS/JVM/shared structure
 lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
   .settings(
-    libraryDependencies ++= Settings.sharedDependencies.value
+    //    libraryDependencies ++= Settings.sharedDependencies.value
   )
   // set up settings specific to the JS project
   .jsConfigure(_ enablePlugins ScalaJSWeb)
