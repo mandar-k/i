@@ -1,6 +1,7 @@
 package com.livelygig.product.user.impl
 
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 //import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
 import com.livelygig.product.user.api.UserService
@@ -10,12 +11,12 @@ import com.softwaremill.macwire._
 abstract class UserApplication(context: LagomApplicationContext)
   extends LagomApplication(context)
   with AhcWSComponents
-  /*with CassandraPersistenceComponents*/ {
+  with CassandraPersistenceComponents {
 
   override lazy val lagomServer = LagomServer.forServices(
     bindService[UserService].to(wire[UserServiceImpl])
   )
-
+  persistentEntityRegistry.register(wire[UserEntity])
 }
 
 class UserApplicationLoader extends LagomApplicationLoader {

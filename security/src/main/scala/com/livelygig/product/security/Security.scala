@@ -1,4 +1,4 @@
-package com.example.auction.security
+package com.livelygig.product.security
 
 import java.security.Principal
 import java.util.UUID

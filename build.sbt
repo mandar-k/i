@@ -70,6 +70,18 @@ lazy val webGateway = (project in file("web-gateway"))
     LessKeys.compress in Assets := true
   )
 
+
+lazy val security = (project in file("security"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi,
+      lagomScaladslServer % Optional,
+      "org.julienrf" %% "play-json-derived-codecs" % "3.3",
+      "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test"
+    )
+  )
+
 lazy val userApi = (project in file("user-api"))
   .settings(commonSettings: _*)
   .settings(
@@ -82,10 +94,10 @@ lazy val userApi = (project in file("user-api"))
 lazy val userImpl = (project in file("user-impl"))
   .settings(commonSettings: _*)
   .enablePlugins(LagomScala)
-  .dependsOn(userApi)
+  .dependsOn(userApi, security)
   .settings(
-    libraryDependencies ++= Settings.apiImplDependencies.value/*,
-    libraryDependencies +=lagomScaladslPersistenceCassandra*/
+    libraryDependencies ++= Settings.apiImplDependencies.value,
+    libraryDependencies +=lagomScaladslPersistenceCassandra
   )
 
 def commonSettings: Seq[Setting[_]] = Seq(
@@ -106,5 +118,5 @@ lazy val ReleaseCmd = Command.command("release") {
 }
 
 
-lagomCassandraCleanOnStart in ThisBuild := false
+//lagomCassandraCleanOnStart in ThisBuild := false
 onLoad in Global := (Command.process("project webGateway", _: State)) compose (onLoad in Global).value

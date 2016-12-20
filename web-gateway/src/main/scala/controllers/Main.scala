@@ -1,7 +1,7 @@
 package controllers
 
 import com.google.inject.Inject
-import com.livelygig.product.user.api.UserService
+import com.livelygig.product.user.api.{User, UserService}
 import play.api.mvc._
 import play.api.Environment
 
@@ -22,8 +22,8 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
   }
 
   def login = Action.async{implicit rh =>
-
-    userService.sayHello.invoke().map{
+    println(rh.body.asJson)
+    userService.login.invoke(User("yo","")).map{
       msg => Ok(msg)
     }
   }
