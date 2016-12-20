@@ -146,7 +146,11 @@ object DashBoardCSS {
       addClassName("btn"),
       /*  marginRight(5.px),
         padding(4.px, 9.px),*/
-      margin(1.px, 5.px, 1.px, 0.px)
+      outline.none.important,
+        margin(1.px, 5.px, 1.px, 0.px)
+     /* &.focus(
+        outline.none
+      )*/
     )
     val inputHeightWidth = style(
       height(25.px),

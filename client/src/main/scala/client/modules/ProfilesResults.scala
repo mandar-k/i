@@ -22,7 +22,7 @@ object ProfilesResults {
 
   case class Props(proxy: ModelProxy[Pot[ProfilesRootModel]])
 
-  case class State(showErrorModal: Boolean = false)
+  case class State(showErrorModal: Boolean = false ,menuAction : String = "" ,sortMenuBy  : String = "")
 
   val getServerError = LGCircuit.zoom(_.appRootModel).value
 
@@ -36,9 +36,14 @@ object ProfilesResults {
       $(addTooltip).tooltip(PopoverOptions.html(true))
     }
 
-    def dropDownSelected(event: ReactEventI): react.Callback = Callback {
+    def dropDownSelectAction(event: ReactEventI): Callback = {
       val value = event.target.innerHTML
-      event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
+      t.modState(s => s.copy(menuAction = value))
+    }
+
+    def dropDownMenuSorting(event: ReactEventI): Callback = {
+      val valueSort = event.target.innerHTML
+      t.modState(s => s.copy(sortMenuBy = valueSort))
     }
 
     def serverError(showErrorModal: Boolean = false): Callback = {
@@ -49,46 +54,21 @@ object ProfilesResults {
     }
 
     def render(P: Props, S: State) = {
-
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
-    /*      <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
-            <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
-            <.div(^.display := "inline-block")(
-              <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("Select Bulk Action "))(
-                  <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
-                ),
-                <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("Hide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("Favorite")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("Unhide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("Unfavorite"))
-                )
-              ),
-              <.div(PresetsCSS.Style.modalBtn)(
-                NewProfile(NewProfile.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.user, "Create Profile")),
-                <.div(PresetsCSS.Style.overlay)(
-                  Icon.plus
-                )
-              ),
-              <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
-            )
-          ),*/
           <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("Select Bulk Action "))(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")
+                (if(S.menuAction.equals("")) "Select Bulk Action " else  S.menuAction )(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Hide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Favorite")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unhide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unfavorite"))
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Hide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Favorite")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Unhide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Unfavorite"))
                 )
               ), <.div(PresetsCSS.Style.modalBtn)(
                 NewProfile(NewProfile.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.user, "Create Profile")),
@@ -99,22 +79,21 @@ object ProfilesResults {
             )
           ),
           <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
-
             <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
           ),
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("By Date "))(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")
+                (if(S.sortMenuBy.equals("")) "By Date" else  S.sortMenuBy )(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu",DashBoardCSS.Style.rsltSortingDropdown)(
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Date")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Experience")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Reputation")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Rate")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Projects Completed"))
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Date")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Experience")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Reputation")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Rate")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Projects Completed"))
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -152,7 +131,6 @@ object ProfilesResults {
           }
         )
       )
-
     }
   }
 

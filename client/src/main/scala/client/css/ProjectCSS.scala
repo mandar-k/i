@@ -19,6 +19,7 @@ object ProjectCSS {
     )
     val textareaWidth = style(
       // width(100.%%),
+      resize.vertical,
       maxWidth(100.%%),
       minWidth(100.%%)
     )

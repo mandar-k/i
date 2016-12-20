@@ -247,34 +247,37 @@ object HeaderCSS {
       color(orange).important,
       border.none.important,
       float.right,
+      boxShadow :=" none !important",
+      outline.none.important
     /*  &.hover(
         backgroundColor.transparent,
         color(orange),
         border.none
       ),*/
-      &.active(
+    /*  &.active(
         boxShadow :=" none !important"
       ),
       &.focus(
-        outline.none.important
-      )
+
+      )*/
     )
     val searchContainerBtn = style(
       fontSize(16.px),
       paddingRight(10.px),
-      color(orange),
+      color(orange).important,
       backgroundColor.transparent,
       border.none,
       float.right,
-      &.focus (
-       outline.none.important,
+      outline.none.important
+     /* &.focus (
+
         boxShadow:="none",
         color.orange
       ),
     &.active (
       outline.none.important,
       boxShadow:="none"
-    )
+    )*/
     )
 
     val searchActionsContainer = style(
@@ -293,11 +296,9 @@ object HeaderCSS {
       backgroundColor.transparent,
       paddingLeft(0.px),
       paddingRight(0.px),
-      media.minWidth(821.px) -
-        paddingTop(4.px),
-      media.maxWidth(820.px) -
-        paddingTop(10.px),
-
+      maxWidth(130.px),
+      textOverflow := "ellipsis",
+      overflow.hidden,
       &.hover(
         backgroundColor.transparent,
         paddingLeft(0.px),
@@ -310,7 +311,15 @@ object HeaderCSS {
         paddingRight(0.px),
         boxShadow :="none !important "
       ),
-      &.visited(boxShadow :="none !important " )
+      &.visited(boxShadow :="none !important " ),
+      media.minWidth(821.px) -
+        paddingTop(4.px),
+      media.maxWidth(820.px) -
+        paddingTop(10.px),
+      media.minWidth(821.px).maxWidth(835.px) -
+        maxWidth(45.px),
+        media.minWidth(835.px).maxWidth(910.px) -
+      maxWidth(60.px)
     )
 
     val userpreferences = style(

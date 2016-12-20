@@ -16,7 +16,6 @@ import client.services.LGCircuit
 import japgolly.scalajs.react
 import org.querki.jquery._
 import org.widok.moment.Moment
-
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
 import scala.language.existentials
@@ -25,7 +24,7 @@ object MessagesResults {
 
   case class Props(proxy: ModelProxy[Pot[MessagesRootModel]])
 
-  case class State(showErrorModal: Boolean = false)
+  case class State(showErrorModal: Boolean = false,menuAction : String = "" ,sortMenuBy  : String = "")
 
   val getServerError = LGCircuit.zoom(_.appRootModel).value
 
@@ -47,11 +46,18 @@ object MessagesResults {
       }
     }*/
 
-    def dropDownSelected(event: ReactEventI): react.Callback = Callback {
+    def dropDownSelectAction(event: ReactEventI): Callback = {
       val value = event.target.innerHTML
-      event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
-
+      t.modState(s => s.copy(menuAction = value))
+      // event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
     }
+
+    def dropDownMenuSorting(event: ReactEventI): Callback = {
+      val valueSort = event.target.innerHTML
+      t.modState(s => s.copy(sortMenuBy = valueSort))
+      // event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
+    }
+
 
 
     def serverError(showErrorModal: Boolean = false): Callback = {
@@ -69,22 +75,22 @@ object MessagesResults {
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("Select Bulk Action "))(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown" )
+                (if(S.menuAction.equals("")) "Select Bulk Action " else  S.menuAction )(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Hide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Favorite")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unhide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unfavorite"))
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Hide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Favorite")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Unhide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Unfavorite"))
                 )
               ), <.div(PresetsCSS.Style.modalBtn)(
-              NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
-              <.div(PresetsCSS.Style.overlay)(
-                Icon.plus
+                NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
+                <.div(PresetsCSS.Style.overlay)(
+                  Icon.plus
+                )
               )
-            )
             )
           ),
           <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
@@ -95,16 +101,16 @@ object MessagesResults {
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block",DashBoardCSS.Style.rsltSortingDropdown)(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("By Date "))(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")
+                (if(S.sortMenuBy.equals("")) "By Date" else  S.sortMenuBy )(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Date")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Experience")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Reputation")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Rate")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("By Projects Completed"))
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Date")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Experience")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Reputation")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Rate")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Projects Completed"))
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
