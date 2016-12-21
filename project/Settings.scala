@@ -26,12 +26,12 @@ object Settings {
     * These dependencies are shared between JS and JVM projects
     * the special %%% function selects the correct version for each project
     */
-  val sharedDependencies = Def.setting(Seq(
-    "com.lihaoyi" %%% "upickle" % Versions.upickle,
-    "com.lihaoyi" %%% "autowire" % Versions.autowire,
-    "me.chrons" %%% "boopickle" % Versions.booPickle,
-    "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test"
-  ))
+  //  val sharedDependencies = Def.setting(Seq(
+  //    "com.lihaoyi" %%% "upickle" % Versions.upickle,
+  //    "com.lihaoyi" %%% "autowire" % Versions.autowire,
+  //    "me.chrons" %%% "boopickle" % Versions.booPickle,
+  //    "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test"
+  //  ))
 
   /** Dependencies only used by the JVM project */
   val jvmDependencies = Def.setting(Seq(
