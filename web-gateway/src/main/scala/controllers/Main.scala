@@ -1,9 +1,11 @@
 package controllers
 
-import com.google.inject.Inject
+import java.util.UUID
+
 import com.livelygig.product.user.api.{User, UserService}
 import play.api.mvc._
 import play.api.Environment
+import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -23,8 +25,14 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
 
   def login = Action.async{implicit rh =>
     println(rh.body.asJson)
-    userService.login.invoke(User("yo","")).map{
-      msg => Ok(msg)
+    userService.signup.invoke(User(UUID.randomUUID(),"","","")).map{
+      msg => Ok(Json.toJson(msg))
+    }
+  }
+  def signup = Action.async{implicit rh =>
+    println(rh.body.asJson)
+    userService.signup.invoke(User(UUID.randomUUID(),"","","")).map{
+      msg => Ok(Json.toJson(msg))
     }
   }
 

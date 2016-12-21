@@ -1,7 +1,5 @@
 package shared.dtos
 
-import boopickle.Default._
-
 /**
   * Represents content within a request/response to API endpoints.
   */

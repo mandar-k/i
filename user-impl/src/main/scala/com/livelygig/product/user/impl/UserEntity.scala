@@ -1,9 +1,12 @@
 package com.livelygig.product.user.impl
 
+import java.util.UUID
+
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.lightbend.lagom.scaladsl.playjson.{Jsonable, SerializerRegistry, Serializers}
+import com.livelygig.product.user.api.User
 import play.api.libs.json.{Format, Json}
 import com.livelygig.product.utils.JsonFormats._
 
@@ -20,39 +23,30 @@ class UserEntity extends PersistentEntity{
   override def initialState = None
 
   override def behavior = {
-    case None =>
-      Actions().onReadOnlyCommand[LoginUser.type, Option[User]] {
-        case (LoginUser, ctx, state) => ctx.reply(state)
+    case None => noUser
+  }
+
+  private val noUser = {
+    Actions()
+      .onReadOnlyCommand[LoginUser.type, Option[User]] {
+      case (LoginUser, ctx, state) => ctx.reply(state)
+    }
+      .onCommand[CreateUser, Done] {
+      case (CreateUser(user), ctx, state) =>
+        ctx.thenPersist(UserCreated(user), _ => ctx.reply(Done))
+    }
+      .onEvent{
+        case (UserCreated(user), state) => Some(user)
       }
   }
 }
 
-case class User(email:String, password: String) extends Jsonable
-
-object User {
-  implicit val format:Format[User] = Json.format
-}
-
-sealed trait UserCommand extends Jsonable
 
 
-sealed trait UserEvent extends Jsonable
 
-case class UserLogin(name: String) extends UserEvent
 
-object UserLogin {
-  implicit val format: Format[UserLogin] = Json.format
-}
 
-case object LoginUser extends UserCommand with ReplyType[Option[User]] {
-  implicit val format: Format[LoginUser.type] = singletonFormat(LoginUser)
-}
 
-class UserSerializerRegistry extends SerializerRegistry {
-  override def serializers = List(
-    Serializers[User],
-    Serializers[UserLogin],
-    Serializers[LoginUser.type ]
-  )
-}
+
+
 

@@ -21,3 +21,5 @@ POST /logging                                                      controllers.M
 # User
 
 POST    /login                              controllers.Main.login
+
+# POST    /signup                             controllers.Main.signup

@@ -9,20 +9,19 @@ import play.api.libs.json.{Format, Json}
 
 trait UserService extends Service {
 
-  def login: ServiceCall[User, String]
+  def login: ServiceCall[User, User]
+
+  def signup: ServiceCall[User, User]
 
   def descriptor = {
     import Service._
     named("user").withCalls(
 //      restCall(Method.POST,"/api/login/", login)
-      pathCall("/api/login/", login)
+//      pathCall("api/signup", signup),
+      pathCall("/api/signup", signup)
+
     )
   }
 }
 
-case class User(email:String, password: String)
 
-object User {
-  implicit val format: Format[User] = Json.format
-
-}

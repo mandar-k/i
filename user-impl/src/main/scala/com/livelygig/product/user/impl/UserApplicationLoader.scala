@@ -16,6 +16,7 @@ abstract class UserApplication(context: LagomApplicationContext)
   override lazy val lagomServer = LagomServer.forServices(
     bindService[UserService].to(wire[UserServiceImpl])
   )
+  lazy val userRepository =wire[UserRepository]
   persistentEntityRegistry.register(wire[UserEntity])
 }
 

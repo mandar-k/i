@@ -118,5 +118,5 @@ lazy val ReleaseCmd = Command.command("release") {
 }
 
 
-//lagomCassandraCleanOnStart in ThisBuild := false
+lagomCassandraCleanOnStart in ThisBuild := false
 onLoad in Global := (Command.process("project webGateway", _: State)) compose (onLoad in Global).value

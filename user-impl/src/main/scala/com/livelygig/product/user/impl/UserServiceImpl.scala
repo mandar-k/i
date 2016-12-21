@@ -5,24 +5,33 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.lightbend.lagom.scaladsl.api.transport.NotFound
+import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, NotFound}
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.livelygig.product.user.api.UserService
-import com.livelygig.product.user.api
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserServiceImpl(registry: PersistentEntityRegistry, system: ActorSystem)(implicit ec: ExecutionContext, mat: Materializer) extends UserService {
+class UserServiceImpl(registry: PersistentEntityRegistry,cassandraSession: CassandraSession, userRepository: UserRepository)(implicit ec: ExecutionContext, mat: Materializer) extends UserService {
+
 
   override def login = ServiceCall { user =>
-    refFor(user.email).ask(LoginUser).map {
-      case Some(user) =>
-        "Ok"
-      case None =>
-        throw NotFound(s"User with email ${user.email}")
-    }
+    userRepository.getUser(user)
   }
 
+  override def signup = ServiceCall { user =>
+    userRepository.doesUserExists(user).flatMap{
+      case true => throw Forbidden("User already exists")
+      case false =>
+        val uuid = UUID.randomUUID()
+        refFor(uuid).ask(CreateUser(user)).map{
+          _ =>  user.copy(id = uuid, password = "")
+        }
+    }
+  }
+  /*override def signup = ServiceCall { user =>
+    Future("yo")
+  }*/
 
-  private def refFor(userEmail:String) = registry.refFor[UserEntity](userEmail)
+  private def refFor(id:UUID) = registry.refFor[UserEntity](id.toString)
 }
