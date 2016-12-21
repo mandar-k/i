@@ -1,31 +1,36 @@
 package client.modules
 
-import japgolly.scalajs.react._
-import japgolly.scalajs.react.vdom.prefix_<^._
+import client.components.Bootstrap._
 import japgolly.scalajs.react.ReactComponentB
 import client.components.Icon
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.modals.{NewMessage, NewRecommendation, Offering}
-import japgolly.scalajs.react
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
+import org.querki.jquery.$
+import scala.scalajs.js
 import scalacss.ScalaCssReact._
-
 
 object OfferingResults {
   case class Props()
 
-  case class State()
+  case class State(menuAction : String = "" ,sortMenuBy  : String = "")
 
-  class Backend($: BackendScope[Props, State]) {
+  class Backend(t: BackendScope[Props, State]) {
     def mounted(props: Props) = Callback {
       //      log.debug("connection view mounted")
       //      Callback.when(props.proxy().isEmpty)(props.proxy.dispatch(RefreshConnections()))
-
+      val addTooltip: js.Object = ".DashBoardCSS_Style-btn"
+      $(addTooltip).tooltip(PopoverOptions.html(true))
     }
-    def dropDownSelected(event: ReactEventI): react.Callback = Callback {
+    def dropDownSelectAction(event: ReactEventI): Callback = {
       val value = event.target.innerHTML
-      event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent=value
+      t.modState(s => s.copy(menuAction = value))
+    }
+
+    def dropDownMenuSorting(event: ReactEventI): Callback = {
+      val valueSort = event.target.innerHTML
+      t.modState(s => s.copy(sortMenuBy = valueSort))
     }
   }
 
@@ -33,50 +38,25 @@ object OfferingResults {
   val component = ReactComponentB[Props]("Offerings")
     .initialState(State())
     .backend(new Backend(_))
-    .renderPS(($, props, S) => {
+    .renderPS((t, props, S) => {
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
-     /*     <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
+     <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("Select Bulk Action "))(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")
+                  (if(S.menuAction.equals("")) "Select Bulk Action " else  S.menuAction )(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Hide")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Favorite")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Unhide")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("Unfavorite"))
-                )
-              ),
-              <.div(PresetsCSS.Style.modalBtn)(
-                Offering(Offering.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.briefcase, "Create Offering")),
-                // NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
-                <.div(PresetsCSS.Style.overlay)(
-                  Icon.plus
-                )
-              ),
-              <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
-            )
-          ),*/   <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
-            <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
-            <.div(^.display := "inline-block")(
-              <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("Select Bulk Action "))(
-                  <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
-                ),
-                <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Hide")),
-                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Favorite")),
-                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Unhide")),
-                  <.li()(<.a(^.onClick ==> $.backend.dropDownSelected)("Unfavorite"))
+                  <.li()(<.a(^.onClick ==> t.backend.dropDownSelectAction)("Hide")),
+                  <.li()(<.a(^.onClick ==> t.backend.dropDownSelectAction)("Favorite")),
+                  <.li()(<.a(^.onClick ==> t.backend.dropDownSelectAction)("Unhide")),
+                  <.li()(<.a(^.onClick ==> t.backend.dropDownSelectAction)("Unfavorite"))
                 )
               ), <.div(PresetsCSS.Style.modalBtn)(
                 Offering(Offering.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.briefcase, "Create Offering")),
-                // NewMessage(NewMessage.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.envelope, "Create New Message")),
                 <.div(PresetsCSS.Style.overlay)(
                   Icon.plus
                 )
@@ -84,22 +64,21 @@ object OfferingResults {
             )
           ),
           <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
-
             <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
           ),
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block",DashBoardCSS.Style.rsltSortingDropdown)(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("By Date "))(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")
+                (if(S.sortMenuBy.equals("")) "By Date" else  S.sortMenuBy )(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Date")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Experience")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Reputation")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Rate")),
-                  <.li()(<.a(^.onClick ==>  $.backend.dropDownSelected)("By Projects Completed"))
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownMenuSorting)("By Date")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownMenuSorting)("By Experience")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownMenuSorting)("By Reputation")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownMenuSorting)("By Rate")),
+                  <.li()(<.a(^.onClick ==>  t.backend.dropDownMenuSorting)("By Projects Completed"))
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -110,13 +89,12 @@ object OfferingResults {
             ),
             <.div(^.className := "pull-right")(
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary", "data-placement".reactAttr := "bottom")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief", "data-placement".reactAttr := "bottom")(<.span("=",DashBoardCSS.Style.equalsIcon)),
+              <.button(DashBoardCSS.Style.customEqualIconButton,DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief", "data-placement".reactAttr := "bottom")(<.span("=",DashBoardCSS.Style.equalsIcon)),
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts", "data-placement".reactAttr := "bottom")(<.span(Icon.bars))
             )
           )
         ), //col-12
         <.div(^.className := "container-fluid", ^.id := "resultsContainer")(
-          //          <.div(^.className := "rsltSectionContainer", ^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.padding0px)(
           <.div(DashBoardCSS.Style.rsltSectionContainer, ^.className := "col-md-12 col-sm-12 col-xs-12", DashBoardCSS.Style.padding0px)(
             <.ul(^.className := "media-list")(
               for (i <- 1 to 50) yield {
@@ -142,8 +120,8 @@ object OfferingResults {
             )
           )
         )
-
       )})
+    .componentDidMount(scope => scope.backend.mounted(scope.props))
     .build
 }
 

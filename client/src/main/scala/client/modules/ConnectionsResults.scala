@@ -1,14 +1,13 @@
 package client.modules
 
-import japgolly.scalajs.react.vdom.prefix_<^._
-import japgolly.scalajs.react._
 import client.components.Bootstrap._
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB}
 import client.rootmodel.ConnectionsRootModel
-import client.modals.NewConnection
-import shared.models.{ConnectionsModel, UserModel}
+import shared.models.{ConnectionsModel}
+import client.components.Icon
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.modals.{NewConnection, NewMessage, NewRecommendation}
+import diode.react.ModelProxy
 import japgolly.scalajs.react
 import client.modals.{NewMessage, NewRecommendation}
 import diode.react._
@@ -19,13 +18,15 @@ import scala.scalajs.js
 import scalacss.ScalaCssReact._
 import org.querki.jquery.$
 
+import scala.scalajs.js
+
 object ConnectionsResults {
 
   case class Props(proxy: ModelProxy[ConnectionsRootModel] )
 
-  case class State(selectedItem: Option[ConnectionsModel] = None)
+  case class State(selectedItem: Option[ConnectionsModel] = None ,menuAction : String = "" ,sortMenuBy  : String = "" )
 
-  class Backend(t: BackendScope[Props, State]) {
+   class Backend(t: BackendScope[Props, State]) {
     def mounted(props: Props): Callback = Callback {
       //      log.debug("connection view mounted")
       //      Callback.when(props.proxy().isEmpty)(props.proxy.dispatch(RefreshConnections()))
@@ -33,50 +34,32 @@ object ConnectionsResults {
       $(addTooltip).tooltip(PopoverOptions.html(true))
     }
 
-    def dropDownSelected(event: ReactEventI): react.Callback = Callback {
+    def dropDownSelectAction(event: ReactEventI): Callback = {
       val value = event.target.innerHTML
-      event.target.parentElement.parentElement.previousElementSibling.firstChild.textContent = value
+      t.modState(s => s.copy(menuAction = value))
+    }
+
+    def dropDownMenuSorting(event: ReactEventI): Callback = {
+      val valueSort = event.target.innerHTML
+      t.modState(s => s.copy(sortMenuBy = valueSort))
     }
 
     def render(P: Props, S: State) = {
       <.div(^.id := "rsltScrollContainer", DashBoardCSS.Style.rsltContainer)(
         <.div(DashBoardCSS.Style.gigActionsContainer, ^.className := "row")(
-    /*      <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
+          <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
             <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
             <.div(^.display := "inline-block")(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("Select Bulk Action "))(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")
+                (if(S.menuAction.equals("")) "Select Bulk Action " else  S.menuAction )(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("Hide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("Favorite")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("Unhide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("Unfavorite"))
-                )
-              ),
-              <.div(PresetsCSS.Style.modalBtn)(
-                NewConnection(NewConnection.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.connectdevelop, "Create New Connection")),
-                <.div(PresetsCSS.Style.overlay, ^.top := "0.1em")(
-                  Icon.plus
-                )
-              ),
-              <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
-            )
-          ),*/   <.div(^.className := "col-md-4 col-sm-4 col-xs-8")(
-            <.input(^.`type` := "checkbox", DashBoardCSS.Style.rsltCheckboxStyle),
-            <.div(^.display := "inline-block")(
-              <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("Select Bulk Action "))(
-                  <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
-                ),
-                <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Hide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Favorite")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unhide")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected)("Unfavorite"))
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Hide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Favorite")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Unhide")),
+                  <.li()(<.a(^.onClick ==> dropDownSelectAction)("Unfavorite"))
                 )
               ), <.div(PresetsCSS.Style.modalBtn)(
                 NewConnection(NewConnection.Props("", Seq(HeaderCSS.Style.rsltContainerIconBtn), Icon.connectdevelop, "Create New Connection")),
@@ -87,22 +70,21 @@ object ConnectionsResults {
             )
           ),
           <.div(^.className := "col-md-2 col-sm-2 col-xs-4")(
-
             <.div(DashBoardCSS.Style.displayInlineText, DashBoardCSS.Style.rsltCountHolderDiv, DashBoardCSS.Style.marginResults)("2,352 Results")
           ),
           <.div(^.className := "col-md-6 col-sm-6 col-xs-12")(
             <.div(^.display := "inline-block",DashBoardCSS.Style.rsltSortingDropdown)(
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
-                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")(
-                  <.span("By Date "))(
+                <.button(DashBoardCSS.Style.gigMatchButton, ^.className := "btn dropdown-toggle", "data-toggle".reactAttr := "dropdown")
+                (if(S.sortMenuBy.equals("")) "By Date" else  S.sortMenuBy )(
                   <.span(^.className := "caret", DashBoardCSS.Style.rsltCaretStyle)
                 ),
                 <.ul(^.className := "dropdown-menu")(
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Date")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Experience")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Reputation")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Rate")),
-                  <.li()(<.a(^.onClick ==> dropDownSelected )("By Projects Completed"))
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Date")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Experience")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Reputation")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Rate")),
+                  <.li()(<.a(^.onClick ==> dropDownMenuSorting)("By Projects Completed"))
                 )
               ),
               <.div(DashBoardCSS.Style.displayInlineText, ^.className := "dropdown")(
@@ -113,17 +95,16 @@ object ConnectionsResults {
             ),
             <.div(^.className := "pull-right")(
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Summary", "data-placement".reactAttr := "bottom")(<.span(Icon.minus)),
-              <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief", "data-placement".reactAttr := "bottom")(<.span("=",DashBoardCSS.Style.equalsIcon)),
+              <.button(DashBoardCSS.Style.customEqualIconButton,DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Brief", "data-placement".reactAttr := "bottom")(<.span("=",DashBoardCSS.Style.equalsIcon)),
               <.button(DashBoardCSS.Style.btn, "data-toggle".reactAttr := "tooltip", "title".reactAttr := "View Full Posts", "data-placement".reactAttr := "bottom")(<.span(Icon.bars))
-            )
           )
-        ), //col-12
-        <.div(^.id := "resultsContainer")(
-          ConnectionList(P.proxy().connectionsResponse))
+        )
+      ), //col-12
+      <.div(^.id := "resultsContainer")(
+        ConnectionList(P.proxy().connectionsResponse))
       ) //mainContainer
     }
   }
-
 
   private val component = ReactComponentB[Props]("Connection")
     .initialState_P(p => State())

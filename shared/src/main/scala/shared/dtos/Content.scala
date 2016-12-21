@@ -1,5 +1,7 @@
 package shared.dtos
 
+//import boopickle.Default._
+
 /**
   * Represents content within a request/response to API endpoints.
   */
@@ -98,7 +100,7 @@ case class VersionInfoResponse(glosevalVersion: String = "", scalaVersion: Strin
 
 case class CloseSessionRequest(sessionURI: String = "") extends Content
 
-case class OmniBalanceResponse(sessionURI: String , amp: String, btc: String, address: String)
+case class OmniBalanceResponse(sessionURI: String, amp: String, btc: String, address: String)
 
 case class SendAmpsRequest(sessionURI: String, amount: String, target: String) extends Content {
   require(amount.nonEmpty, "Amount of AMPs should be non-zero!")
@@ -107,7 +109,7 @@ case class SendAmpsRequest(sessionURI: String, amount: String, target: String) e
 
 case class SendAmpsResponse(sessionURI: String, transaction: String)
 
-case class ServerModel(uid: String = "", serverAddress : String = "", isEditable : Boolean = true, serverType: String = "")
+case class ServerModel(uid: String = "", serverAddress: String = "", isEditable: Boolean = true, serverType: String = "")
 
 /*object Content {
   implicit val todoPriorityPickler: Pickler[Content] = generatePickler[Content]

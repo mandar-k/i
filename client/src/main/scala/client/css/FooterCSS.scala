@@ -85,7 +85,8 @@ object FooterCSS {
     val legalModalBtn = style(
       border.none,
       &.hover(
-        backgroundColor.transparent
+        backgroundColor.transparent,
+        color.blue
       ),
       &.active(
         backgroundColor.transparent
