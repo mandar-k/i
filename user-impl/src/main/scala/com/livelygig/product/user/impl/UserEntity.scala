@@ -4,7 +4,7 @@ import java.util.UUID
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
-import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, AggregateEventTagger, PersistentEntity}
+import com.lightbend.lagom.scaladsl.persistence._
 import com.lightbend.lagom.scaladsl.playjson.Jsonable
 import com.livelygig.product.utils.JsonFormats.singletonFormat
 import play.api.libs.json.{Format, Json}
@@ -41,14 +41,16 @@ class UserEntity extends PersistentEntity{
 }
 
 
-sealed trait UserEvent extends AggregateEvent[UserEvent] with Jsonable {
-  override def aggregateTag: AggregateEventTagger[UserEvent] = UserEvent.Tag
-}
 
 object UserEvent {
   val NumShards = 4
   val Tag = AggregateEventTag.sharded[UserEvent](NumShards)
 }
+
+sealed trait UserEvent extends AggregateEvent[UserEvent] with Jsonable {
+  override def aggregateTag: AggregateEventShards[UserEvent] = UserEvent.Tag
+}
+
 
 case class UserLoggedIn(id: String) extends UserEvent
 
@@ -68,8 +70,6 @@ case class UserCreated(user: User) extends UserEvent
 object UserCreated {
   implicit val format: Format[UserCreated] = Json.format
 }
-
-
 
 sealed trait UserCommand extends Jsonable
 
