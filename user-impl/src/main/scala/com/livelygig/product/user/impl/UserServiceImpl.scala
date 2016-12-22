@@ -24,7 +24,7 @@ class UserServiceImpl(registry: PersistentEntityRegistry,cassandraSession: Cassa
       case true => throw Forbidden("User already exists")
       case false =>
         val uuid = UUID.randomUUID()
-        refFor(uuid).ask(CreateUser(user)).map{
+        refFor(uuid).ask(CreateUser(User(user.id,user.email,user.password,user.name))).map{
           _ =>  user.copy(id = uuid, password = "")
         }
     }

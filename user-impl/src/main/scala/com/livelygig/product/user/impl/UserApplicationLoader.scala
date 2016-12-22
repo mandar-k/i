@@ -18,6 +18,7 @@ abstract class UserApplication(context: LagomApplicationContext)
   )
   lazy val userRepository =wire[UserRepository]
   persistentEntityRegistry.register(wire[UserEntity])
+  readSide.register(wire[UserEventProcessor])
 }
 
 class UserApplicationLoader extends LagomApplicationLoader {

@@ -3,12 +3,11 @@ package com.livelygig.product.user.impl
 import java.util.UUID
 
 import akka.Done
-import com.lightbend.lagom.scaladsl.persistence.PersistentEntity
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
-import com.lightbend.lagom.scaladsl.playjson.{Jsonable, SerializerRegistry, Serializers}
-import com.livelygig.product.user.api.User
+import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, AggregateEventTagger, PersistentEntity}
+import com.lightbend.lagom.scaladsl.playjson.Jsonable
+import com.livelygig.product.utils.JsonFormats.singletonFormat
 import play.api.libs.json.{Format, Json}
-import com.livelygig.product.utils.JsonFormats._
 
 /**
   * Created by shubham.k on 16-12-2016.
@@ -42,11 +41,46 @@ class UserEntity extends PersistentEntity{
 }
 
 
+sealed trait UserEvent extends AggregateEvent[UserEvent] with Jsonable {
+  override def aggregateTag: AggregateEventTagger[UserEvent] = UserEvent.Tag
+}
+
+object UserEvent {
+  val NumShards = 4
+  val Tag = AggregateEventTag.sharded[UserEvent](NumShards)
+}
+
+case class UserLoggedIn(id: String) extends UserEvent
+
+object UserLoggedIn {
+  implicit val format: Format[UserLoggedIn] = Json.format
+}
+
+case class User(id: UUID, email:String, password: String, name:String)
+
+object User {
+  implicit val format: Format[User] = Json.format
+
+}
+
+case class UserCreated(user: User) extends UserEvent
+
+object UserCreated {
+  implicit val format: Format[UserCreated] = Json.format
+}
 
 
 
+sealed trait UserCommand extends Jsonable
 
+case class CreateUser(user: User) extends UserCommand with ReplyType[Done]
+object CreateUser {
+  implicit val format: Format[CreateUser.type] = singletonFormat(CreateUser)
+}
 
+case object LoginUser extends UserCommand with ReplyType[Option[User]] {
+  implicit val format: Format[LoginUser.type] = singletonFormat(LoginUser)
+}
 
 
 

@@ -25,7 +25,7 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
 
   def login = Action.async{implicit rh =>
     println(rh.body.asJson)
-    userService.signup.invoke(User(UUID.randomUUID(),"","","")).map{
+    userService.signup.invoke(User(UUID.randomUUID(),"test","test","test")).map{
       msg => Ok(Json.toJson(msg))
     }
   }
