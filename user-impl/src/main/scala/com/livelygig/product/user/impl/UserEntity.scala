@@ -47,7 +47,7 @@ object UserEvent {
   val Tag = AggregateEventTag.sharded[UserEvent](NumShards)
 }
 
-sealed trait UserEvent extends AggregateEvent[UserEvent] with Jsonable {
+sealed trait UserEvent extends AggregateEvent[UserEvent]  {
   override def aggregateTag: AggregateEventShards[UserEvent] = UserEvent.Tag
 }
 
