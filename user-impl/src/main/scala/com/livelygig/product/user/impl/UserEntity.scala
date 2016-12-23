@@ -18,12 +18,13 @@ class UserEntity extends PersistentEntity{
 
   override def behavior = {
     case None => noUser
+    case Some(user) => userFound
   }
 
   private val noUser = {
     Actions()
-      .onReadOnlyCommand[LoginUser.type, Option[User]] {
-      case (LoginUser, ctx, state) => ctx.reply(state)
+      .onReadOnlyCommand[LoginUser, Option[User]] {
+      case (LoginUser(user), ctx, state) => ctx.invalidCommand("User Does not exist.")
     }
       .onCommand[CreateUser, Done] {
       case (CreateUser(user), ctx, state) =>
@@ -32,5 +33,20 @@ class UserEntity extends PersistentEntity{
       .onEvent{
         case (UserCreated(user), state) => Some(user)
       }
+  }
+
+  private val userFound = {
+    Actions()
+      .onReadOnlyCommand[CreateUser, Done] {
+      case (_, ctx, _) => ctx.invalidCommand("This email is already registered.")
+    }
+      .onReadOnlyCommand[LoginUser , Option[User]] {
+      case (LoginUser(user), ctx, state) =>
+        if (state.get.password == user.password)
+          ctx.reply(state)
+
+        else
+          ctx.invalidCommand("Authorization failed.")
+    }
   }
 }

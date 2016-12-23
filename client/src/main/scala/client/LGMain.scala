@@ -140,6 +140,10 @@ object LGMain extends js.JSApp {
       case Success(response)=> println(response)
       case Failure(v) => println("")
     }
+    CoreApi.signupFromApi().onComplete{
+      case Success(response)=> println(response)
+      case Failure(v) => println("")
+    }
     window.sessionStorage.removeItem("sessionPingTriggered")
     //    standaloneCSS.render[HTMLStyleElement].outerHTML
     GlobalRegistry.addToDocumentOnRegistration()

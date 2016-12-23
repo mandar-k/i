@@ -6,7 +6,7 @@ import org.scalajs.dom._
 import upickle.default._
 import shared.models.{EmailValidationModel, SignUpModel, UserModel}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js.Date
 import scala.util.{Failure, Success, Try}
@@ -43,6 +43,13 @@ object CoreApi {
   def loginFromApi(): Future[String] = {
     Ajax.post(
       url = "/login",
+      data = "{}",
+      headers = Map("Content-Type" -> "application/json;charset=UTF-8")
+    ).map(_.responseText)
+  }
+  def signupFromApi(): Future[String] = {
+    Ajax.post(
+      url = "/signup",
       data = "{}",
       headers = Map("Content-Type" -> "application/json;charset=UTF-8")
     ).map(_.responseText)

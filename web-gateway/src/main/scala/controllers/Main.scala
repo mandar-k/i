@@ -23,16 +23,16 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
       Ok("")
   }
 
-  def login = Action.async{implicit rh =>
-    println(rh.body.asJson)
-    userService.signup.invoke(User(UUID.randomUUID(),"testq2","testq2","testq2")).map{
-      msg => Ok(Json.toJson(msg))
-    }
-  }
   def signup = Action.async{implicit rh =>
     println(rh.body.asJson)
-    userService.signup.invoke(User(UUID.randomUUID(),"","","")).map{
-      msg => Ok(Json.toJson(msg))
+    userService.signup.invoke(User(UUID.randomUUID(),"testq2","testq2","testq2")).map{
+      msg => Ok("")
+    }
+  }
+  def login = Action.async{implicit rh =>
+    println(rh.body.asJson)
+    userService.login.invoke(User(UUID.randomUUID(),"testq2","testq2","testq2")).map{
+      msg => Ok("")
     }
   }
 

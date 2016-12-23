@@ -22,4 +22,4 @@ POST /logging                                                      controllers.M
 
 POST    /login                              controllers.Main.login
 
-# POST    /signup                             controllers.Main.signup
+POST    /signup                             controllers.Main.signup

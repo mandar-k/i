@@ -43,9 +43,9 @@ private[impl] class UserEventProcessor(session: CassandraSession, readSide: Cass
 
   override def buildHandler() = {
     readSide.builder[UserEvent]("UserEventOffset")
-      .setGlobalPrepare(createTables)
-      .setPrepare(_ => preparedStatements())
-      .setEventHandler[UserCreated](e => insertUserAuth(e.event.user))
+//      .setGlobalPrepare(createTables)
+//      .setPrepare(_ => preparedStatements())
+//      .setEventHandler[UserCreated](e => insertUserAuth(e.event.user))
       .build
   }
 

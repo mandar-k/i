@@ -5,7 +5,8 @@ import com.livelygig.product.user.api.User
 class UserSerializerRegistry extends SerializerRegistry {
   override def serializers = List(
     Serializers[User],
-    Serializers[LoginUser.type ],
+    Serializers[LoginUser],
+    Serializers[CreateUser],
     Serializers[UserCreated]
   )
 }
