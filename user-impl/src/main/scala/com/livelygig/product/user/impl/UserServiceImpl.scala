@@ -7,7 +7,7 @@ import akka.stream.Materializer
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, NotFound}
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
-import com.livelygig.product.user.api.UserService
+import com.livelygig.product.user.api.{User, UserService}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 
 import scala.concurrent.{ExecutionContext, Future}

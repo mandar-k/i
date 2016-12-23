@@ -7,6 +7,7 @@ import com.lightbend.lagom.scaladsl.api.transport.NotFound
 import com.lightbend.lagom.scaladsl.persistence.{ReadSide, ReadSideProcessor}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, CassandraSession}
 import com.livelygig.product.user.api
+import com.livelygig.product.user.api.User
 
 import scala.concurrent.{ExecutionContext, Future}
 
