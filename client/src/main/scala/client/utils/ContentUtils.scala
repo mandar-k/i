@@ -3,7 +3,7 @@ package client.utils
 import client.handler._
 import client.logger
 import client.modules.AppModule
-import client.services.{CoreApi, LGCircuit}
+import client.services.{CoreApi,CoreApiOld, LGCircuit}
 import diode.AnyAction._
 import org.widok.moment.Moment
 import shared.dtos._
@@ -58,7 +58,7 @@ object ContentUtils {
     val req = SubscribeRequest(AppUtils.getSessionUri(viewName), expr)
     var count = 1
     subscribe()
-    def subscribe(): Unit = CoreApi.evalSubscribeRequest(req).onComplete {
+    def subscribe(): Unit = CoreApiOld.evalSubscribeRequest(req).onComplete {
       case Success(res) =>
         LGCircuit.dispatch(
           UpdatePrevSearchCnxn(req.expression.content.cnxns, viewName))
@@ -81,7 +81,7 @@ object ContentUtils {
     var count = 1
     subscribe()
 
-    def subscribe(): Unit = CoreApi.evalSubscribeRequest(req).onComplete {
+    def subscribe(): Unit = CoreApiOld.evalSubscribeRequest(req).onComplete {
       case Success(res) =>
         LGCircuit.dispatch(
           UpdatePrevSearchCnxn(req.expression.content.cnxns, viewName))
@@ -214,7 +214,7 @@ object ContentUtils {
     var count = 1
     cancelPrevious()
     def cancelPrevious(): Unit =
-      CoreApi
+      CoreApiOld
         .cancelSubscriptionRequest(getCancelSubscribeRequest(viewName))
         .onComplete {
           case Success(res) =>
@@ -233,7 +233,7 @@ object ContentUtils {
   def postContent(req: SubscribeRequest): Unit = {
     var count = 1
     postMsg()
-    def postMsg(): Unit = CoreApi.evalSubscribeRequest(req).onComplete {
+    def postMsg(): Unit = CoreApiOld.evalSubscribeRequest(req).onComplete {
       case Success(res) =>
       case Failure(fail) =>
         if (count == 3) {
@@ -253,7 +253,7 @@ object ContentUtils {
       "alias")
     var count = 1
     post()
-    def post(): Unit = CoreApi.postLabel(labelPost).onComplete {
+    def post(): Unit = CoreApiOld.postLabel(labelPost).onComplete {
       case Success(res) =>
         postContent(subscribeReq)
         LGCircuit.dispatch(
@@ -278,7 +278,7 @@ object ContentUtils {
       "alias")
     var count = 1
     post()
-    def post(): Unit = CoreApi.postLabel(labelPost).onComplete {
+    def post(): Unit = CoreApiOld.postLabel(labelPost).onComplete {
       case Success(res) =>
         LGCircuit.dispatch(
           CreateLabels(labelNames.map(SearchesModelHandler.leaf)))

@@ -11,7 +11,7 @@ import client.components.Icon
 import client.components.Icon._
 import client.components._
 import client.css._
-import client.services.{ApiTypes, CoreApi, LGCircuit, RootModel}
+import client.services.{ApiTypes, CoreApi,CoreApiOld, LGCircuit, RootModel}
 import japgolly.scalajs.react
 import client.components.Bootstrap._
 import client.utils.ConnectionsUtils
@@ -153,7 +153,7 @@ object ConnectionsForm {
         //        val content = state.establishConnection.copy(sessionURI = uri,
         //          aURI = connections(0).target,
         //          bURI = connections(1).target, label = connections(0).label)
-        CoreApi.postIntroduction(content)
+        CoreApiOld.postIntroduction(content)
         t.modState(s => s.copy(postConnection = true))
       } else {
         $("#cnxnError".asInstanceOf[js.Object]).removeClass("hidden")
@@ -175,7 +175,7 @@ object ConnectionsForm {
           val content = state.establishConnection.copy(sessionURI = uri,
             aURI = ConnectionsUtils.getSelfConnnection(uri).source,
             bURI = s"agent://${state.agentUid}", label = "869b2062-d97b-42dc-af5d-df28332cdda1")
-          CoreApi.postIntroduction(content)
+          CoreApiOld.postIntroduction(content)
           t.modState(s => s.copy(postConnection = true))
       }
     }

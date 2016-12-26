@@ -6,7 +6,7 @@ package client.modals
 
 
 import shared.models.MessagePostContent
-import client.services.{CoreApi, LGCircuit}
+import client.services.{CoreApi, CoreApiOld, LGCircuit}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.OnUnmount
 import japgolly.scalajs.react.vdom.prefix_<^._
@@ -102,7 +102,7 @@ object ConfirmIntroReqForm {
       val props = t.props.runNow()
       val introConfirmReq = IntroConfirmReq(connectionSessionURI, alias = "alias", props.proxy().introResponse(0).introSessionId, props.proxy().introResponse(0).correlationId, accepted = false)
 //      println(s"introConfirmReq: $introConfirmReq")
-      CoreApi.postIntroduction(introConfirmReq).onComplete {
+      CoreApiOld.postIntroduction(introConfirmReq).onComplete {
         case Success(response) => println("introRequest Rejected successfully ")
           LGCircuit.dispatch(UpdateIntroductionsModel(introConfirmReq))
 
@@ -137,7 +137,7 @@ object ConfirmIntroReqForm {
       val connectionSessionURI = LGCircuit.zoom(_.session.messagesSessionUri).value/*window.sessionStorage.getItem(SessionItems.ConnectionViewItems.CONNECTIONS_SESSION_URI)*/
       val props = t.props.runNow()
       val introConfirmReq = IntroConfirmReq(connectionSessionURI, alias = "alias", props.proxy().introResponse(0).introSessionId, props.proxy().introResponse(0).correlationId, accepted = true)
-      CoreApi.postIntroduction(introConfirmReq).onComplete {
+      CoreApiOld.postIntroduction(introConfirmReq).onComplete {
         case Success(response) =>
 //           println("introRequest sent successfully ")
           LGCircuit.dispatch(UpdateIntroductionsModel(introConfirmReq))

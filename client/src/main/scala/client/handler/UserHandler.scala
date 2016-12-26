@@ -1,12 +1,13 @@
 package client.handler
 
-import client.services.{CoreApi, LGCircuit}
+import client.services.{CoreApi, CoreApiOld, LGCircuit}
 import diode.{ActionHandler, ActionResult, ModelRW}
 import org.scalajs.dom.window
 import shared.dtos.UpdateUserRequest
-import shared.models.UserModel
+import client.dtos.UserModel
 import client.logger
 import diode.AnyAction._
+
 import scala.util.{Failure, Success}
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -34,7 +35,7 @@ class UserHandler[M](modelRW: ModelRW[M, UserModel]) extends ActionHandler(model
     case PostUserUpdate(req) =>
       var count = 1
       post()
-      def post(): Unit = CoreApi.updateUserRequest(req).onComplete {
+      def post(): Unit = CoreApiOld.updateUserRequest(req).onComplete {
         case Success(response) =>
           logger.log.debug("user update request sent successfully")
         case Failure(response) =>

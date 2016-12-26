@@ -6,7 +6,7 @@ import diode.data._
 import shared.models.MessagePost
 import client.rootmodel.MessagesRootModel
 import client.logger
-import client.services.{CoreApi, LGCircuit}
+import client.services.{CoreApi,CoreApiOld, LGCircuit}
 import diode.util.{Retry, RetryPolicy}
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils}
 import org.widok.moment.Moment
@@ -31,7 +31,7 @@ class MessagesHandler[M](modelRW: ModelRW[M, Pot[MessagesRootModel]]) extends Ac
 
     case action: RefreshMessages =>
       val updateF = action.effectWithRetry {
-        CoreApi.sessionPing(LGCircuit.zoom(_.session.messagesSessionUri).value)
+        CoreApiOld.sessionPing(LGCircuit.zoom(_.session.messagesSessionUri).value)
       } { messagesResponse =>
         LGCircuit.dispatch(RefreshMessages())
         val currentVal = if (value.nonEmpty) value.get.messagesModelList else Nil

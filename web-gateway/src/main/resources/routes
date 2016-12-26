@@ -5,6 +5,16 @@
 # Home page
 GET     /                                 controllers.Main.index
 
+
+# User
+
+POST    /login                              controllers.Main.login
+
+POST    /signup                             controllers.Main.signup
+
+
+
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/fonts/glyphicons-halflings-regular.ttf             controllers.Assets.at(path="/public",file="/lib/bootstrap/fonts/glyphicons-halflings-regular.ttf")
 GET     /assets/fonts/glyphicons-halflings-regular.woff            controllers.Assets.at(path="/public",file="/lib/bootstrap/fonts/glyphicons-halflings-regular.woff")
@@ -17,9 +27,3 @@ GET     /assets/*file                                              controllers.A
 
 # Logging
 POST /logging                                                      controllers.Main.logging
-
-# User
-
-POST    /login                              controllers.Main.login
-
-POST    /signup                             controllers.Main.signup

@@ -6,7 +6,7 @@ import client.rootmodel._
 import diode._
 import diode.data._
 import diode.react.ReactConnector
-import shared.models.UserModel
+import client.dtos.UserModel
 
 case class RootModel(connections: ConnectionsRootModel, user: UserModel, messages: Pot[MessagesRootModel],
                      jobPosts: Pot[ProjectsRootModel], searches: SearchesRootModel, profiles : Pot[ProfilesRootModel],

@@ -1,12 +1,11 @@
 package client.modals
 
-import client.LGMain.{DashboardLoc, Loc}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
 import client.components.Bootstrap._
 import client.components._
-import client.css.{CreateAgentCSS, DashBoardCSS, HeaderCSS}
-import shared.models.UserModel
+import client.css.{CreateAgentCSS, DashBoardCSS}
+import client.dtos.UserModel
 import client.sessionitems.SessionItems
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
@@ -38,6 +37,7 @@ object LoginForm {
       window.sessionStorage.setItem(SessionItems.ApiDetails.API_URL, state.hostName)
       if ($(LoginID).hasClass("disabled")) {
         t.modState(s => s.copy(login = false))
+
       }
       else {
         t.modState(s => s.copy(login = true))
@@ -104,8 +104,6 @@ object LoginForm {
                 <.div(^.className := "form-group")(
                     <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Name",
                         ^.placeholder := "email id", ^.value := s.hostName, ^.onChange ==> updateIp, ^.required := true)
-
-
                 ),
                 <.div(^.className := "form-group")(
                   <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Name", ^.className := "form-control", "data-error".reactAttr := "Username is required",

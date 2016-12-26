@@ -6,7 +6,7 @@ import shared.models.{MessagePost, ProfilesPost}
 import client.modules.AppModule
 import diode.{ActionHandler, ActionResult, ModelRW}
 import org.scalajs.dom.window
-import client.services.{CoreApi, LGCircuit}
+import client.services.{CoreApi,CoreApiOld, LGCircuit}
 import diode.util.{Retry, RetryPolicy}
 import client.sessionitems.SessionItems
 import client.utils.ContentUtils
@@ -29,7 +29,7 @@ case class ClearProfiles()
 class ProfilesHandler[M](modelRW: ModelRW[M, Pot[ProfilesRootModel]]) extends ActionHandler(modelRW) {
   override def handle: PartialFunction[Any, ActionResult[M]] = {
     case action: RefreshProfiles =>
-      val updateF = action.effectWithRetry(CoreApi.sessionPing(LGCircuit.zoom(_.session.profileSessionUri).value)) { profilesResponse =>
+      val updateF = action.effectWithRetry(CoreApiOld.sessionPing(LGCircuit.zoom(_.session.profileSessionUri).value)) { profilesResponse =>
         LGCircuit.dispatch(RefreshProfiles())
         val currentProfile = if (value.nonEmpty) value.get.profilesList else Nil
         val updatedProfiles = currentProfile ++ ContentUtils

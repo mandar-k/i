@@ -136,14 +136,8 @@ object LGMain extends js.JSApp {
     GlobalStyles.addToDocument()
     AppCSS.load
     import scala.concurrent.ExecutionContext.Implicits.global
-    CoreApi.loginFromApi().onComplete{
-      case Success(response)=> println(response)
-      case Failure(v) => println("")
-    }
-    CoreApi.signupFromApi().onComplete{
-      case Success(response)=> println(response)
-      case Failure(v) => println("")
-    }
+
+
     window.sessionStorage.removeItem("sessionPingTriggered")
     //    standaloneCSS.render[HTMLStyleElement].outerHTML
     GlobalRegistry.addToDocumentOnRegistration()

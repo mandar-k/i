@@ -10,7 +10,7 @@ import client.components.Bootstrap.CommonStyle
 import client.modals._
 import client.components._
 import client.css.{DashBoardCSS, HeaderCSS}
-import shared.models.UserModel
+import client.dtos.UserModel
 import client.services.LGCircuit
 import client.components.Bootstrap._
 import scalacss.ScalaCssReact._

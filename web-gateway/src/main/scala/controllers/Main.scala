@@ -23,17 +23,42 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
       Ok("")
   }
 
-  def signup = Action.async{implicit rh =>
-    println(rh.body.asJson)
-    userService.signup.invoke(User(UUID.randomUUID(),"testq2","testq2","testq2")).map{
-      msg => Ok("")
-    }
-  }
-  def login = Action.async{implicit rh =>
-    println(rh.body.asJson)
-    userService.login.invoke(User(UUID.randomUUID(),"testq2","testq2","testq2")).map{
-      msg => Ok("")
+
+  def signup = Action.async { implicit rh =>
+    println("Signup" + rh.body.asJson)
+    rh.body.asJson match {
+      case Some(data) => {
+        var email = (data \ ("email")).as[String]
+        var password = (data \ ("password")).as[String]
+        var name = (data \ ("name")).as[String]
+        userService.signup.invoke(User(UUID.randomUUID(), email, password, name)).map {
+          msg => Ok("")
+        }
+      }
+      case None => {
+        userService.signup.invoke(User(UUID.randomUUID(), "", "testq2", "testq2")).map {
+          msg => Ok("")
+        }
+      }
     }
   }
 
+  def login = Action.async { implicit rh =>
+    println("Signup" + rh.body.asJson)
+    rh.body.asJson match {
+      case Some(data) => {
+        var email = (data \ ("email")).as[String]
+        var password = (data \ ("password")).as[String]
+//        var name = (data \ ("name")).as[String]
+        userService.login.invoke(User(UUID.randomUUID(), email, password, "name")).map {
+          msg => Ok(views.html.index("LivelyGig"))
+        }
+      }
+      case None => {
+        userService.login.invoke(User(UUID.randomUUID(), "", "testq2", "testq2")).map {
+          msg => Ok("")
+        }
+      }
+    }
+  }
 }

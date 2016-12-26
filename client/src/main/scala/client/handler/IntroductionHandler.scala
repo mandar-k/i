@@ -6,7 +6,7 @@ import java.util.UUID
 import diode.{ActionHandler, ActionResult, ModelRW}
 import client.rootmodel.IntroRootModel
 import client.logger
-import client.services.{CoreApi, LGCircuit}
+import client.services.{CoreApiOld, LGCircuit}
 import shared.dtos._
 
 import concurrent._
@@ -39,7 +39,7 @@ class IntroductionHandler[M](modelRW: ModelRW[M, IntroRootModel]) extends Action
     case PostNewConnection(content: Content) =>
       var count = 1
       post()
-      def post(): Unit = CoreApi.postIntroduction(content).onComplete {
+      def post(): Unit = CoreApiOld.postIntroduction(content).onComplete {
         case Success(res) =>
           logger.log.debug("Connection request sent successfully")
         case Failure(fail) =>
@@ -62,7 +62,7 @@ class IntroductionHandler[M](modelRW: ModelRW[M, IntroRootModel]) extends Action
       updated(IntroRootModel(newList))
 
     case UpdateIntroductionsModel(introConfirmReq: IntroConfirmReq) =>
-      CoreApi.postIntroduction(introConfirmReq).onComplete {
+      CoreApiOld.postIntroduction(introConfirmReq).onComplete {
         case Success(response) => logger.log.debug("Intro confirm request sent successfully")
         case Failure(response) => /*logger.log.error("Error sending intro confirm request")*/ LGCircuit.dispatch(ShowServerError(response.getMessage))
       }
