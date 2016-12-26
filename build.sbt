@@ -100,6 +100,24 @@ lazy val userImpl = (project in file("user-impl"))
     libraryDependencies +=lagomScaladslPersistenceCassandra
   )
 
+lazy val messageApi = (project in file("message-api"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+
+lazy val messageImpl = (project in file("message-impl"))
+  .settings(commonSettings: _*)
+  .enablePlugins(LagomScala)
+  .dependsOn(messageApi, security)
+  .settings(
+    libraryDependencies ++= Settings.apiImplDependencies.value,
+    libraryDependencies +=lagomScaladslPersistenceCassandra
+  )
+
+
 def commonSettings: Seq[Setting[_]] = Seq(
   version := Versions.appVersion,
   scalacOptions ++= Settings.scalacOptions
