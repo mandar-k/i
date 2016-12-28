@@ -12,7 +12,7 @@ import play.api.libs.json.{Format, Json}
   */
 sealed trait MessageCommand extends Jsonable
 
-case class PostMessage(message: Message) extends MessageCommand with ReplyType[Done]
-object PostMessage {
-  implicit val format: Format[PostMessage] = Json.format
+case class AddMessage(message: Message) extends MessageCommand with ReplyType[Done]
+object AddMessage {
+  implicit val format: Format[AddMessage] = Json.format
 }

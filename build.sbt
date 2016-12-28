@@ -114,7 +114,7 @@ lazy val messageImpl = (project in file("message-impl"))
   .dependsOn(messageApi, security)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies +=lagomScaladslPersistenceCassandra
+    libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
   )
 
 
