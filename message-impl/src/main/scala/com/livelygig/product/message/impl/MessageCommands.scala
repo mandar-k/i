@@ -1,4 +1,4 @@
-package com.livelygig.product.messages.impl
+package com.livelygig.product.message.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType

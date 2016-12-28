@@ -2,10 +2,8 @@ package com.livelygig.product.message.impl
 
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
-import com.lightbend.lagom.scaladsl.pubsub.PubSubRegistry
 import com.lightbend.lagom.scaladsl.server._
 import com.livelygig.product.message.api.MessageService
-import com.livelygig.product.messages.impl.MessageTimelineEntity
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
 

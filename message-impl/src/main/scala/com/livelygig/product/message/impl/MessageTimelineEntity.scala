@@ -1,12 +1,8 @@
-package com.livelygig.product.messages.impl
+package com.livelygig.product.message.impl
 
 import akka.Done
-import com.lightbend.lagom.scaladsl.pubsub.TopicId
-//import com.lightbend.lagom.scaladsl.api.broker.Topic.TopicId
 import com.lightbend.lagom.scaladsl.persistence._
-import com.lightbend.lagom.scaladsl.pubsub.PubSubRegistry
 import com.livelygig.product.message.api.Message
-import com.livelygig.product.message.impl.{MessageEvent, MessagePosted}
 
 /**
   * Created by shubham.k on 16-12-2016.

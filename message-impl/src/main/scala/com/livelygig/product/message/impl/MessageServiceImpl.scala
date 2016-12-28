@@ -6,9 +6,6 @@ import com.lightbend.lagom.scaladsl.api.transport.Forbidden
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.livelygig.product.message.api.MessageService
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
-import com.lightbend.lagom.scaladsl.pubsub.PubSubRegistry
-import com.livelygig.product.messages.impl.{AddMessage, MessageTimelineEntity}
-
 import scala.concurrent.ExecutionContext
 
 class MessageServiceImpl(registry: PersistentEntityRegistry,cassandraSession: CassandraSession/*, pubSubRegistry: PubSubRegistry*/)
