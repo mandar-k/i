@@ -28,6 +28,7 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
     println("Signup" + rh.body.asJson)
     rh.body.asJson match {
       case Some(data) => {
+//        data.as[Message]
         var email = (data \ ("email")).as[String]
         var password = (data \ ("password")).as[String]
         var name = (data \ ("name")).as[String]

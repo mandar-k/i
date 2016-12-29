@@ -1,5 +1,7 @@
 package com.livelygig.product.message.impl
 
+import java.util.Date
+
 import akka.Done
 import com.datastax.driver.core.PreparedStatement
 import com.lightbend.lagom.scaladsl.persistence.{ReadSide, ReadSideProcessor}
@@ -53,6 +55,6 @@ private[impl] class MessageEventProcessor(session: CassandraSession, readSide: C
   }
 
   def insertMessage(message: Message) = {
-    Future.successful(List(insertMessageStatement.bind(message.userId, message.id, message.content, message.posttime)))
+    Future.successful(List(insertMessageStatement.bind(message.userId, message.id, message.content, Date.from(message.posttime))))
   }
 }

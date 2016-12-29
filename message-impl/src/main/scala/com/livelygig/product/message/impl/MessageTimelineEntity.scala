@@ -7,9 +7,8 @@ import com.livelygig.product.message.api.Message
 /**
   * Created by shubham.k on 16-12-2016.
   */
-class MessageTimelineEntity extends PersistentEntity{
+class MessageTimelineEntity(msgPubSub: MessagePubSub)  extends PersistentEntity {
 
-  private final val MAX_TOPICS = 1024
   override type Command = MessageCommand
 
   override type Event = MessageEvent
@@ -29,7 +28,7 @@ class MessageTimelineEntity extends PersistentEntity{
       case (AddMessage(msg),ctx,state) => {
         ctx.thenPersist(MessagePosted(msg), evt => {
           ctx.reply(Done)
-//          refFor(msg.userId.toString).publish(msg)
+          msgPubSub.refFor(msg.userId.toString).publish(msg)
         })
       }
     }
@@ -41,16 +40,9 @@ class MessageTimelineEntity extends PersistentEntity{
     Actions()
       .onReadOnlyCommand[AddMessage, Done] {
       case (AddMessage(msg),ctx, _) => {
+        msgPubSub.refFor(msg.userId.toString).publish(msg)
         ctx.invalidCommand("Error in posting the message.")
       }
     }
-  }
-
-  def refFor(userId: String) = {
-//    pubsub.refFor(TopicId[Message](topicQualifier(userId)))
-  }
-
-  def topicQualifier (userId: String) = {
-    String.valueOf(Math.abs(userId.hashCode()) % MAX_TOPICS)
   }
 }

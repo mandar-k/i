@@ -12,6 +12,10 @@ POST    /login                              controllers.Main.login
 
 POST    /signup                             controllers.Main.signup
 
+# Messages
+
+POST    /addMessage                         controllers.MessageController.addMessage
+
 
 
 
