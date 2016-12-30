@@ -14,13 +14,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class MessageServiceImpl(registry: PersistentEntityRegistry, cassandraSession: CassandraSession /*, pubSubRegistry: PubSubRegistry*/)
                         (implicit ec: ExecutionContext, mat: Materializer) extends MessageService {
 
-  override def addMessage(userId: String) = ServiceCall { msg =>
-    if (userId == msg.userId) {
-      refFor(msg.id.toString).ask(AddMessage(msg)).map { _ => null }
-    } else {
-      throw Forbidden("User not authorized to post this message")
-    }
-
+  override def addMessage() = ServiceCall { msg =>
+    refFor(msg.id.toString).ask(AddMessage(msg)).map { _ => null }
   }
 
   override def getLiveMessages() = ???
