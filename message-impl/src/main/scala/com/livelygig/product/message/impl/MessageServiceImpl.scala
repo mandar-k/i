@@ -1,25 +1,31 @@
 package com.livelygig.product.message.impl
 
+import java.util.UUID
+
 import akka.stream.Materializer
-import com.google.inject.Inject
+import akka.stream.scaladsl.Source
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.lightbend.lagom.scaladsl.api.transport.Forbidden
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.livelygig.product.message.api.MessageService
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
-import com.lightbend.lagom.scaladsl.pubsub.PubSubRegistry
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MessageServiceImpl(registry: PersistentEntityRegistry, cassandraSession: CassandraSession /*, pubSubRegistry: PubSubRegistry*/)
+class MessageServiceImpl(registry: PersistentEntityRegistry,
+                         cassandraSession: CassandraSession,
+                         msgPubSub: MessagePubSub,
+                         msgRepo: MessageRepository)
                         (implicit ec: ExecutionContext, mat: Materializer) extends MessageService {
 
   override def addMessage() = ServiceCall { msg =>
-    refFor(msg.id.toString).ask(AddMessage(msg)).map { _ => null }
+    val msgUid = UUID.randomUUID()
+    refFor(msgUid.toString).ask(AddMessage(msg.copy(id = msgUid))).map { _ => null }
   }
 
-  override def getLiveMessages() = ???
-
+//  override def getLiveMessages() = ???
+  override def getLiveMessages() = ServiceCall {
+    live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
+    }
   //  override def def getHistoricalMessages (): ServiceCall[HistoricalMessagesRequest, Source[Message, _]]
 
   private def refFor(messageId: String) = registry.refFor[MessageTimelineEntity](messageId)

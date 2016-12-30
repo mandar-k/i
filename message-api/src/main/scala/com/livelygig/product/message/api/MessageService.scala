@@ -8,7 +8,7 @@ import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 trait MessageService extends Service {
 
   def addMessage(): ServiceCall[Message, NotUsed]
-  def getLiveMessages(): ServiceCall[LiveMessagesRequest, Source[Message, _]]
+  def getLiveMessages(): ServiceCall[LiveMessagesRequest, Source[Message, NotUsed]]
 //  def getHistoricalMessages(): ServiceCall[HistoricalMessagesRequest, Source[Message, _]]
 
 //  def bidEvents: Topic[]

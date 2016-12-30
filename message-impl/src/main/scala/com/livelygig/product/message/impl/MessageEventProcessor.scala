@@ -31,7 +31,7 @@ private[impl] class MessageEventProcessor(session: CassandraSession, readSide: C
     for {
       _ <- session.executeCreateTable(
         """
-          CREATE TABLE IF NOT EXISTS msg (
+          CREATE TABLE IF NOT EXISTS messages (
           userId UUID,
           id UUID,
           content text,
@@ -47,7 +47,7 @@ private[impl] class MessageEventProcessor(session: CassandraSession, readSide: C
 
   def preparedStatements() = {
     for {
-      insertMessageStmt <- session.prepare("INSERT INTO msg(userId,id,content,posttime) VALUES (?, ?, ? ,?)")
+      insertMessageStmt <- session.prepare("INSERT INTO messages(userId,id,content,posttime) VALUES (?, ?, ? ,?)")
     } yield {
       insertMessageStatement = insertMessageStmt
       Done

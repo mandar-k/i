@@ -40,7 +40,6 @@ class MessageTimelineEntity(msgPubSub: MessagePubSub)  extends PersistentEntity 
     Actions()
       .onReadOnlyCommand[AddMessage, Done] {
       case (AddMessage(msg),ctx, _) => {
-        msgPubSub.refFor(msg.userId.toString).publish(msg)
         ctx.invalidCommand("Error in posting the message.")
       }
     }

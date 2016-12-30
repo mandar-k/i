@@ -7,9 +7,9 @@ import com.livelygig.product.message.api.Message
 /**
   * Created by shubham.k on 29-12-2016.
   */
-class MessagePubSub extends PubSubComponents {
+class MessagePubSub(actSys: ActorSystem) extends PubSubComponents {
   private final val MAX_TOPICS = 1024
-  override def actorSystem = ActorSystem("MessageActor")
+  override def actorSystem = actSys
 
   def refFor (userId: String) = {
     pubSubRegistry.refFor(TopicId[Message](topicQualifier(userId)))
