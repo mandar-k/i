@@ -19,7 +19,7 @@ abstract class MessageApplication(context: LagomApplicationContext)
   )
   lazy val actSys = actorSystem
 //  pubSubRegistry.refFor()
-  lazy val messageRepository = wire[MessageRepository]
+//  lazy val messageRepository = wire[MessageRepository]
   lazy val msgPubSub = wire[MessagePubSub]
   lazy val msgRepo = wire[MessageRepository]
 //  lazy val msgPubSubRegistry = wire[pubSubRegistry]
