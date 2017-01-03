@@ -25,7 +25,6 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
 
 
   def signup = Action.async { implicit rh =>
-    println("Signup" + rh.body.asJson)
     rh.body.asJson match {
       case Some(data) => {
 //        data.as[Message]
@@ -45,7 +44,6 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
   }
 
   def login = Action.async { implicit rh =>
-    println("Signup" + rh.body.asJson)
     rh.body.asJson match {
       case Some(data) => {
         var email = (data \ ("email")).as[String]

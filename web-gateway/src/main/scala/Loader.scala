@@ -32,7 +32,6 @@ abstract class WebGateway (context: Context) extends BuiltInComponentsFromContex
     wire[Routes]
   }
   implicit val env = context.environment
-
   lazy val userService = serviceClient.implement[UserService]
   lazy val messageService = serviceClient.implement[MessageService]
   lazy val main = wire[Main]
