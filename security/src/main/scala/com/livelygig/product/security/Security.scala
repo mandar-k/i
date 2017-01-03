@@ -2,11 +2,13 @@ package com.livelygig.product.security
 
 import java.security.Principal
 import java.util.UUID
+import javassist.tools.web.BadHttpRequest
 import javax.security.auth.Subject
 
 import com.lightbend.lagom.scaladsl.api.security.ServicePrincipal
 import com.lightbend.lagom.scaladsl.api.transport._
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
+import play.api.libs.json.{JsError, JsValue}
 
 sealed trait UserPrincipal extends Principal {
   val userId: UUID
@@ -75,6 +77,13 @@ object ClientSecurity {
   def authenticate(userId: UUID): RequestHeader => RequestHeader = { request =>
     request.withPrincipal(UserPrincipal.of(userId, request.principal))
   }
+
+  /*def validateJson[T](jsValue: JsValue) = {
+    jsValue.as[T] match {
+      case success => success.getClass
+      case JsError(error) => throw new Exception
+    }
+  }*/
 }
 
 

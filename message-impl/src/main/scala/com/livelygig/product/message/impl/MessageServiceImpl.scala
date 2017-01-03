@@ -22,11 +22,9 @@ class MessageServiceImpl(registry: PersistentEntityRegistry,
     refFor(msgUid.toString).ask(AddMessage(msg.copy(id = msgUid))).map { _ => null }
   }
 
-//  override def getLiveMessages() = ???
   override def getLiveMessages() = ServiceCall {
     live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
     }
-  //  override def def getHistoricalMessages (): ServiceCall[HistoricalMessagesRequest, Source[Message, _]]
 
   private def refFor(messageId: String) = registry.refFor[MessageTimelineEntity](messageId)
 }

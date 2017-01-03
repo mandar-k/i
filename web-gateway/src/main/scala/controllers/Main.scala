@@ -3,14 +3,16 @@ package controllers
 import java.util.UUID
 
 import com.livelygig.product.user.api.{User, UserService}
+import org.slf4j.LoggerFactory
 import play.api.mvc._
 import play.api.Environment
+import play.api.libs.json
 import play.api.libs.json.Json
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class Main(userService: UserService) (implicit env: Environment, ec: ExecutionContext) extends Controller {
-
+class Main(userService: UserService)(implicit env: Environment, ec: ExecutionContext) extends Controller {
+  private val log = LoggerFactory.getLogger(classOf[Main])
   def index = Action {
     Ok(views.html.index("LivelyGig"))
   }
@@ -25,39 +27,16 @@ class Main(userService: UserService) (implicit env: Environment, ec: ExecutionCo
 
 
   def signup = Action.async { implicit rh =>
-    rh.body.asJson match {
-      case Some(data) => {
-//        data.as[Message]
-        var email = (data \ ("email")).as[String]
-        var password = (data \ ("password")).as[String]
-        var name = (data \ ("name")).as[String]
-        userService.signup.invoke(User(UUID.randomUUID(), email, password, name)).map {
-          msg => Ok("")
-        }
+    userService.signup.invoke(rh.body.asJson.get.as[User]).map {
+        _ => Ok("")
       }
-      case None => {
-        userService.signup.invoke(User(UUID.randomUUID(), "", "testq2", "testq2")).map {
-          msg => Ok("")
-        }
-      }
-    }
   }
 
   def login = Action.async { implicit rh =>
-    rh.body.asJson match {
-      case Some(data) => {
-        var email = (data \ ("email")).as[String]
-        var password = (data \ ("password")).as[String]
-//        var name = (data \ ("name")).as[String]
-        userService.login.invoke(User(UUID.randomUUID(), email, password, "name")).map {
-          msg => Ok(views.html.index("LivelyGig"))
-        }
-      }
-      case None => {
-        userService.login.invoke(User(UUID.randomUUID(), "", "testq2", "testq2")).map {
-          msg => Ok("")
-        }
-      }
+//    if (true) throw new Exception("an error!")
+    userService.login.invoke(rh.body.asJson.get.as[User]).map {
+      user => Ok(Json.toJson(user))
     }
   }
+
 }

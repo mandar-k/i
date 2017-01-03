@@ -26,6 +26,7 @@ abstract class WebGateway (context: Context) extends BuiltInComponentsFromContex
       "web-gateway" -> immutable.Seq(ServiceAcl.forPathRegex("(?!/api/).*"))
     )
   )
+//  override httpErrorHandler = WebGatewayErrorHandler
   override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
   override lazy val router = {
     val prefix = "/"
