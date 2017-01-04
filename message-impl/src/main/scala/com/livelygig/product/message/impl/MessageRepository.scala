@@ -1,15 +1,10 @@
 package com.livelygig.product.message.impl
 
-import java.time.Instant
-import java.util.Date
-
-import akka.NotUsed
-import akka.stream.scaladsl.Source
 import com.datastax.driver.core.Row
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.livelygig.product.message.api.Message
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 /**
   * Created by shubham.k on 27-12-2016.
@@ -28,7 +23,7 @@ private[impl] class MessageRepository(session: CassandraSession)(implicit ec: Ex
       id = item.getUUID("id"),
       userId = item.getUUID("userId"),
       content = item.getString("content"),
-      posttime = item.getTimestamp("timestamp").toInstant
+      posttime = item.getTimestamp("timestamp") //.toInstant
     )
   }
 }

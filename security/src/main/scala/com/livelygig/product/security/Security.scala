@@ -2,13 +2,12 @@ package com.livelygig.product.security
 
 import java.security.Principal
 import java.util.UUID
-import javassist.tools.web.BadHttpRequest
 import javax.security.auth.Subject
 
 import com.lightbend.lagom.scaladsl.api.security.ServicePrincipal
 import com.lightbend.lagom.scaladsl.api.transport._
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
-import play.api.libs.json.{JsError, JsValue}
+import play.api.mvc.{AnyContent, Request}
 
 sealed trait UserPrincipal extends Principal {
   val userId: UUID
@@ -57,16 +56,17 @@ object SecurityHeaderFilter extends HeaderFilter {
 
 object ServerSecurity {
 
-  def authenticated[Request, Response](serviceCall: UUID => ServerServiceCall[Request, Response]) =
+  def authenticated[Req, Response](serviceCall: UUID => ServerServiceCall[Req, Response]) =
+
     ServerServiceCall.compose { requestHeader =>
-      requestHeader.principal match {
+      val request = SecurityHeaderFilter.transformServerRequest(requestHeader)
+      request.principal match {
         case Some(userPrincipal: UserPrincipal) =>
           serviceCall(userPrincipal.userId)
         case other =>
           throw Forbidden("User not authenticated")
       }
     }
-
 }
 
 object ClientSecurity {
@@ -74,16 +74,15 @@ object ClientSecurity {
   /**
     * Authenticate a client request.
     */
-  def authenticate(userId: UUID): RequestHeader => RequestHeader = { request =>
-    request.withPrincipal(UserPrincipal.of(userId, request.principal))
-  }
-
-  /*def validateJson[T](jsValue: JsValue) = {
-    jsValue.as[T] match {
-      case success => success.getClass
-      case JsError(error) => throw new Exception
+  def authenticate(req: Request[AnyContent]): RequestHeader => RequestHeader = { requestHeader =>
+    req.headers.get("userId") match {
+      case Some(userId) =>
+          val requestWithPrincipal = requestHeader.withPrincipal(UserPrincipal.of(UUID.fromString(userId), requestHeader.principal))
+          SecurityHeaderFilter.transformClientRequest(requestWithPrincipal)
+      case other =>
+          throw Forbidden("User not authenticated")
     }
-  }*/
+  }
 }
 
 

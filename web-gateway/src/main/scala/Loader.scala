@@ -4,12 +4,12 @@ import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.server.LagomDevModeComponents
 import com.livelygig.product.message.api.MessageService
 import com.livelygig.product.user.api.UserService
-import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Mode}
 import play.api.ApplicationLoader.Context
 import play.api.i18n.I18nComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
 import controllers.{Assets, Main, MessageController}
+import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Mode}
 import router.Routes
 
 import scala.collection.immutable

@@ -50,7 +50,7 @@ lazy val clients = Seq(client)
 lazy val webGateway = (project in file("web-gateway"))
   .settings(commonSettings: _*)
   .enablePlugins(PlayScala && LagomPlay)
-  .dependsOn(userApi, messageApi)
+  .dependsOn(userApi, messageApi, security)
   .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
   .dependsOn(sharedJvm)
   .settings(
@@ -87,7 +87,8 @@ lazy val userApi = (project in file("user-api"))
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi,
-      "org.julienrf" %% "play-json-derived-codecs" % "3.3"
+      "org.julienrf" %% "play-json-derived-codecs" % "3.3",
+      "be.objectify" %% "deadbolt-scala" % "2.5.1"
     )
   )
 
