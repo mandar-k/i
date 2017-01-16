@@ -98,7 +98,7 @@ lazy val userImpl = (project in file("user-impl"))
   .dependsOn(userApi, security)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies +=lagomScaladslPersistenceCassandra
+    libraryDependencies += lagomScaladslPersistenceCassandra
   )
 
 lazy val messageApi = (project in file("message-api"))
@@ -118,6 +118,27 @@ lazy val messageImpl = (project in file("message-impl"))
     libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
   )
 
+lazy val keeperApi = (project in file("keeper-api"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies += lagomScaladslApi
+  )
+
+lazy val keeperImpl = (project in file("keeper-impl"))
+  .settings(commonSettings: _ *)
+  .enablePlugins(LagomScala)
+  .settings(
+    libraryDependencies ++= Settings.apiImplDependencies.value,
+    libraryDependencies ++= Seq(
+      "be.objectify" %% "deadbolt-scala" % "2.5.1",
+      lagomScaladslPersistenceCassandra
+    )
+  )
+  .enablePlugins(LagomScala)
+  .dependsOn(keeperApi, security)
+  .settings(
+
+  )
 
 def commonSettings: Seq[Setting[_]] = Seq(
   version := Versions.appVersion,
@@ -126,16 +147,17 @@ def commonSettings: Seq[Setting[_]] = Seq(
 
 // Command for building a release
 lazy val ReleaseCmd = Command.command("release") {
-  state => "set elideOptions in client := Seq(\"-Xelide-below\", \"WARNING\")" ::
-    "client/clean" ::
-    "client/test" ::
-    "webGateway/clean" ::
-    "webGateway/test" ::
-    "webGateway/dist" ::
-    "set elideOptions in client := Seq()" ::
-    state
+  state =>
+    "set elideOptions in client := Seq(\"-Xelide-below\", \"WARNING\")" ::
+      "client/clean" ::
+      "client/test" ::
+      "webGateway/clean" ::
+      "webGateway/test" ::
+      "webGateway/dist" ::
+      "set elideOptions in client := Seq()" ::
+      state
 }
 
 
-lagomCassandraCleanOnStart in ThisBuild := false
+lagomCassandraCleanOnStart in ThisBuild := true
 onLoad in Global := (Command.process("project webGateway", _: State)) compose (onLoad in Global).value
