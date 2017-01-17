@@ -8,7 +8,6 @@ import com.lightbend.lagom.scaladsl.api.transport.Forbidden
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
-import com.livelygig.product.security.ServerSecurity.authenticated
 import com.livelygig.product.user.api.UserService
 
 import scala.concurrent.ExecutionContext

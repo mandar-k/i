@@ -2,7 +2,6 @@ package controllers
 
 import java.util.UUID
 
-import com.livelygig.product.security.ClientSecurity.authenticate
 import com.livelygig.product.user.api.{User, UserService}
 import org.slf4j.LoggerFactory
 import play.api.mvc._

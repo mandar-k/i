@@ -30,7 +30,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
       .setEventHandler[UserCreated](e => insertDefaultRolesAndPermissions(e.event.user.id))
 //      .setEventHandler[UserDeleted](e => removeUser(e.event.user.id))
 //      .setEventHandler[TokenCreated](e => )
-      .setEventHandler[TokenDeleted](removeToken)
+//      .setEventHandler[TokenDeleted](removeToken)
       .build()
   }
 

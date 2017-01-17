@@ -118,11 +118,13 @@ lazy val messageImpl = (project in file("message-impl"))
     libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
   )
 
+
 lazy val keeperApi = (project in file("keeper-api"))
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies += lagomScaladslApi
   )
+  .dependsOn(security)
 
 lazy val keeperImpl = (project in file("keeper-impl"))
   .settings(commonSettings: _ *)

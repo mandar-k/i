@@ -9,7 +9,7 @@ import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.livelygig.product.message.api.MessageService
-import com.livelygig.product.security.ServerSecurity
+import com.livelygig.product.security.resource.ResourceServerSecurity
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -19,12 +19,12 @@ class MessageServiceImpl(registry: PersistentEntityRegistry,
                          msgRepo: MessageRepository)
                         (implicit ec: ExecutionContext, mat: Materializer) extends MessageService {
 
-  override def addMessage = ServerSecurity.authenticated( userId => ServerServiceCall { msg =>
+  override def addMessage = ResourceServerSecurity.authenticated(authKey => ServerServiceCall { msg =>
     val msgUid = UUID.randomUUID()
     refFor(msgUid.toString).ask(AddMessage(msg.copy(id = msgUid))).map { _ => null }
   })
 
-  override def getLiveMessages() = ServerSecurity.authenticated( userId => ServerServiceCall {
+  override def getLiveMessages() = ResourceServerSecurity.authenticated(userId => ServerServiceCall {
     live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
     })
 
