@@ -20,15 +20,10 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
   override def authorize() = ???
 
   override def login() =  ServiceCall{ loginModel=>
-    keeperRepo.searchForUsernameOrEmail(loginModel).map{
-      case Some(userId) => {
-        refFor(userId).ask(LoginUser(loginModel.password))
-        ""
-      }
-      case None => throw NotFound("User not found")
-    }
-//    refFor(UUID.fromString("userId") ).ask(LoginUser(loginModel.password))
-
+    for {
+      userId <- keeperRepo.searchForUsernameOrEmail(loginModel)
+      authKey <- if (userId.nonEmpty) refFor(userId.get).ask(LoginUser(loginModel.password)) else throw NotFound("User not found")
+    } yield authKey
   }
 
   override def createUser() = ???

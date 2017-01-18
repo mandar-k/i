@@ -16,7 +16,7 @@ private [impl] class KeeperRepository(session: CassandraSession)(implicit ec: Ex
   def searchForUsernameOrEmail(userLoginModel: UserLoginModel) =  {
     for {
       uid <- searchForUsername(userLoginModel.usernameOrEmail)
-      userId <- if (!uid.isEmpty) Future.successful(uid) else searchForEmail(userLoginModel.usernameOrEmail)
+      userId <- if (uid.nonEmpty) Future.successful(uid) else searchForEmail(userLoginModel.usernameOrEmail)
     } yield userId
   }
 
