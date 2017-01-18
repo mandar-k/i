@@ -14,7 +14,7 @@ trait MessageService extends Service {
     named("messages").withCalls(
       namedCall("/api/messages/add", addMessage _),
       namedCall("/api/messages/live", getLiveMessages _)
-    )
+    ).withAutoAcl(true)
   }
 }
 

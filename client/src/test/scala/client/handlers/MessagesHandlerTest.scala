@@ -14,7 +14,7 @@ import shared.models.{MessagePost, MessagePostContent}
   */
 class MessagesHandlerTest extends UnitTest("MessagesHandler") {
 
-  val model: Pot[MessagesRootModel] = Ready(MessagesRootModel(Nil))
+  val model: MessagesRootModel/*Pot[MessagesRootModel]*/ = MessagesRootModel(Nil)/*Ready(MessagesRootModel(Nil))*/
   //def build = new MotdHandler(new RootModelRW(model))
 
 

@@ -4,20 +4,41 @@ import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.server.LagomDevModeComponents
 import com.livelygig.product.message.api.MessageService
 import com.livelygig.product.user.api.UserService
-import play.api.ApplicationLoader.Context
 import play.api.i18n.I18nComponents
 import play.api.libs.ws.ahc.AhcWSComponents
-import com.softwaremill.macwire._
-import controllers.{Assets, Main, MessageController}
+import controllers.ActivateAccountController
+import controllers.ChangePasswordController
+import controllers.ForgotPasswordController
+import controllers.ResetPasswordController
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Mode}
 import router.Routes
 
 import scala.collection.immutable
 import scala.concurrent.ExecutionContext
+import com.softwaremill.macwire._
+import controllers.ApplicationController
+import controllers.Assets
+import controllers.MessageController
+import controllers.SignInController
+import controllers.SignUpController
+import controllers.SocialAuthController
+import controllers.WebJarAssets
+import play.api.ApplicationLoader.Context
+import play.api._
+import play.api.libs.mailer.MailerComponents
+import play.api.libs.ws.WSClient
+import play.api.libs.ws.ahc.AhcWSClient
+import play.api.mvc.EssentialFilter
+import play.api.routing.Router
+import play.filters.csrf.{CSRFComponents, CSRFConfig, CSRFFilter}
+import play.filters.headers.SecurityHeadersComponents
 
-abstract class WebGateway (context: Context) extends BuiltInComponentsFromContext(context)
+
+abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext(context)
   with I18nComponents
-  with AhcWSComponents
+  //  with AhcWSComponents
+  with WebAppComponents
+  with UtilModule
   with LagomServiceClientComponents {
 
   override lazy val serviceInfo: ServiceInfo = ServiceInfo(
@@ -26,18 +47,20 @@ abstract class WebGateway (context: Context) extends BuiltInComponentsFromContex
       "web-gateway" -> immutable.Seq(ServiceAcl.forPathRegex("(?!/api/).*"))
     )
   )
-//  override httpErrorHandler = WebGatewayErrorHandler
   override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
+  override lazy val httpErrorHandler = errorHandler
+  lazy val routerOption = None
   override lazy val router = {
     val prefix = "/"
     wire[Routes]
   }
   implicit val env = context.environment
-  lazy val userService = serviceClient.implement[UserService]
-  lazy val messageService = serviceClient.implement[MessageService]
-  lazy val main = wire[Main]
+
+  lazy val userServiceImpl = serviceClient.implement[UserService]
+  lazy val messageServiceImpl = serviceClient.implement[MessageService]
   lazy val messageController = wire[MessageController]
-  lazy val assets = wire[Assets]
+  //  lazy val main = wire[Main]
+  //  lazy val assets = wire[Assets]
 }
 
 class WebGatewayLoader extends ApplicationLoader {
@@ -48,5 +71,30 @@ class WebGatewayLoader extends ApplicationLoader {
       new WebGateway(context) {
         override def serviceLocator = NoServiceLocator
       }.application
+  }
+}
+
+trait WebAppComponents extends BuiltInComponents
+  with WebAppModule
+  with I18nComponents
+  with CSRFComponents
+  with MailerComponents
+  with SecurityHeadersComponents {
+  lazy val assets: Assets = wire[Assets]
+  lazy val applicationController: ApplicationController = wire[ApplicationController]
+  lazy val socialAuthController: SocialAuthController = wire[SocialAuthController]
+  lazy val signupController: SignUpController = wire[SignUpController]
+  lazy val signinController: SignInController = wire[SignInController]
+  lazy val webjarAssets: WebJarAssets = wire[WebJarAssets]
+  lazy val forgotPasswordController: ForgotPasswordController = wire[ForgotPasswordController]
+  lazy val resetPasswordController: ResetPasswordController = wire[ResetPasswordController]
+  lazy val changePasswordController: ChangePasswordController = wire[ChangePasswordController]
+  lazy val activateAccountController: ActivateAccountController = wire[ActivateAccountController]
+  lazy val wsClient: WSClient = AhcWSClient()
+  //  lazy val router: Router = {
+  //    wire[Routes] withPrefix "/"
+  //  }
+  override lazy val httpFilters: Seq[EssentialFilter] = {
+    Seq(csrfFilter, securityHeadersFilter)
   }
 }

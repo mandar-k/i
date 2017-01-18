@@ -47,8 +47,8 @@ object AgentLoginSignUp {
   // scalastyle:off
   case class Backend(t: BackendScope[Props, State]) extends RxObserver(t) {
 
-    def mounted(props: Props): Callback = {
-      t.modState(s => s.copy(showLoginForm = true))
+    def mounted(props: Props): Callback = Callback {
+     // t.modState(s => s.copy(showLoginForm = true))
     }
 
     def addLoginForm(): Callback = {
@@ -343,8 +343,8 @@ object AgentLoginSignUp {
         }
         else {
           // Show the Log In modal by default
-          LoginForm(LoginForm.Props(B.loginUser))
-          //  Seq.empty[ReactElement]
+         // LoginForm(LoginForm.Props(B.loginUser))
+            Seq.empty[ReactElement]
         }
       )
     })

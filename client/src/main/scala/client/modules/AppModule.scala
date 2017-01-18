@@ -28,7 +28,8 @@ object AppModule {
   val CONNECTIONS_VIEW = "connections"
   val NOTIFICATIONS_VIEW = "notifications"
 
-  case class Props(view: String ,proxy: ModelProxy[AppRootModel])
+
+  case class Props(view: String, proxy: ModelProxy[AppRootModel])
 
   case class State(showErrorModal: Boolean = false)
 
@@ -72,15 +73,15 @@ object AppModule {
 
   case class Backend(t: BackendScope[Props, State]) {
     def mounted(props: Props) = {
-     showSidebar
+      showSidebar
       //  LGCircuit.dispatch(ShowServerError(""))
     }
 
-    def serverError(showErrorModal:Boolean=false): Callback = {
+    def serverError(showErrorModal: Boolean = false): Callback = {
       LGCircuit.dispatch(ShowServerError(""))
-      if(showErrorModal)
-      t.modState(s => s.copy(showErrorModal = false))
-      else{
+      if (showErrorModal)
+        t.modState(s => s.copy(showErrorModal = false))
+      else {
         t.modState(s => s.copy(showErrorModal = false))
       }
     }
@@ -92,52 +93,53 @@ object AppModule {
       val jobsProxy = LGCircuit.connect(_.jobPosts)
       val messagesProxy = LGCircuit.connect(_.messages)
       val connectionsProxy = LGCircuit.connect(_.connections)
-       val appProxy = LGCircuit.connect(_.appRootModel)
-      val introProxy =LGCircuit.connect(_.introduction)
+      val appProxy = LGCircuit.connect(_.appRootModel)
+      val introProxy = LGCircuit.connect(_.introduction)
 
       <.div(^.id := "mainContainer", DashBoardCSS.Style.mainContainerDiv)(
-         /*^.background := "url(./assets/images/LG_Background3E.svg)", ^.backgroundSize := "101% 101%"*/)(
+        /*^.background := "url(./assets/images/LG_Background3E.svg)", ^.backgroundSize := "101% 101%"*/)(
         <.div()(
           Presets(Presets.Props(p.view))
         ),
         <.div(DashBoardCSS.Style.splitContainer)
           // ^.background := "url(./assets/images/LG_Background3.svg)")
-        (
-          <.div(^.className := "col-lg-1")(),
-          <.div(^.className := "split col-lg-10 col-md-12", DashBoardCSS.Style.paddingRight0px)(
-            <.div(^.className := "row")(
-              //Left Sidebar
-              <.div(^.id := "searchContainer", ^.marginBottom := "4px", ^.className := "col-md-3 col-sm-4 sidebar", DashBoardCSS.Style.padding0px)(
-                //Adding toggle button for sidebar
-                <.button(^.id := "sidebarbtn", ^.`type` := "button", ^.className := "navbar-toggle toggle-left hidden-md hidden-lg", ^.float := "right", "data-toggle".reactAttr := "sidebar", "data-target".reactAttr := ".sidebar-left",
-                  ^.onClick --> showSidebar)(
-                  <.span(^.id := "sidebarIcon", LftcontainerCSS.Style.toggleBtn)(/*Icon.chevronCircleLeft*/)
+          (
+            <.div(^.className := "col-lg-1")(),
+            <.div(^.className := "split col-lg-10 col-md-12", DashBoardCSS.Style.paddingRight0px)(
+              <.div(^.className := "row")(
+                //Left Sidebar
+                <.div(^.id := "searchContainer", ^.marginBottom := "4px", ^.className := "col-md-3 col-sm-4 sidebar", DashBoardCSS.Style.padding0px)(
+                  //Adding toggle button for sidebar
+                  <.button(^.id := "sidebarbtn", ^.`type` := "button", ^.className := "navbar-toggle toggle-left hidden-md hidden-lg", ^.float := "right", "data-toggle".reactAttr := "sidebar", "data-target".reactAttr := ".sidebar-left",
+                    ^.onClick --> showSidebar)(
+                    <.span(^.id := "sidebarIcon", LftcontainerCSS.Style.toggleBtn)(/*Icon.chevronCircleLeft*/)
+                  ),
+                  searchesProxy(searchesProxy => Searches(Searches.Props(p.view, searchesProxy)))
                 ),
-                searchesProxy(searchesProxy => Searches(Searches.Props(p.view, searchesProxy)))
-              ),
-              if (p.proxy().isServerError){
-                ServerErrorModal(ServerErrorModal.Props(serverError, "Server offline"))
-              } else {
-                <.div()
-              },
-              <.div(^.id:="overlayContainer", ^.onClick-->hideSidebar()),
-              <.div(^.className := "main col-md-9 col-md-offset-3", DashBoardCSS.Style.dashboardResults2)(
-                <.div()(
-                  p.view match {
-                    case PROFILES_VIEW => profilesProxy(ProfilesResults(_))
-                    case PROJECTS_VIEW => jobsProxy(ProjectResults(_))
-                    case MESSAGES_VIEW => messagesProxy(MessagesResults(_))
-                    case CONNECTIONS_VIEW => connectionsProxy(ConnectionsResults(_))
-                    case CONTRACTS_VIEW => ContractResults.component(ContractResults.Props())
-                    case OFFERINGS_VIEW => OfferingResults.component(OfferingResults.Props())
-                   // case NOTIFICATIONS_VIEW => connectionsProxy(NotificationResults(_))
-                  }
+                if (p.proxy().isServerError) {
+                  ServerErrorModal(ServerErrorModal.Props(serverError, "Server offline"))
+                } else {
+                  <.div()
+                },
+                <.div(^.id := "overlayContainer", ^.onClick --> hideSidebar()),
+                <.div(^.className := "main col-md-9 col-md-offset-3", DashBoardCSS.Style.dashboardResults2)(
+                  <.div()(
+                    p.view match {
+                      case PROFILES_VIEW => profilesProxy(ProfilesResults(_))
+                      case PROJECTS_VIEW => jobsProxy(ProjectResults(_))
+                      case MESSAGES_VIEW => messagesProxy(msgsProxy => MessagesResults(msgsProxy))
+                      case CONNECTIONS_VIEW => connectionsProxy(ConnectionsResults(_))
+                      case CONTRACTS_VIEW => ContractResults.component(ContractResults.Props())
+                      case OFFERINGS_VIEW => OfferingResults.component(OfferingResults.Props())
+
+                      // case NOTIFICATIONS_VIEW => connectionsProxy(NotificationResults(_))
+                    }
+                  )
                 )
               )
-            )
-          ),
-          <.div(^.className := "col-lg-1")()
-        ) //row
+            ),
+            <.div(^.className := "col-lg-1")()
+          ) //row
       ) // mainContainer
     }
   }

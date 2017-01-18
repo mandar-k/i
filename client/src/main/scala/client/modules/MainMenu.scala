@@ -74,7 +74,7 @@ object MainMenu {
           // build a list of menu items
           for (item <- $.backend.menuItems) yield {
             if (Seq(ConnectionsLoc, MessagesLoc, JobPostsLoc, OfferingsLoc, ProfilesLoc, ContractsLoc, DashboardLoc).contains(item.location)) {
-              if (props.proxy.value.isLoggedIn) {
+              if (true) {
                 <.li()(^.key := item.idx, "data-toggle".reactAttr := "collapse", "data-target".reactAttr := ".in",
                   props.ctl.link(item.location)(
                     (props.currentLoc != item.location) ?= HeaderCSS.Style.headerNavA,

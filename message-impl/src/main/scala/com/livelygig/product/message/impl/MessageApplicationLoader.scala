@@ -18,11 +18,11 @@ abstract class MessageApplication(context: LagomApplicationContext)
     bindService[MessageService].to(wire[MessageServiceImpl])
   )
   lazy val actSys = actorSystem
-//  pubSubRegistry.refFor()
-//  lazy val messageRepository = wire[MessageRepository]
+  //  pubSubRegistry.refFor()
+  //  lazy val messageRepository = wire[MessageRepository]
   lazy val msgPubSub = wire[MessagePubSub]
   lazy val msgRepo = wire[MessageRepository]
-//  lazy val msgPubSubRegistry = wire[pubSubRegistry]
+  //  lazy val msgPubSubRegistry = wire[pubSubRegistry]
   persistentEntityRegistry.register(wire[MessageTimelineEntity])
   readSide.register(wire[MessageEventProcessor])
 }

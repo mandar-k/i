@@ -269,6 +269,7 @@ object Searches {
             )
           )
         } //talent
+
         case AppModule.OFFERINGS_VIEW => {
           <.div()(
             <.div(^.className := "HeaderCSS_Style-searchActionsContainer")(

@@ -17,14 +17,14 @@ import scala.concurrent.ExecutionContext
 class MessageController(messageService: MessageService) (implicit env: Environment, ec: ExecutionContext) extends Controller{
   def addMessage = Action.async { implicit rh =>
         messageService.addMessage
-          .handleRequestHeader(ResourceClientSecurity.authenticate())
+        //  .handleRequestHeader(ResourceClientSecurity.authenticate())
           .invoke(rh.body.asJson.get.as[Message])
           .map {
             msg => Ok("")
     }
   }
 
-  def liveMsg: WebSocket = ???/*WebSocket.acceptOrResult[JsValue, JsValue] {
+  def liveMsg = ???/*WebSocket.acceptOrResult[JsValue, JsValue] {
     implicit  request =>
       messageService.getLiveMessages().invoke(LiveMessagesRequest(Seq(userID.toString))).map {
         e => e.

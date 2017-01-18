@@ -119,28 +119,28 @@ lazy val messageImpl = (project in file("message-impl"))
   )
 
 
-lazy val keeperApi = (project in file("keeper-api"))
-  .settings(commonSettings: _*)
-  .settings(
-    libraryDependencies += lagomScaladslApi
-  )
-  .dependsOn(security)
-
-lazy val keeperImpl = (project in file("keeper-impl"))
-  .settings(commonSettings: _ *)
-  .enablePlugins(LagomScala)
-  .settings(
-    libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies ++= Seq(
-      "be.objectify" %% "deadbolt-scala" % "2.5.1",
-      lagomScaladslPersistenceCassandra
-    )
-  )
-  .enablePlugins(LagomScala)
-  .dependsOn(keeperApi, security)
-  .settings(
-
-  )
+//lazy val keeperApi = (project in file("keeper-api"))
+//  .settings(commonSettings: _*)
+//  .settings(
+//    libraryDependencies += lagomScaladslApi
+//  )
+//  .dependsOn(security)
+//
+//lazy val keeperImpl = (project in file("keeper-impl"))
+//  .settings(commonSettings: _ *)
+//  .enablePlugins(LagomScala)
+//  .settings(
+//    libraryDependencies ++= Settings.apiImplDependencies.value,
+//    libraryDependencies ++= Seq(
+//      "be.objectify" %% "deadbolt-scala" % "2.5.1",
+//      lagomScaladslPersistenceCassandra
+//    )
+//  )
+//  .enablePlugins(LagomScala)
+//  .dependsOn(keeperApi, security)
+//  .settings(
+//
+//  )
 
 def commonSettings: Seq[Setting[_]] = Seq(
   version := Versions.appVersion,

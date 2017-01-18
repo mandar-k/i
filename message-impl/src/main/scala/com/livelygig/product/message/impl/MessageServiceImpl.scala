@@ -20,21 +20,20 @@ class MessageServiceImpl(registry: PersistentEntityRegistry,
                          msgRepo: MessageRepository)
                         (implicit ec: ExecutionContext, mat: Materializer) extends MessageService {
 
-  override def addMessage = ResourceServerSecurity.authenticated(authKey => ServerServiceCall { msg =>
+  override def addMessage = /*ResourceServerSecurity.authenticated(authKey => ServerServiceCall {*/ServiceCall{ msg =>
 
     val msgUid = UUID.randomUUID()
     refFor(msgUid.toString).ask(AddMessage(msg.copy(id = msgUid))).map { _ => null }
-  })
+  }//)
 
-  override def getLiveMessages() = ResourceServerSecurity.authenticated(userId => ServerServiceCall {
+ /* override def getLiveMessages() = ResourceServerSecurity.authenticated(userId => ServerServiceCall {
     live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
-    })
+    })*/
+ override def getLiveMessages() = /*ServerSecurity.authenticated( userId => ServerServiceCall {*/ServiceCall{
+   live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
+ }
+  //)
 
-
-  //override def getLiveMessages() = ???/*ServiceCall{ livemsgreq =>
-  //  val userId = livemsgreq.userIds
-
-  //}*/
 
   private def refFor(messageId: String) = registry.refFor[MessageTimelineEntity](messageId)
 }
