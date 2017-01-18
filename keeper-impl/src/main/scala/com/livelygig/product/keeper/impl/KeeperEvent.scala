@@ -3,6 +3,7 @@ package com.livelygig.product.keeper.impl
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, AggregateEventTagger}
 import com.lightbend.lagom.scaladsl.playjson.Jsonable
 import com.livelygig.product.keeper.api.models.{User, UserAuth}
+import com.livelygig.product.keeper.impl.models.UserLoginInfo
 import play.api.libs.json.{Format, Json}
 
 /**
@@ -23,10 +24,16 @@ object UserCreated {
   implicit val format: Format[UserCreated] = Json.format
 }
 
-case class UserLogin (user: User) extends KeeperEvent
+case class UserLogin (userLoginInfo: UserLoginInfo) extends KeeperEvent
 
 object UserLogin {
   implicit val format: Format[UserLogin] = Json.format
+}
+
+case class LoginFailed(userLoginInfo: UserLoginInfo) extends KeeperEvent
+
+object LoginFailed {
+  implicit val format: Format[LoginFailed] = Json.format
 }
 
 case class UserDisabled (userAuth: UserAuth) extends KeeperEvent

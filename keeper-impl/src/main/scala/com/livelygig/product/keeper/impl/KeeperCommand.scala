@@ -11,16 +11,16 @@ import play.api.libs.json.{Format, Json}
   */
 trait KeeperCommand extends Jsonable
 
-case class IssueToken(userAuth: UserAuth) extends KeeperCommand with ReplyType[String]
+case class LoginUser(password: String) extends KeeperCommand with ReplyType[String]
 
-object IssueToken {
-  implicit val format: Format[IssueToken] = Json.format
+object LoginUser {
+  implicit val format: Format[LoginUser] = Json.format
 }
 
 case class DeleteToken(userAuth: UserAuth) extends KeeperCommand with ReplyType[String]
 
 object DeleteToken {
-  implicit val format: Format[IssueToken] = Json.format
+  implicit val format: Format[LoginUser] = Json.format
 }
 
 case class CreateUser(userAuth: UserAuth) extends KeeperCommand with ReplyType[Done]

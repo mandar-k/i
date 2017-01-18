@@ -2,7 +2,7 @@ package com.livelygig.product.keeper.api
 
 import akka.NotUsed
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
-import com.livelygig.product.keeper.api.models.{AuthorizationInfo, User, UserAuth}
+import com.livelygig.product.keeper.api.models._
 import com.livelygig.product.security.keeper.SecurityHeaderFilter
 
 /**
@@ -28,7 +28,7 @@ trait KeeperService extends Service {
     * Take the UserAuth with email and password and return the Auth token
     * @return
     */
-  def login(): ServiceCall[UserAuth, String]
+  def login(): ServiceCall[UserLoginModel, String]
 
   /**
     * Take the user object with auth info and profile info

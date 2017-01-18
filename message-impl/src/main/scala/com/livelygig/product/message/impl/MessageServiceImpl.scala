@@ -10,6 +10,7 @@ import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.livelygig.product.message.api.MessageService
 import com.livelygig.product.security.resource.ResourceServerSecurity
+import play.api.mvc.Request
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -20,6 +21,7 @@ class MessageServiceImpl(registry: PersistentEntityRegistry,
                         (implicit ec: ExecutionContext, mat: Materializer) extends MessageService {
 
   override def addMessage = ResourceServerSecurity.authenticated(authKey => ServerServiceCall { msg =>
+
     val msgUid = UUID.randomUUID()
     refFor(msgUid.toString).ask(AddMessage(msg.copy(id = msgUid))).map { _ => null }
   })

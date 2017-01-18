@@ -18,7 +18,7 @@ class KeeperSerializerRegistry extends SerializerRegistry {
     Serializers[KeeperState],
 
     // Commands and replies.type
-    Serializers[IssueToken],
+    Serializers[LoginUser],
     Serializers[CreateUser],
     Serializers[DeleteUser],
 

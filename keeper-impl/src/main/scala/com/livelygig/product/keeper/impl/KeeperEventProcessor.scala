@@ -6,7 +6,8 @@ import akka.Done
 import com.datastax.driver.core.PreparedStatement
 import com.lightbend.lagom.scaladsl.persistence.ReadSideProcessor
 import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, CassandraSession}
-import com.livelygig.product.keeper.api.models.UserAuth
+import com.livelygig.product.keeper.api.models.{User, UserAuth}
+import com.livelygig.product.keeper.impl.models.UserLoginInfo
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -18,6 +19,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
   private var insertAuthKeyStatement: PreparedStatement = _
   private var deleteAuthKeyStatement: PreparedStatement = _
   private var insertUserPermissions: PreparedStatement = _
+  private var insertUsernameUserId: PreparedStatement = _
+  private var insertEmailUserId: PreparedStatement = _
   private var insertUserRoles: PreparedStatement = _
   private var updateUserRoles: PreparedStatement = _
   private var updateUserPermissions: PreparedStatement = _
@@ -26,8 +29,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
     readSide.builder[KeeperEvent]("keeperEventOffset")
       .setGlobalPrepare(createTables)
       .setPrepare(tag => preparedStatements)
-      .setEventHandler[UserLogin](e => insertToken(e.event.user.id))
-      .setEventHandler[UserCreated](e => insertDefaultRolesAndPermissions(e.event.user.id))
+      .setEventHandler[UserLogin](e => insertToken(e.event.userLoginInfo))
+      .setEventHandler[UserCreated](e => insertUserAuthDetails(e.event.user))
 //      .setEventHandler[UserDeleted](e => removeUser(e.event.user.id))
 //      .setEventHandler[TokenCreated](e => )
 //      .setEventHandler[TokenDeleted](removeToken)
@@ -63,6 +66,23 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
             PRIMARY KEY (userId)
             )
           """)
+      _ <- session.executeCreateTable(
+        """
+          CREATE TABLE IF NOT EXISTS userIdByUsername (
+          username text,
+          userId UUID,
+          PRIMARY KEY (username)
+          )
+        """)
+      _ <- session.executeCreateTable(
+        """
+          CREATE TABLE IF NOT EXISTS userIdByEmail (
+          email text,
+          userId UUID,
+          PRIMARY KEY (email)
+          )
+        """
+      )
 
     } yield Done
   }
@@ -81,25 +101,41 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
         """
           INSERT INTO userAuthToken (userId, authToken) VALUES (?,?)
         """)
+      insertUsernameAndUserId <- session.prepare(
+        """
+           INSERT INTO userIdByUsername (username, userId) VALUES (?,?)
+        """
+      )
+      insertEmailAndUserId <- session.prepare(
+        """
+           INSERT INTO userIdByEmail (email, userId) VALUES (?,?)
+        """
+      )
     } yield {
       insertUserRoles = insertRoles
       insertUserPermissions = insertPermissions
       insertAuthKeyStatement = insertAuthToken
+      insertEmailUserId = insertEmailAndUserId
+      insertUsernameUserId = insertUsernameAndUserId
       Done
     }
   }
 
-  private def insertDefaultRolesAndPermissions(userId: UUID) = {
-    Future.successful(List(insertDefaultRole(userId), inserDefaultPermission(userId)))
+  private def insertUserAuthDetails(user:User) = {
+    Future.successful(List(insertDefaultRole(user.userId), inserDefaultPermission(user.userId), insertEmailUserID(user), insertUsernameUserID(user)))
   }
 
   private def insertDefaultRole(userId: UUID) = insertUserRoles.bind(userId, "USER")
 
   private def inserDefaultPermission(userId: UUID) = insertUserPermissions.bind(userId, "message.add")
 
+  private def insertEmailUserID(user:User) = insertUsernameUserId.bind(user.userAuth.email, user.userId)
+
+  private def insertUsernameUserID(user: User) = insertUsernameUserId.bind(user.userAuth.username, user.userId)
+
   private def removeToken = ???
 
-  private def insertToken(userId: UUID) = ???
+  private def insertToken(userLoginInfo: UserLoginInfo) = Future.successful(List(insertAuthKeyStatement.bind(userLoginInfo.userId, userLoginInfo.authKeyGenerated)))
 
   private def removeUser = ???
 }
