@@ -37,12 +37,12 @@ class ApplicationController @Inject() (
     Future.successful(Ok(views.html.index(request.identity)))
   }
 
-    def logging = Action(parse.anyContent) {
+    def logging = Action.async {
       implicit request =>
         request.body.asJson.foreach { msg =>
           println(s"Application - CLIENT - $msg")
         }
-        Ok("")
+        Future.successful(Ok(""))
     }
 
   /**

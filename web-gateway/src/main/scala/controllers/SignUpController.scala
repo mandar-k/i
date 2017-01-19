@@ -78,29 +78,9 @@ class SignUpController @Inject() (
               subject = Messages("email.already.signed.up.subject"),
               from = Messages("email.from"),
               to = Seq(data.email),
-              // adds attachment
-              attachments = Seq(
-               // AttachmentFile("attachment.pdf", new File("/some/path/attachment.pdf")),
-                // adds inline attachment from byte array
-               // AttachmentData("data.txt", "data".getBytes, "text/plain", Some("Simple data"), Some(EmailAttachment.INLINE)),
-                // adds cid attachment
-                AttachmentFile("LivelyGig-logo-symbol.svg", new File("images/LivelyGig-logo-symbol.svg"), contentId = Some(cid))
-              ),
-              // sends text, HTML or both...
-//              bodyText = Some("A text message"),
-//              bodyHtml = Some(s"""<html><body><p>An <b>html</b> message with cid <img src="cid:$cid"></p></body></html>""")
-
-
               bodyText = Some(views.txt.emails.alreadySignedUp(user, url).body),
               bodyHtml = Some(views.html.emails.alreadySignedUp(user, url).body)
             )
-           /* mailerClient.send(Email(
-              subject = Messages("email.already.signed.up.subject"),
-              from = Messages("email.from"),
-              to = Seq(data.email),
-              bodyText = Some(views.txt.emails.alreadySignedUp(user, url).body),
-              bodyHtml = Some(views.html.emails.alreadySignedUp(user, url).body)
-            ))*/
             mailerClient.send(email)
 
             Future.successful(result)
@@ -128,13 +108,6 @@ class SignUpController @Inject() (
                 subject = Messages("email.sign.up.subject"),
                 from = Messages("email.from"),
                 to = Seq(data.email),
-                attachments = Seq(
-                  // AttachmentFile("attachment.pdf", new File("/some/path/attachment.pdf")),
-                  // adds inline attachment from byte array
-                  // AttachmentData("data.txt", "data".getBytes, "text/plain", Some("Simple data"), Some(EmailAttachment.INLINE)),
-                  // adds cid attachment
-                  AttachmentFile("LivelyGig-logo-symbol.svg", new File("D:/ClientUI/Keeper/i/web-gateway/src/main/assets/images/LivelyGig-logo-symbol.svg"), contentId = Some(cid))
-                ),
                 bodyText = Some(views.txt.emails.signUp(user, url).body),
                 bodyHtml = Some(views.html.emails.signUp(user, url).body)
               ))

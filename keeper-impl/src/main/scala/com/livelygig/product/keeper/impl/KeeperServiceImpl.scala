@@ -26,7 +26,13 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     } yield authKey
   }
 
-  override def createUser() = ???
+  override def createUser() = ???/*ServiceCall{ userModel =>
+    for {
+      userFromEmail <- keeperRepo.searchForEmail(userModel.userAuth.email)
+      userFromUserName <- keeperRepo.searchForUsername(userModel.userAuth.username)
+      _
+    }
+  }*/
 
   private def refFor(userId: UUID) = registry.refFor[KeeperEntity](userId.toString)
 //  private

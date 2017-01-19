@@ -68,7 +68,7 @@ object LGMain extends js.JSApp {
   // configure the router
   val routerConfig = RouterConfigDsl[Loc].buildConfig { dsl =>
     import dsl._
-    (staticRoute(root, LandingLoc) ~>  renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))/*renderR(ctl => LandingLocation.component(ctl))*/
+    (staticRoute(root, LandingLoc) ~>  /*renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))*/renderR(ctl => LandingLocation.component(ctl))
       | staticRoute(s"#${AppModule.DASHBOARD_VIEW}", DashboardLoc) ~> renderR(ctl => Dashboard.component(ctl))
       | staticRoute(s"#${AppModule.NOTIFICATIONS_VIEW}", NotificationsLoc) ~> renderR(ctl => introProxy(proxy => NotificationResults(NotificationResults.Props(proxy))))
       | staticRoute(s"#${AppModule.MESSAGES_VIEW}", MessagesLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))
@@ -149,5 +149,6 @@ object LGMain extends js.JSApp {
     // tell React to render the router in the document body
     //ReactDOM.render(router(), dom.document.getElementById("root"))
     ReactDOM.render(router(), dom.document.getElementById("root"))
+    window.location.href = "/#messages"
   }
 }

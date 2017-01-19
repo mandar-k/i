@@ -2,6 +2,7 @@ package com.livelygig.product.keeper.impl
 
 import java.util.{Date, UUID}
 
+import akka.Done
 import com.lightbend.lagom.scaladsl.api.transport.Forbidden
 import com.lightbend.lagom.scaladsl.persistence._
 import com.livelygig.product.keeper.impl.models.UserLoginInfo
@@ -29,7 +30,10 @@ class KeeperEntity extends PersistentEntity {
 
   }
 
-  def doesNotExists = ???
+  def doesNotExists = ???/*{
+    Actions()
+      .onCommand[CreateUser, Done]
+  }*/
 
   def userActivated = {
     Actions()
