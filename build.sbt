@@ -55,7 +55,13 @@ lazy val webGateway = (project in file("web-gateway"))
   .dependsOn(sharedJvm)
   .settings(
     scalacOptions ++= Settings.scalacOptions,
-    resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), //add resolver
+    resolvers ++= Seq(
+      "Atlassian Releases" at "https://maven.atlassian.com/public/",
+      Resolver.jcenterRepo,
+      Resolver.bintrayRepo("denigma", "denigma-releases")
+    ),
+
+//    resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), //add resolver
     libraryDependencies ++= Settings.jvmDependencies.value,
     libraryDependencies += lagomScaladslServer,
     commands += ReleaseCmd,
