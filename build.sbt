@@ -50,7 +50,7 @@ lazy val clients = Seq(client)
 lazy val webGateway = (project in file("web-gateway"))
   .settings(commonSettings: _*)
   .enablePlugins(PlayScala && LagomPlay)
-  .dependsOn(userApi)
+  .dependsOn(userApi, messageApi, security)
   .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
   .dependsOn(sharedJvm)
   .settings(
@@ -87,7 +87,8 @@ lazy val userApi = (project in file("user-api"))
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi,
-      "org.julienrf" %% "play-json-derived-codecs" % "3.3"
+      "org.julienrf" %% "play-json-derived-codecs" % "3.3",
+      "be.objectify" %% "deadbolt-scala" % "2.5.1"
     )
   )
 
@@ -97,7 +98,48 @@ lazy val userImpl = (project in file("user-impl"))
   .dependsOn(userApi, security)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies +=lagomScaladslPersistenceCassandra
+    libraryDependencies += lagomScaladslPersistenceCassandra
+  )
+
+lazy val messageApi = (project in file("message-api"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+
+lazy val messageImpl = (project in file("message-impl"))
+  .settings(commonSettings: _*)
+  .enablePlugins(LagomScala)
+  .dependsOn(messageApi, security)
+  .settings(
+    libraryDependencies ++= Settings.apiImplDependencies.value,
+    libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
+  )
+
+
+lazy val keeperApi = (project in file("keeper-api"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies += lagomScaladslApi
+  )
+  .dependsOn(security)
+
+lazy val keeperImpl = (project in file("keeper-impl"))
+  .settings(commonSettings: _ *)
+  .enablePlugins(LagomScala)
+  .settings(
+    libraryDependencies ++= Settings.apiImplDependencies.value,
+    libraryDependencies ++= Seq(
+      "be.objectify" %% "deadbolt-scala" % "2.5.1",
+      lagomScaladslPersistenceCassandra
+    )
+  )
+  .enablePlugins(LagomScala)
+  .dependsOn(keeperApi, security)
+  .settings(
+
   )
 
 def commonSettings: Seq[Setting[_]] = Seq(
@@ -107,14 +149,15 @@ def commonSettings: Seq[Setting[_]] = Seq(
 
 // Command for building a release
 lazy val ReleaseCmd = Command.command("release") {
-  state => "set elideOptions in client := Seq(\"-Xelide-below\", \"WARNING\")" ::
-    "client/clean" ::
-    "client/test" ::
-    "webGateway/clean" ::
-    "webGateway/test" ::
-    "webGateway/dist" ::
-    "set elideOptions in client := Seq()" ::
-    state
+  state =>
+    "set elideOptions in client := Seq(\"-Xelide-below\", \"WARNING\")" ::
+      "client/clean" ::
+      "client/test" ::
+      "webGateway/clean" ::
+      "webGateway/test" ::
+      "webGateway/dist" ::
+      "set elideOptions in client := Seq()" ::
+      state
 }
 
 

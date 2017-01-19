@@ -5,8 +5,8 @@ import japgolly.scalajs.react.vdom.prefix_<^._
 import client.components.Bootstrap._
 import client.components._
 import client.css.{DashBoardCSS, FooterCSS}
+import client.dtos.SignUpModel
 import client.sessionitems.SessionItems
-import shared.models.SignUpModel
 
 import scala.util.{Failure, Success}
 import scalacss.ScalaCssReact._
@@ -172,7 +172,7 @@ object NewAgentForm {
                   <.label(^.`for` := "Last name *", "Last name\u00a0*")
                 ),
                 <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin)(
-                  <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "LastName", ^.value := s.signUpModel.lastName,
+                  <.input(^.tpe := "text", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "LastName" ,^.value := s.signUpModel.lastName,
                     ^.onChange ==> updateLastName)
                 )
               ),
@@ -201,8 +201,8 @@ object NewAgentForm {
                   <.label(^.`for` := "Confirm Password *", "Confirm Password\u00a0*")
                 ),
                 <.div(DashBoardCSS.Style.scltInputModalLeftContainerMargin, ^.className := "form-group")(
-                  <.input(^.tpe := "password", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Confirm Password", ^.value := s.signUpModel.confirmPassword, ^.className := "form-control", "data-error".reactAttr := "Confirm Password is required",
-                    ^.onChange ==> updateConfirmPassword, ^.required := true),
+                  <.input(^.tpe := "password", bss.formControl, DashBoardCSS.Style.inputModalMargin, ^.id := "Confirm Password", ^.value := s.signUpModel.confirmPassword ,^.className := "form-control", "data-error".reactAttr := "Confirm Password is required"
+                    ,^.onChange ==> updateConfirmPassword, ^.required := true),
                   <.div(^.className := "help-block with-errors",DashBoardCSS.Style.loginHelpBlock)
                 )
               )
@@ -229,7 +229,7 @@ object NewAgentForm {
           <.div(^.className := "row", DashBoardCSS.Style.MarginLeftchkproduct)(
             <.div(DashBoardCSS.Style.marginTop10px)(
               <.div()(
-                <.input(^.`type` := "checkbox", ^.id := "createBTCWallet", ^.checked := s.signUpModel.createBTCWallet, ^.onChange ==> toggleBTCWallet),
+                <.input(^.`type` := "checkbox", ^.id := "createBTCWallet" ,^.checked := s.signUpModel.createBTCWallet, ^.onChange ==> toggleBTCWallet),
                 " * I understand and agree to the LivelyGig",
                 <.button(^.tpe := "button", ^.className := "btn-link", DashBoardCSS.Style.btnDefault, FooterCSS.Style.legalModalBtn, "Terms of Service", ^.onClick ==> showTermsOfServices),
                 "and",
@@ -255,10 +255,10 @@ object NewAgentForm {
 
   private val component = ReactComponentB[Props]("NewAgentForm")
     .initialState_P(p =>
-      if (addNewAgentState)
-        State(new SignUpModel(signUpModelUpdate.email, signUpModelUpdate.password, signUpModelUpdate.confirmPassword, signUpModelUpdate.name, signUpModelUpdate.lastName, signUpModelUpdate.createBTCWallet, signUpModelUpdate.isModerator,
-          signUpModelUpdate.isClient, signUpModelUpdate.isFreelancer, signUpModelUpdate.canReceiveEmailUpdates))
-      else
+//      if (addNewAgentState)
+//        State(new SignUpModel(signUpModelUpdate.email, signUpModelUpdate.password, signUpModelUpdate.confirmPassword, signUpModelUpdate.name, signUpModelUpdate.lastName, signUpModelUpdate.createBTCWallet, signUpModelUpdate.isModerator,
+//          signUpModelUpdate.isClient, signUpModelUpdate.isFreelancer, signUpModelUpdate.canReceiveEmailUpdates))
+//      else
         State(new SignUpModel("", "", "", "", "", false, false, false, false, false, false, "")))
     .renderBackend[Backend]
     .componentDidUpdate(scope => Callback {

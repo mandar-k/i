@@ -4,9 +4,9 @@ import client.modules.AppModule
 import diode._
 import diode.data._
 import shared.models.MessagePost
-import client.rootmodel.MessagesRootModel
+import client.rootmodel._
 import client.logger
-import client.services.{CoreApi, LGCircuit}
+import client.services.{CoreApi, CoreApiOld, LGCircuit}
 import diode.util.{Retry, RetryPolicy}
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils}
 import org.widok.moment.Moment
@@ -21,30 +21,40 @@ case class RefreshMessages(potResult: Pot[MessagesRootModel] = Empty, retryPolic
   override def next(value: Pot[MessagesRootModel], newRetryPolicy: RetryPolicy): RefreshMessages = RefreshMessages(value, newRetryPolicy)
 }
 
+case class AddMessage(newMessage: MessagePost)
+
 case class ClearMessages()
 
-
-class MessagesHandler[M](modelRW: ModelRW[M, Pot[MessagesRootModel]]) extends ActionHandler(modelRW) {
+class MessagesHandler[M](modelRW: ModelRW[M, MessagesRootModel /*Pot[MessagesRootModel]*/ ]) extends ActionHandler(modelRW) {
   //  var labelFamily = LabelsUtils.getLabelProlog(Nil)
 
   override def handle: PartialFunction[Any, ActionResult[M]] = {
 
-    case action: RefreshMessages =>
-      val updateF = action.effectWithRetry {
-        CoreApi.sessionPing(LGCircuit.zoom(_.session.messagesSessionUri).value)
-      } { messagesResponse =>
-        LGCircuit.dispatch(RefreshMessages())
-        val currentVal = if (value.nonEmpty) value.get.messagesModelList else Nil
-        val msg = currentVal ++ ContentUtils
-          .processRes(messagesResponse)
-          .filterNot(_.pageOfPosts.isEmpty)
-          .flatMap(content => Try(upickle.default.read[MessagePost](content.pageOfPosts(0))).toOption)
-        MessagesRootModel(msg.sortWith((x, y) => Moment(x.created).isAfter(Moment(y.created))))
+    //    case action: RefreshMessages =>
+    //      val updateF = action.effectWithRetry {
+    //        CoreApiOld.sessionPing(LGCircuit.zoom(_.session.messagesSessionUri).value)
+    //      } { messagesResponse =>
+    //        LGCircuit.dispatch(RefreshMessages())
+    //        val currentVal = if (!value.equals(Nil) /*value.nonEmpty*/ ) value.messagesModelList /*value.get.messagesModelList*/ else Nil
+    //        val msg = currentVal ++ ContentUtils
+    //          .processRes(messagesResponse)
+    //          .filterNot(_.pageOfPosts.isEmpty)
+    //          .flatMap(content => Try(upickle.default.read[MessagePost](content.pageOfPosts(0))).toOption)
+    //        MessagesRootModel(msg.sortWith((x, y) => Moment(x.created).isAfter(Moment(y.created))))
+    //      }
+    //      action.handleWith(this, updateF)(PotActionRetriable.handler())
+
+    case AddMessage(newMessage: MessagePost) => {
+      if (value.messagesModelList.isEmpty) {
+        updated(value.copy(Seq(newMessage)))
+      } else {
+        var newval = value.messagesModelList :+ newMessage
+        updated(value.copy(newval))
       }
-      action.handleWith(this, updateF)(PotActionRetriable.handler())
+    }
 
     case ClearMessages() =>
-      updated(Pot.empty)
+      updated(/*Pot.empty*/ MessagesRootModel(Nil))
 
   }
 }

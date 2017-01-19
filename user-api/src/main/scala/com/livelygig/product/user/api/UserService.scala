@@ -12,8 +12,8 @@ trait UserService extends Service {
   def descriptor = {
     import Service._
     named("user").withCalls(
-      pathCall("/api/login", login),
-      pathCall("/api/signup", signup)
+      namedCall("/api/user/login", login),
+      namedCall("/api/user/signup", signup)
 
     )
   }

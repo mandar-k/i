@@ -27,8 +27,9 @@ class UserEntity extends PersistentEntity{
       case (LoginUser(user), ctx, state) => ctx.invalidCommand("User Does not exist.")
     }
       .onCommand[CreateUser, Done] {
-      case (CreateUser(user), ctx, state) =>
+      case (CreateUser(user), ctx, state) =>{
         ctx.thenPersist(UserCreated(user), _ => ctx.reply(Done))
+      }
     }
       .onEvent{
         case (UserCreated(user), state) => Some(user)

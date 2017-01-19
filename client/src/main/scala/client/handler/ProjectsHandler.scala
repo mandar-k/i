@@ -6,7 +6,7 @@ import diode.data._
 import shared.models.{ProfilesPost, ProjectsPost}
 import org.scalajs.dom.window
 import client.rootmodel.ProjectsRootModel
-import client.services.{CoreApi, LGCircuit}
+import client.services.{CoreApi, CoreApiOld, LGCircuit}
 import diode.util.{Retry, RetryPolicy}
 import client.sessionitems.SessionItems
 import client.utils.ContentUtils
@@ -27,7 +27,7 @@ class ProjectsHandler[M](modelRW: ModelRW[M, Pot[ProjectsRootModel]]) extends Ac
   override def handle: PartialFunction[Any, ActionResult[M]] = {
     case action: RefreshProjects =>
 //      val labels = window.sessionStorage.getItem(SessionItems.ProjectsViewItems.CURRENT_PROJECTS_LABEL_SEARCH)
-      val updateF = action.effectWithRetry(CoreApi.sessionPing(LGCircuit.zoom(_.session.projectSessionUri).value)) { res =>
+      val updateF = action.effectWithRetry(CoreApiOld.sessionPing(LGCircuit.zoom(_.session.projectSessionUri).value)) { res =>
         LGCircuit.dispatch(RefreshProjects())
         val currentProjects = if (value.nonEmpty) value.get.projectsModelList else Nil
         val proj = currentProjects ++

@@ -4,19 +4,22 @@ import client.handler._
 import client.components._
 import client.logger
 import client.logger._
-import shared.models.{EmailValidationModel, SignUpModel}
-import client.services.CoreApi._
+import shared.models.EmailValidationModel
+import client.dtos.SignUpModel
+import client.dtos.UserModel
 import client.services._
+import client.services.CoreApiOld._
 import shared.dtos._
 import org.scalajs.dom._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js
 import scala.util.{Failure, Success}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
-import shared.models.UserModel
 import org.querki.jquery._
 import client.sessionitems.SessionItems
+
 import scala.concurrent.Future
 import diode.AnyAction._
 import client.utils.{AppUtils, ConnectionsUtils}
@@ -44,8 +47,8 @@ object AgentLoginSignUp {
   // scalastyle:off
   case class Backend(t: BackendScope[Props, State]) extends RxObserver(t) {
 
-    def mounted(props: Props): Callback = {
-      t.modState(s => s.copy(showLoginForm = true))
+    def mounted(props: Props): Callback = Callback {
+     // t.modState(s => s.copy(showLoginForm = true))
     }
 
     def addLoginForm(): Callback = {
@@ -67,39 +70,43 @@ object AgentLoginSignUp {
       t.modState(s => s.copy(showNewAgentForm = true))
     }
 
-    def addNewAgent(signUpModel: SignUpModel, addNewAgent: Boolean = false, showTermsOfServicesForm: Boolean = false, showPrivacyPolicyModal: Boolean = false): Callback = {
+    def addNewAgent(signUpModel: SignUpModel , addNewAgent: Boolean = false, showTermsOfServicesForm: Boolean = false, showPrivacyPolicyModal: Boolean = false): Callback = {
       //      log.debug(s"addNewAgent userModel : ${signUpModel} ,addNewAgent: ${addNewAgent}")
       if (addNewAgent) {
-        createUser(signUpModel).onComplete {
-          case Success(response) =>
-            try {
-              val s = upickle.default.read[ApiResponse[CreateUserResponse]](response)
-              //            log.debug(s"createUser msg : ${s.msgType}")
-              if (s.msgType == ApiTypes.responseTypes.CREATE_USER_WAITING) {
-                t.modState(s => s.copy(showConfirmAccountCreation = true)).runNow()
-              } else if (s.msgType == ApiTypes.responseTypes.CREATE_USER_ERROR) {
-                val errorResponse = upickle.default.read[ApiResponse[CreateUserError]](response)
-                //              val msg = JSON.parse(errorResponse.content.reason).reason.asInstanceOf[String]
-                t.modState(s => s.copy(showRegistrationFailed = true, registrationErrorMsg = errorResponse.content.reason)).runNow()
-                //                $(loginLoader).addClass("hidden")
-                //                $(loadingScreen).addClass("hidden")
-              } else if (s.msgType == ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR) {
-                processServerError(s.msgType)
-              }
-              else {
-                // log.debug(s"createUser msg : ${s.content}")
-                t.modState(s => s.copy(showRegistrationFailed = true)).runNow()
-              }
-            } catch {
-              case e: Exception =>
-                val error = upickle.default.read[ApiResponse[InitializeSessionErrorResponse]](response)
-                processServerError(error.msgType)
-            }
-          case Failure(s) =>
-            processServerError(ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR)
-          //            processServerError(s.)
-          // now you need to refresh the UI
+        CoreApi.signupFromApi(signUpModel).onComplete{
+          case Success(response)=> println(response)
+          case Failure(v) => println("")
         }
+//        createUser(signUpModel).onComplete {
+//          case Success(response) =>
+//            try {
+//              val s = upickle.default.read[ApiResponse[CreateUserResponse]](response)
+//              //            log.debug(s"createUser msg : ${s.msgType}")
+//              if (s.msgType == ApiTypes.responseTypes.CREATE_USER_WAITING) {
+//                t.modState(s => s.copy(showConfirmAccountCreation = true)).runNow()
+//              } else if (s.msgType == ApiTypes.responseTypes.CREATE_USER_ERROR) {
+//                val errorResponse = upickle.default.read[ApiResponse[CreateUserError]](response)
+//                //              val msg = JSON.parse(errorResponse.content.reason).reason.asInstanceOf[String]
+//                t.modState(s => s.copy(showRegistrationFailed = true, registrationErrorMsg = errorResponse.content.reason)).runNow()
+//                //                $(loginLoader).addClass("hidden")
+//                //                $(loadingScreen).addClass("hidden")
+//              } else if (s.msgType == ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR) {
+//                processServerError(s.msgType)
+//              }
+//              else {
+//                // log.debug(s"createUser msg : ${s.content}")
+//                t.modState(s => s.copy(showRegistrationFailed = true)).runNow()
+//              }
+//            } catch {
+//              case e: Exception =>
+//                val error = upickle.default.read[ApiResponse[InitializeSessionErrorResponse]](response)
+//                processServerError(error.msgType)
+//            }
+//          case Failure(s) =>
+//            processServerError(ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR)
+//          //            processServerError(s.)
+//          // now you need to refresh the UI
+//        }
         t.modState(s => s.copy(showNewAgentForm = false))
       } else if (showTermsOfServicesForm) {
         t.modState(s => s.copy(showNewAgentForm = false, showTermsOfServicesForm = true))
@@ -134,28 +141,38 @@ object AgentLoginSignUp {
     def setUserDetails(cnxnResponseStr: String, cnxnModelStr: String): Unit = {
       val response = upickle.default.read[ApiResponse[InitializeSessionResponse]](cnxnResponseStr)
       // println(s"SetUserDetails initialresponse sessionURI ==== ${response.content.sessionURI}")
-      LGCircuit.dispatch(LoginUser(UserModel(name = response.content.jsonBlob.getOrElse("name", ""), imgSrc = response.content.jsonBlob.getOrElse("imgSrc", "") /*,sessionUri = response.content.sessionURI*/)))
+     // LGCircuit.dispatch(LoginUser(UserModel(name = response.content.jsonBlob.getOrElse("name", "")/*, imgSrc = response.content.jsonBlob.getOrElse("imgSrc", "") *//*,sessionUri = response.content.sessionURI*/)))
       LGCircuit.dispatch(UpdateConnections(ConnectionsUtils.getConnectionsModel(cnxnModelStr)))
       LGCircuit.dispatch(CreateLabels(response.content.listOfLabels))
     }
 
     def processLogin(userModel: UserModel): Callback = {
       $(loginLoader).removeClass("hidden")
-      val sessionURISeq = SessionItems.getAllSessionUriName()
-      val futureArray = for (sessionURI <- sessionURISeq) yield CoreApi.agentLogin(userModel)
-      Future.sequence(futureArray).onComplete {
-        case Success(responseArray) =>
-          validateResponse(responseArray(0)) match {
-            case SUCCESS => processSuccessfulLogin(responseArray, userModel)
-            case LOGIN_ERROR => processLoginFailed(responseArray(0))
-            case SERVER_ERROR =>
-              val error = upickle.default.read[ApiResponse[InitializeSessionErrorResponse]](responseArray(0))
-//              println(error)
-              processServerError(error.msgType)
-
-          }
-        case Failure(res) =>
-          processServerError(ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR)
+//      val sessionURISeq = SessionItems.getAllSessionUriName()
+//      val futureArray = for (sessionURI <- sessionURISeq) yield CoreApi.agentLogin(userModel)
+//      Future.sequence(futureArray).onComplete {
+//        case Success(responseArray) =>
+//          validateResponse(responseArray(0)) match {
+//            case SUCCESS => processSuccessfulLogin(responseArray, userModel)
+//            case LOGIN_ERROR => processLoginFailed(responseArray(0))
+//            case SERVER_ERROR =>
+//              val error = upickle.default.read[ApiResponse[InitializeSessionErrorResponse]](responseArray(0))
+////              println(error)
+//              processServerError(error.msgType)
+//
+//          }
+//        case Failure(res) =>
+//          processServerError(ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR)
+//      }
+      CoreApi.loginFromApi(userModel).onComplete{
+        case Success(response)=> {
+         LGCircuit.dispatch(LoginUser(UserModel(name = userModel.name)))
+          $(loginLoader).addClass("hidden")
+          $(dashboardContainer).removeClass("hidden")
+          window.location.replace("/#messages")
+          log.debug("login successful")
+        }
+        case Failure(v) => println("Login Failed")
       }
       t.modState(s => s.copy(showLoginForm = false))
     }
@@ -164,20 +181,22 @@ object AgentLoginSignUp {
       val responseSeq = responseArray.map(e => upickle.default.read[ApiResponse[InitializeSessionResponse]](e))
       LGCircuit.dispatch(SetSessionUri(responseSeq.map(_.content.sessionURI)))
       // do a session ping to get the connections
-      val futureArray = for (response <- responseSeq) yield CoreApi.sessionPing(response.content.sessionURI)
-      Future.sequence(futureArray).onComplete {
-        case Success(sessionPingResponseStr) =>
-          AppUtils.handleInitialSessionPingRes(sessionPingResponseStr(0))
-          setUserDetails(responseArray(0), sessionPingResponseStr(0))
-          LGCircuit.dispatch(SubscribeForDefaultAndBeginPing())
-          $(loginLoader).addClass("hidden")
-          $(dashboardContainer).removeClass("hidden")
-          window.location.replace("/#messages")
-          log.debug("login successful")
+   //   val futureArray = for (response <- responseSeq) yield CoreApi.sessionPing(response.content.sessionURI)
 
-        case Failure(res) =>
-          processServerError(res.getMessage)
-      }
+//      Future.sequence(futureArray).onComplete {
+//        case Success(sessionPingResponseStr) =>
+//          AppUtils.handleInitialSessionPingRes(sessionPingResponseStr(0))
+//          setUserDetails(responseArray(0), sessionPingResponseStr(0))
+//          LGCircuit.dispatch(SubscribeForDefaultAndBeginPing())
+//          $(loginLoader).addClass("hidden")
+//          $(dashboardContainer).removeClass("hidden")
+//          window.location.replace("/#messages")
+//          log.debug("login successful")
+//
+//        case Failure(res) =>
+//          processServerError(res.getMessage)
+//      }
+
     }
 
     def processLoginFailed(responseStr: String): Unit = {
@@ -324,8 +343,8 @@ object AgentLoginSignUp {
         }
         else {
           // Show the Log In modal by default
-          LoginForm(LoginForm.Props(B.loginUser))
-          //  Seq.empty[ReactElement]
+         // LoginForm(LoginForm.Props(B.loginUser))
+            Seq.empty[ReactElement]
         }
       )
     })

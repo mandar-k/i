@@ -180,12 +180,12 @@ object DashBoardCSS {
     )
 
     val scltInputModalLeftContainerMargin = style(
-      /*marginLeft(180.px),
+      marginLeft(180.px),
       marginRight(60.px),
       media.maxWidth(1130.px) - (
         marginLeft(135.px),
         marginRight(38.px)
-      )*/
+      )
     )
     val scltInputModalContainerMargin = style(
       media.maxWidth(768.px) - (

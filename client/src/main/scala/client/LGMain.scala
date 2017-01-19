@@ -59,6 +59,8 @@ object LGMain extends js.JSApp {
 
   case object NotificationsLoc extends Loc
 
+
+
   val userProxy = LGCircuit.connect(_.user)
   val appProxy = LGCircuit.connect(_.appRootModel)
   val introProxy = LGCircuit.connect(_.introduction)
@@ -66,7 +68,7 @@ object LGMain extends js.JSApp {
   // configure the router
   val routerConfig = RouterConfigDsl[Loc].buildConfig { dsl =>
     import dsl._
-    (staticRoute(root, LandingLoc) ~> renderR(ctl => LandingLocation.component(ctl))
+    (staticRoute(root, LandingLoc) ~>  /*renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))*/renderR(ctl => LandingLocation.component(ctl))
       | staticRoute(s"#${AppModule.DASHBOARD_VIEW}", DashboardLoc) ~> renderR(ctl => Dashboard.component(ctl))
       | staticRoute(s"#${AppModule.NOTIFICATIONS_VIEW}", NotificationsLoc) ~> renderR(ctl => introProxy(proxy => NotificationResults(NotificationResults.Props(proxy))))
       | staticRoute(s"#${AppModule.MESSAGES_VIEW}", MessagesLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))
@@ -80,6 +82,7 @@ object LGMain extends js.JSApp {
       //      | staticRoute(s"#${AppModule.NOTIFICATIONS_VIEW}", NotificationsLoc) ~> renderR(ctl =>appProxy(proxy => AppModule(AppModule.Props(AppModule.NOTIFICATIONS_VIEW, proxy))))
       | staticRoute(s"#${AppModule.CONNECTIONS_VIEW}", ConnectionsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.CONNECTIONS_VIEW, proxy)))))
       .notFound(redirectToPage(LandingLoc)(Redirect.Replace))
+
   }.renderWith(layout)
 
   // base layout for all pages
@@ -136,14 +139,8 @@ object LGMain extends js.JSApp {
     GlobalStyles.addToDocument()
     AppCSS.load
     import scala.concurrent.ExecutionContext.Implicits.global
-    CoreApi.loginFromApi().onComplete{
-      case Success(response)=> println(response)
-      case Failure(v) => println("")
-    }
-    CoreApi.signupFromApi().onComplete{
-      case Success(response)=> println(response)
-      case Failure(v) => println("")
-    }
+
+
     window.sessionStorage.removeItem("sessionPingTriggered")
     //    standaloneCSS.render[HTMLStyleElement].outerHTML
     GlobalRegistry.addToDocumentOnRegistration()
@@ -152,5 +149,6 @@ object LGMain extends js.JSApp {
     // tell React to render the router in the document body
     //ReactDOM.render(router(), dom.document.getElementById("root"))
     ReactDOM.render(router(), dom.document.getElementById("root"))
+    window.location.href = "/#messages"
   }
 }

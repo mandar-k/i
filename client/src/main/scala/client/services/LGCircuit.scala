@@ -6,16 +6,17 @@ import client.rootmodel._
 import diode._
 import diode.data._
 import diode.react.ReactConnector
-import shared.models.UserModel
+import client.dtos.UserModel
+import shared.models.MessagePost
 
-case class RootModel(connections: ConnectionsRootModel, user: UserModel, messages: Pot[MessagesRootModel],
+case class RootModel(connections: ConnectionsRootModel, user: UserModel, messages: MessagesRootModel/*Pot[MessagesRootModel]*/,
                      jobPosts: Pot[ProjectsRootModel], searches: SearchesRootModel, profiles : Pot[ProfilesRootModel],
                      introduction: IntroRootModel, appRootModel : AppRootModel, session: SessionRootModel)
 
 object LGCircuit extends Circuit[RootModel] with ReactConnector[RootModel] {
   // initial application model
   override protected def initialModel = RootModel(ConnectionsRootModel(Nil),
-    UserModel(), Empty, Empty, SearchesRootModel(Nil), Empty, IntroRootModel(Nil),AppRootModel(), SessionRootModel())
+    UserModel(),MessagesRootModel(Nil)/* Empty*/, Empty, SearchesRootModel(Nil), Empty, IntroRootModel(Nil),AppRootModel(), SessionRootModel())
 
   // combine all handlers into one
   override protected val actionHandler = composeHandlers(

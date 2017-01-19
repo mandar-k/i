@@ -1,39 +1,42 @@
-package controllers
-
-import java.util.UUID
-
-import com.livelygig.product.user.api.{User, UserService}
-import play.api.mvc._
-import play.api.Environment
-import play.api.libs.json.Json
-
-import scala.concurrent.{ExecutionContext, Future}
-
-class Main(userService: UserService) (implicit env: Environment, ec: ExecutionContext) extends Controller {
-
-  def index = Action {
-    Ok(views.html.index("LivelyGig"))
-  }
-
-  def logging = Action(parse.anyContent) {
-    implicit request =>
-      request.body.asJson.foreach { msg =>
-        println(s"Application - CLIENT - $msg")
-      }
-      Ok("")
-  }
-
-  def signup = Action.async{implicit rh =>
-    println(rh.body.asJson)
-    userService.signup.invoke(User(UUID.randomUUID(),"testq2","testq2","testq2")).map{
-      msg => Ok("")
-    }
-  }
-  def login = Action.async{implicit rh =>
-    println(rh.body.asJson)
-    userService.login.invoke(User(UUID.randomUUID(),"testq2","testq2","testq2")).map{
-      msg => Ok("")
-    }
-  }
-
-}
+//package controllers
+//
+//import java.util.UUID
+//
+//import com.livelygig.product.user.api.{User, UserService}
+//import org.slf4j.LoggerFactory
+//import play.api.mvc._
+//import play.api.Environment
+//import play.api.libs.json.Json
+//
+//import scala.concurrent.{ExecutionContext}
+//
+//class Main(userService: UserService)(implicit env: Environment, ec: ExecutionContext) extends Controller {
+//  private val log = LoggerFactory.getLogger(classOf[Main])
+//  def index = Action {
+//    Ok(views.html.index("LivelyGig"))
+//  }
+//
+//  def logging = Action(parse.anyContent) {
+//    implicit request =>
+//      request.body.asJson.foreach { msg =>
+//        println(s"Application - CLIENT - $msg")
+//      }
+//      Ok("")
+//  }
+//
+//
+//  def signup = Action.async { implicit rh =>
+//    userService.signup
+//      .invoke(rh.body.asJson.get.as[User]).map {
+//        _ => Ok("")
+//      }
+//  }
+//
+//  def login = Action.async { implicit rh =>
+////    if (true) throw new Exception("an error!")
+//    userService.login.invoke(rh.body.asJson.get.as[User]).map {
+//      user => Ok(Json.toJson(user))
+//    }
+//  }
+//
+//}

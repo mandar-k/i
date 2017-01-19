@@ -1,0 +1,10 @@
+@(user: User, url: String)(implicit messages: Messages)
+
+<html>
+    <body>
+      <img  class="logoImg">
+        <p>@messages("email.sign.up.hello", user.name.getOrElse("user"))</p>
+        <p>@Html(messages("email.sign.up.html.text", url))</p>
+
+    </body>
+</html>
