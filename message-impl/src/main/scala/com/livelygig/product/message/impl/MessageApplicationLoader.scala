@@ -2,11 +2,11 @@ package com.livelygig.product.message.impl
 
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
-import com.lightbend.lagom.scaladsl.pubsub.{PubSubComponents, PubSubRegistry, TopicId}
 import com.lightbend.lagom.scaladsl.server._
-import com.livelygig.product.message.api.{Message, MessageService}
+import com.livelygig.product.message.api.{MessageService}
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
+import com.livelygig.product.keeper.api.KeeperService
 
 abstract class MessageApplication(context: LagomApplicationContext)
   extends LagomApplication(context)
@@ -23,6 +23,10 @@ abstract class MessageApplication(context: LagomApplicationContext)
   lazy val msgPubSub = wire[MessagePubSub]
   lazy val msgRepo = wire[MessageRepository]
   //  lazy val msgPubSubRegistry = wire[pubSubRegistry]
+  lazy val handler = wire[MessageAuthHandler]
+  lazy val analyser = wire[ConstraintAnalyser]
+  lazy val keeperService = serviceClient.implement[KeeperService]
+//  lazy val msgPubSubRegistry = wire[pubSubRegistry]
   persistentEntityRegistry.register(wire[MessageTimelineEntity])
   readSide.register(wire[MessageEventProcessor])
 }

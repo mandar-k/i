@@ -54,13 +54,13 @@ object SecurityHeaderFilter extends HeaderFilter {
 
 object ResourceServerSecurity {
 
-  def authenticated[Req, Response](serviceCall: String => ServerServiceCall[Req, Response]) =
+  def authenticated[Req, Response](serviceCall: (String, RequestHeader) => ServerServiceCall[Req, Response]) =
 
     ServerServiceCall.compose { requestHeader =>
       val request = SecurityHeaderFilter.transformServerRequest(requestHeader)
       request.principal match {
         case Some(userPrincipal: UserPrincipal) =>
-          serviceCall(userPrincipal.authKey)
+          serviceCall(userPrincipal.authKey, requestHeader)
         case other =>
           throw Forbidden("User not authenticated")
       }

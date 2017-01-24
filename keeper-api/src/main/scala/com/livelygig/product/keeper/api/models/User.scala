@@ -31,13 +31,13 @@ object UserProfile {
   implicit val format: Format[UserProfile] = Json.format
 }
 
-case class UserRole(id: UUID, name: String)
+case class UserRole(name: String)
 
 object UserRole {
   implicit val format: Format[UserRole] = Json.format
 }
 
-case class UserPermission(id: UUID, name: String)
+case class UserPermission(name: String)
 
 object UserPermission {
   implicit val format: Format[UserPermission] = Json.format

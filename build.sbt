@@ -118,7 +118,7 @@ lazy val messageApi = (project in file("message-api"))
 lazy val messageImpl = (project in file("message-impl"))
   .settings(commonSettings: _*)
   .enablePlugins(LagomScala)
-  .dependsOn(messageApi, security)
+  .dependsOn(messageApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
