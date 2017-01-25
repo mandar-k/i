@@ -2,6 +2,7 @@ import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.api.{ServiceAcl, ServiceInfo}
 import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.server.LagomDevModeComponents
+import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.message.api.MessageService
 import com.livelygig.product.user.api.UserService
 import play.api.i18n.I18nComponents
@@ -58,6 +59,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
 
   lazy val userServiceImpl = serviceClient.implement[UserService]
   lazy val messageServiceImpl = serviceClient.implement[MessageService]
+  lazy val emailNotificationImpl = serviceClient.implement[EmailNotificationsService]
   lazy val messageController = wire[MessageController]
   //  lazy val main = wire[Main]
   //  lazy val assets = wire[Assets]

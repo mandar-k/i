@@ -50,7 +50,7 @@ lazy val clients = Seq(client)
 lazy val webGateway = (project in file("web-gateway"))
   .settings(commonSettings: _*)
   .enablePlugins(PlayScala && LagomPlay)
-  .dependsOn(userApi, messageApi, security)
+  .dependsOn(userApi, messageApi, security, emailnotificationsApi)
   .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
   .dependsOn(sharedJvm)
   .settings(
@@ -119,6 +119,23 @@ lazy val messageImpl = (project in file("message-impl"))
   .settings(commonSettings: _*)
   .enablePlugins(LagomScala)
   .dependsOn(messageApi, security, keeperApi)
+  .settings(
+    libraryDependencies ++= Settings.apiImplDependencies.value,
+    libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
+  )
+
+lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+
+lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
+  .settings(commonSettings: _*)
+  .enablePlugins(LagomScala)
+  .dependsOn(emailnotificationsApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)

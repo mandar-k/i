@@ -23,10 +23,10 @@ class MessageServiceImpl(registry: PersistentEntityRegistry,
                          analyser: ConstraintAnalyser)
                         (implicit ec: ExecutionContext, mat: Materializer) extends MessageService {
 
-  override def addMessage() = /*ResourceServerSecurity.authenticated(())*/
+  override def addMessage() =
     ResourceServerSecurity.authenticated((authKey, rh) => ServerServiceCall { msg =>
       analyser.hasRolesAndPermissions(List(Array(UserRole("user"))), UserPermission("add"), handler, rh)
-          .flatMap{ authFlag => authFlag match {
+          .flatMap{ auth => auth match {
             case true =>
               val msgUid = UUID.randomUUID()
               refFor(msgUid.toString).ask(AddMessage(msg.copy(id = msgUid))).map { _ => null }
