@@ -1,6 +1,6 @@
 package com.livelygig.product.keeper.api
 
-import akka.NotUsed
+import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 import com.livelygig.product.keeper.api.models._
 import com.livelygig.product.security.keeper.SecurityHeaderFilter
@@ -35,7 +35,7 @@ trait KeeperService extends Service {
     * and returns success or failure
     * @return
     */
-  def createUser(): ServiceCall[User, NotUsed]
+  def createUser(): ServiceCall[User, Done]
 
    def descriptor = {
      import Service._

@@ -15,25 +15,31 @@ import scala.util.{Failure, Success}
 /**
   * Created by shubham.k on 09-01-2017.
   */
-class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRepository)(implicit ec: ExecutionContext) extends KeeperService  {
+class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRepository)(implicit ec: ExecutionContext) extends KeeperService {
   // Return the authorization roles and permission of the subject
   override def authorize() = ???
 
-  override def login() =  ServiceCall{ loginModel=>
+  override def login() = ServiceCall { loginModel =>
     for {
       userId <- keeperRepo.searchForUsernameOrEmail(loginModel)
       authKey <- if (userId.nonEmpty) refFor(userId.get).ask(LoginUser(loginModel.password)) else throw NotFound("User not found")
     } yield authKey
   }
 
-  override def createUser() = ???/*ServiceCall{ userModel =>
+
+  override def createUser() = ServiceCall { userModel =>
     for {
       userFromEmail <- keeperRepo.searchForEmail(userModel.userAuth.email)
       userFromUserName <- keeperRepo.searchForUsername(userModel.userAuth.username)
-      _
-    }
-  }*/
+      reply <- if (userFromEmail.isEmpty && userFromUserName.isEmpty) {
+        val uid = UUID.randomUUID()
+        refFor(uid).ask(CreateUser(userModel))
+      } else throw Forbidden("User already exist")
+    } yield reply
+  }
+
 
   private def refFor(userId: UUID) = registry.refFor[KeeperEntity](userId.toString)
-//  private
+
+  //  private
 }

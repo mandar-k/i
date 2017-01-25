@@ -3,7 +3,7 @@ package com.livelygig.product.keeper.impl
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.lightbend.lagom.scaladsl.playjson.Jsonable
-import com.livelygig.product.keeper.api.models.UserAuth
+import com.livelygig.product.keeper.api.models.{User, UserAuth}
 import play.api.libs.json.{Format, Json}
 
 /**
@@ -23,7 +23,7 @@ object DeleteToken {
   implicit val format: Format[LoginUser] = Json.format
 }
 
-case class CreateUser(userAuth: UserAuth) extends KeeperCommand with ReplyType[Done]
+case class CreateUser(user: User) extends KeeperCommand with ReplyType[Done]
 
 object CreateUser {
   implicit val format: Format[CreateUser] = Json.format
