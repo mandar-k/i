@@ -21,7 +21,7 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.0")
 
-addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.3.0-M1")
+addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.3.0-RC1")
 
 //addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.3.0-M1" excludeAll(ExclusionRule("io.netty", "netty-transport-native-epoll"), ExclusionRule("org.slf4j", "slf4j-simple")))
 //addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.9" excludeAll(ExclusionRule("io.netty", "netty-transport-native-epoll"), ExclusionRule("org.slf4j", "slf4j-simple")))

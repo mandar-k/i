@@ -1,9 +1,10 @@
 package com.livelygig.product.message.impl
 
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
+import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
-import com.livelygig.product.message.api.{MessageService}
+import com.livelygig.product.message.api.MessageService
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
 import com.livelygig.product.keeper.api.KeeperService
@@ -17,6 +18,7 @@ abstract class MessageApplication(context: LagomApplicationContext)
   override lazy val lagomServer = LagomServer.forServices(
     bindService[MessageService].to(wire[MessageServiceImpl])
   )
+  override lazy val jsonSerializerRegistry = MessageJsonSerializerRegistry
   lazy val actSys = actorSystem
   //  pubSubRegistry.refFor()
   //  lazy val messageRepository = wire[MessageRepository]

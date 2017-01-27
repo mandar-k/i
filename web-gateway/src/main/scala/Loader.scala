@@ -1,7 +1,7 @@
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.api.{ServiceAcl, ServiceInfo}
 import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
-import com.lightbend.lagom.scaladsl.server.LagomDevModeComponents
+import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.message.api.MessageService
 import com.livelygig.product.user.api.UserService

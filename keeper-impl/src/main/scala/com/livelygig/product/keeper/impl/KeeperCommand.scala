@@ -2,14 +2,13 @@ package com.livelygig.product.keeper.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
-import com.lightbend.lagom.scaladsl.playjson.Jsonable
 import com.livelygig.product.keeper.api.models.{User, UserAuth}
 import play.api.libs.json.{Format, Json}
 
 /**
   * Created by shubham.k on 11-01-2017.
   */
-trait KeeperCommand extends Jsonable
+trait KeeperCommand
 
 case class LoginUser(password: String) extends KeeperCommand with ReplyType[String]
 

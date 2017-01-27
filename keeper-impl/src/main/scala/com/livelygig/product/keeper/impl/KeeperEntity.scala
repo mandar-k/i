@@ -34,7 +34,7 @@ class KeeperEntity extends PersistentEntity {
     Actions()
       .onCommand[CreateUser, Done] {
       case (CreateUser(user), ctx, userAuthState) =>
-        ctx.thenPersist(UserCreated(user), _ => ctx.reply(Done))
+        ctx.thenPersist(UserCreated(user))(_ => ctx.reply(Done))
     }
   }
 
@@ -46,11 +46,11 @@ class KeeperEntity extends PersistentEntity {
         if (password == userState.state.get.password) {
           val authKey = UUID.randomUUID().toString
           val userLoginInfo = UserLoginInfo(new Date(), userState.state.get.email, authKey, userState.state.get.userId)
-          ctx.thenPersist(UserLogin(userLoginInfo), _ => ctx.reply(authKey))
+          ctx.thenPersist(UserLogin(userLoginInfo))(_ => ctx.reply(authKey))
         }
         else {
           val loginFailedInfo = new UserLoginInfo(new Date(), userState.state.get.email, "", userState.state.get.userId)
-          ctx.thenPersist(UserLogin(loginFailedInfo), _ => ctx.commandFailed(throw Forbidden("Authorization failed")))
+          ctx.thenPersist(UserLogin(loginFailedInfo))(_ => ctx.commandFailed(throw Forbidden("Authorization failed")))
         }
     }
   }

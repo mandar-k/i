@@ -26,7 +26,7 @@ class MessageTimelineEntity(msgPubSub: MessagePubSub)  extends PersistentEntity 
     Actions()
       .onCommand[AddMessage, Done]{
       case (AddMessage(msg),ctx,state) => {
-        ctx.thenPersist(MessagePosted(msg), evt => {
+        ctx.thenPersist(MessagePosted(msg))(evt => {
           ctx.reply(Done)
           msgPubSub.refFor(msg.userId.toString).publish(msg)
         })

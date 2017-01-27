@@ -1,6 +1,7 @@
 package com.livelygig.product.keeper.impl
 
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
+import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.server._
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
@@ -19,6 +20,8 @@ abstract class KeeperApplication(context: LagomApplicationContext)
   override lazy val lagomServer = LagomServer.forServices(
     bindService[KeeperService].to(wire[KeeperServiceImpl])
   )
+  override lazy val jsonSerializerRegistry = KeeperJsonSerializerRegistry
+
   lazy val keeperRepo = wire[KeeperRepository]
   persistentEntityRegistry.register(wire[KeeperEntity])
   readSide.register(wire[KeeperEventProcessor])

@@ -1,11 +1,11 @@
 package com.livelygig.product.message.impl
-import com.lightbend.lagom.scaladsl.playjson.{SerializerRegistry, Serializers}
+import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
 import com.livelygig.product.message.api.Message
 
-class MessageSerializerRegistry extends SerializerRegistry {
+object MessageJsonSerializerRegistry extends JsonSerializerRegistry {
   override def serializers = List(
-    Serializers[Message],
-    Serializers[AddMessage],
-    Serializers[MessagePosted]
+    JsonSerializer[Message],
+    JsonSerializer[AddMessage],
+    JsonSerializer[MessagePosted]
   )
 }

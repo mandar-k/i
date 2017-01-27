@@ -10,7 +10,7 @@ import play.api.libs.json.{Format, Json}
 /**
   * Created by shubham.k on 23-12-2016.
   */
-sealed trait MessageCommand extends Jsonable
+sealed trait MessageCommand
 
 case class AddMessage(message: Message) extends MessageCommand with ReplyType[Done]
 object AddMessage {

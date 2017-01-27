@@ -1,6 +1,7 @@
 package com.livelygig.product.user.impl
 
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
+import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 //import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
@@ -16,6 +17,8 @@ abstract class UserApplication(context: LagomApplicationContext)
   override lazy val lagomServer = LagomServer.forServices(
     bindService[UserService].to(wire[UserServiceImpl])
   )
+  override lazy val jsonSerializerRegistry = UserJsonSerializerRegistry
+
   lazy val userRepository =wire[UserRepository]
   persistentEntityRegistry.register(wire[UserEntity])
   readSide.register(wire[UserEventProcessor])

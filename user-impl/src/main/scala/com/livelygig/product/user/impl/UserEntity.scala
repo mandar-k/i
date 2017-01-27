@@ -28,7 +28,7 @@ class UserEntity extends PersistentEntity{
     }
       .onCommand[CreateUser, Done] {
       case (CreateUser(user), ctx, state) =>{
-        ctx.thenPersist(UserCreated(user), _ => ctx.reply(Done))
+        ctx.thenPersist(UserCreated(user))(_ => ctx.reply(Done))
       }
     }
       .onEvent{

@@ -1,9 +1,10 @@
 package com.livelygig.product.emailnotifications.impl
 
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
+import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
-import com.livelygig.product.emailnotifications.api.{EmailNotificationsService}
+import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
 
@@ -17,6 +18,8 @@ abstract class EmailNotificationsApplication(context: LagomApplicationContext)
   override lazy val lagomServer = LagomServer.forServices(
     bindService[EmailNotificationsService].to(wire[EmailNotificationsImpl])
   )
+//  override lazy val jsonSerializerRegistry = EmailNotificationJsonSerializerRegistry
+
   //  lazy val keeperRepo = wire[KeeperRepository]
   //  persistentEntityRegistry.register(wire[KeeperEntity])
   //  readSide.register(wire[KeeperEventProcessor])
