@@ -1,7 +1,6 @@
 package com.livelygig.product.keeper.impl
 
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, AggregateEventTagger}
-import com.lightbend.lagom.scaladsl.playjson.Jsonable
 import com.livelygig.product.keeper.api.models.{User, UserAuth}
 import com.livelygig.product.keeper.impl.models.UserLoginInfo
 import play.api.libs.json.{Format, Json}
@@ -9,7 +8,7 @@ import play.api.libs.json.{Format, Json}
 /**
   * Created by shubham.k on 11-01-2017.
   */
-class KeeperEvent extends AggregateEvent[KeeperEvent] with Jsonable{
+class KeeperEvent extends AggregateEvent[KeeperEvent] {
   override def aggregateTag :AggregateEventTagger[KeeperEvent] = KeeperEvent.Tag
 }
 

@@ -2,7 +2,6 @@ package com.livelygig.product.message.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
-import com.lightbend.lagom.scaladsl.playjson.Jsonable
 import com.livelygig.product.message.api.Message
 import com.livelygig.product.utils.JsonFormats.singletonFormat
 import play.api.libs.json.{Format, Json}
