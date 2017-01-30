@@ -27,7 +27,7 @@ import scala.concurrent.Future
  * @param passwordHasherRegistry The password hasher registry.
  * @param webJarAssets           The WebJar assets locator.
  */
-class ChangePasswordController @Inject() (
+class ChangePasswordController  (
   val messagesApi: MessagesApi,
   silhouette: Silhouette[DefaultEnv],
   userService: UserService,

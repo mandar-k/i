@@ -24,7 +24,7 @@ import scala.concurrent.Future
  * @param mailerClient     The mailer client.
  * @param webJarAssets     The WebJar assets locator.
  */
-class ForgotPasswordController @Inject() (
+class ForgotPasswordController  (
   val messagesApi: MessagesApi,
   silhouette: Silhouette[DefaultEnv],
   userService: UserService,

@@ -36,25 +36,30 @@ object Settings {
     "org.webjars" % "font-awesome" % Versions.fontAwesome % Provided,
 //    "org.webjars" % "bootstrap" % Versions.bootstrap % Provided,
     "be.objectify" %% "deadbolt-scala" % "2.5.1",
-    "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided",
-    "com.mohiva" %% "play-silhouette" % "4.0.0-BETA4",
-    "com.mohiva" %% "play-silhouette-password-bcrypt" % "4.0.0-BETA4",
-    "com.mohiva" %% "play-silhouette-persistence-memory" % "4.0.0-BETA4",
-    "org.webjars" %% "webjars-play" % "2.5.0",
+    "com.mohiva" %% "play-silhouette-password-bcrypt" % "4.0.0",
+    "com.mohiva" %% "play-silhouette" % "4.0.0",
+    "com.mohiva" %% "play-silhouette-persistence" % "4.0.0",
+    "com.mohiva" %% "play-silhouette-crypto-jca" % "4.0.0",
+    "org.webjars" %% "webjars-play" % "2.5.0-2",
     "net.codingwell" %% "scala-guice" % "4.0.1",
     "com.iheart" %% "ficus" % "1.4.0",
     "com.adrianhurt" %% "play-bootstrap" % "1.0-P25-B3",
-    "com.mohiva" %% "play-silhouette-testkit" % "4.0.0-BETA4" % "test",
-    specs2 % Test,
-    cache,
-    filters,
-    "com.softwaremill.macwire" %% "macros" % "1.0.7",
-    "com.softwaremill.macwire" %% "runtime" % "1.0.7",
+
     ws,
     "org.asynchttpclient" % "async-http-client" % "2.0.4" force(),
-    "com.mohiva" %% "play-silhouette-persistence" % "4.0.0-BETA4",
     "com.typesafe.play" %% "play-mailer" % "5.0.0",
-    "com.enragedginger" %% "akka-quartz-scheduler" % "1.5.0-akka-2.4.x"
+    "com.enragedginger" %% "akka-quartz-scheduler" % "1.5.0-akka-2.4.x",
+
+    /////////
+
+ // "net.codingwell" %% "scala-guice" % "4.0.1",
+ // "com.iheart" %% "ficus" % "1.2.6",
+  "com.mohiva" %% "play-silhouette-testkit" % "4.0.0" % "test",
+  "com.softwaremill.macwire" %% "macros" % "2.2.5",
+  "com.softwaremill.macwire" %% "runtime" % "1.0.7",
+  specs2 % Test,
+  cache,
+  filters
   ))
 
   /** Dependencies only used by the JS project (note the use of %%% instead of %%) */

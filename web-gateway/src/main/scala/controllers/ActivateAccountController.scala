@@ -26,7 +26,7 @@ import scala.language.postfixOps
  * @param mailerClient     The mailer client.
  * @param webJarAssets     The WebJar assets locator.
  */
-class ActivateAccountController @Inject() (
+class ActivateAccountController (
   val messagesApi: MessagesApi,
   silhouette: Silhouette[DefaultEnv],
   userService: UserService,

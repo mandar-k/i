@@ -5,6 +5,7 @@ import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.message.api.MessageService
 import com.livelygig.product.user.api.UserService
+import com.mohiva.play.silhouette.api.{Silhouette, SilhouetteProvider}
 import play.api.i18n.I18nComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 import controllers.ActivateAccountController
@@ -24,22 +25,29 @@ import controllers.SignInController
 import controllers.SignUpController
 import controllers.SocialAuthController
 import controllers.WebJarAssets
+import models.daos.UserDAOImpl
+import models.services.UserServiceImpl
+import modules.SilhouetteModule
 import play.api.ApplicationLoader.Context
 import play.api._
+import play.api.cache.EhCacheComponents
+import play.api.http.HttpErrorHandler
 import play.api.libs.mailer.MailerComponents
+import play.api.libs.openid.OpenIDComponents
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSClient
 import play.api.mvc.EssentialFilter
 import play.api.routing.Router
 import play.filters.csrf.{CSRFComponents, CSRFConfig, CSRFFilter}
 import play.filters.headers.SecurityHeadersComponents
+import utils.auth.DefaultEnv
 
 
 abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext(context)
   with I18nComponents
   //  with AhcWSComponents
   with WebAppComponents
-  with UtilModule
+
   with LagomServiceClientComponents {
 
   override lazy val serviceInfo: ServiceInfo = ServiceInfo(
@@ -49,7 +57,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
     )
   )
   override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
-  override lazy val httpErrorHandler = errorHandler
+ override  lazy val httpErrorHandler:HttpErrorHandler = wire[WebGatewayErrorHandler]
   lazy val routerOption = None
   override lazy val router = {
     val prefix = "/"
@@ -77,11 +85,17 @@ class WebGatewayLoader extends ApplicationLoader {
 }
 
 trait WebAppComponents extends BuiltInComponents
-  with WebAppModule
+  with SilhouetteModule
   with I18nComponents
-  with CSRFComponents
+  with OpenIDComponents
+  with EhCacheComponents
+  with WebAppModule
   with MailerComponents
-  with SecurityHeadersComponents {
+   with CSRFComponents
+  with SecurityHeadersComponents
+  {
+    lazy val silhouette: Silhouette[DefaultEnv] = wire[SilhouetteProvider[DefaultEnv]]
+  lazy val userService = new UserServiceImpl(new UserDAOImpl)
   lazy val assets: Assets = wire[Assets]
   lazy val applicationController: ApplicationController = wire[ApplicationController]
   lazy val socialAuthController: SocialAuthController = wire[SocialAuthController]

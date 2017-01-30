@@ -6,10 +6,11 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
-import com.mohiva.play.silhouette.api.util.PasswordHasher
+import com.mohiva.play.silhouette.api.util.{PasswordHasher, PasswordHasherRegistry}
 import com.mohiva.play.silhouette.impl.providers._
 import forms.SignUpForm
 import java.io.File
+
 import models.User
 import models.services.{AuthTokenService, UserService}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -18,6 +19,7 @@ import play.api.libs.mailer.{AttachmentData, AttachmentFile, Email, MailerClient
 import play.api.mvc.Controller
 import play.api.libs.mailer._
 import java.io.File
+
 import org.apache.commons.mail.EmailAttachment
 import utils.auth.DefaultEnv
 
@@ -37,14 +39,14 @@ import scala.concurrent.Future
  * @param mailerClient           The mailer client.
  * @param webJarAssets           The webjar assets implementation.
  */
-class SignUpController @Inject() (
+class SignUpController  (
   val messagesApi: MessagesApi,
   silhouette: Silhouette[DefaultEnv],
   userService: UserService,
   authInfoRepository: AuthInfoRepository,
   authTokenService: AuthTokenService,
   avatarService: AvatarService,
-//  passwordHasherRegistry: PasswordHasherRegistry,
+ passwordHasherRegistry: PasswordHasherRegistry,
   passwordHasher: PasswordHasher,
   mailerClient: MailerClient,
   implicit val webJarAssets: WebJarAssets)
