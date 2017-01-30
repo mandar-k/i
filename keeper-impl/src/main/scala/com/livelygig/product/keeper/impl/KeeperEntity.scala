@@ -5,7 +5,8 @@ import java.util.{Date, UUID}
 import akka.Done
 import com.lightbend.lagom.scaladsl.api.transport.Forbidden
 import com.lightbend.lagom.scaladsl.persistence._
-import com.livelygig.product.keeper.impl.models.UserLoginInfo
+import com.livelygig.product.keeper.api.models.{CreateUserResponse, ErrorResponse, InitializeSessionResponse, UserAuthRes}
+import com.livelygig.product.keeper.impl.models.{MsgTypes, UserLoginInfo}
 
 
 /**
@@ -32,25 +33,33 @@ class KeeperEntity extends PersistentEntity {
 
   def doesNotExists = {
     Actions()
-      .onCommand[CreateUser, Done] {
+      .onCommand[CreateUser, UserAuthRes] {
       case (CreateUser(user), ctx, userAuthState) =>
-        ctx.thenPersist(UserCreated(user))(_ => ctx.reply(Done))
+        // TODO use srp to secure the user login details
+        ctx.thenPersist(UserCreated(user))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse(""))))
+    }.onEvent{
+      case (UserCreated(user), state) => {
+        // TODO send activation email using email and notification service and
+        // TODO add the user profile on the user profile service
+        // TODO add default alias on the different service
+        state.changeStatus(UserStatus.NotActivated)
+      }
     }
   }
 
 
   def userActivated = {
     Actions()
-      .onCommand[LoginUser, String] {
+      .onCommand[LoginUser, UserAuthRes] {
       case (LoginUser(password), ctx, userState) =>
+        // TODO use srp to secure the login info
         if (password == userState.state.get.password) {
           val authKey = UUID.randomUUID().toString
           val userLoginInfo = UserLoginInfo(new Date(), userState.state.get.email, authKey, userState.state.get.userId)
-          ctx.thenPersist(UserLogin(userLoginInfo))(_ => ctx.reply(authKey))
+          ctx.thenPersist(UserLogin(userLoginInfo))(_ => ctx.reply(UserAuthRes(MsgTypes.INITIALIZE_SESSION_RESPONSE, InitializeSessionResponse(authKey))))
         }
         else {
-          val loginFailedInfo = new UserLoginInfo(new Date(), userState.state.get.email, "", userState.state.get.userId)
-          ctx.thenPersist(UserLogin(loginFailedInfo))(_ => ctx.commandFailed(throw Forbidden("Authorization failed")))
+          ctx.thenPersist(UserLoginFailed(userState.state.get.email,"Authentication error"))(_ => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Authentication Failed"))))
         }
     }
   }

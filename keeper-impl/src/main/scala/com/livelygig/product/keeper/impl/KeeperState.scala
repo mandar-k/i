@@ -8,6 +8,7 @@ import com.livelygig.product.utils.JsonFormats._
   */
 case class KeeperState(state: Option[UserAuth], userStatus:UserStatus.Status)  {
   def withStatus (status: UserStatus.Status) = copy(userStatus = status)
+  def changeStatus (newStatus: UserStatus.Status) = copy(userStatus = newStatus)
 }
 
 object KeeperState {

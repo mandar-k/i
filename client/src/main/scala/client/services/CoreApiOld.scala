@@ -1,6 +1,6 @@
 package client.services
 
-import client.dtos.UserModel
+import client.dtos.{SignUpModel, UserModel}
 import client.facades.SRPClient
 import shared.dtos._
 import org.scalajs.dom._
@@ -12,7 +12,7 @@ import scala.scalajs.js.{Date, JSON}
 import scala.util.{Failure, Success, Try}
 import scala.language.postfixOps
 import org.scalajs.dom.ext.Ajax
-import shared.models.{EmailValidationModel}
+import shared.models.EmailValidationModel
 import client.sessionitems.SessionItems
 import client.modules.ConnectionList
 import client.utils.{ConnectionsUtils, LabelsUtils}
@@ -40,29 +40,29 @@ object CoreApiOld {
 
   }
 
-//
-//  def createUser(signUpModel: SignUpModel): Future[String] = {
-//    val srpc = new SRPClient(signUpModel.email, signUpModel.password)
-//    val requestContent1 = upickle.default.write(ApiRequest(ApiTypes.requestTypes.CREATE_USER_STEP1_REQUEST,
-//      CreateUserStep1(signUpModel.email)))
-//    val futureResponse = for {
-//      requestContent2 <- ajaxPost(requestContent1).map {
-//        response =>
-//          Try(upickle.default.read[ApiResponse[CreateUserStep1Response]](response)) toOption match {
-//            case None => throw new ApiError(response)
-//            case Some(rsp) => upickle.default.write(ApiRequest(ApiTypes.requestTypes.CREATE_USER_STEP2_REQUEST,
-//              CreateUserStep2(signUpModel.email, Map("name" -> signUpModel.name),
-//                true, rsp.content.salt, srpc.getVerifierHex(rsp.content.salt))))
-//          }
-//      }
-//      result <- ajaxPost(requestContent2)
-//    } yield result
-//
-//    futureResponse.recover {
-//      case ae: ApiError => ae.response
-//      case e: Throwable => upickle.default.write(ApiRequest(ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR, ErrorResponse(e.getMessage)))
-//    }
-//  }
+
+  def createUser(signUpModel: SignUpModel): Future[String] = {
+    val srpc = new SRPClient(signUpModel.email, signUpModel.password)
+    val requestContent1 = upickle.default.write(ApiRequest(ApiTypes.requestTypes.CREATE_USER_STEP1_REQUEST,
+      CreateUserStep1(signUpModel.email)))
+    val futureResponse = for {
+      requestContent2 <- ajaxPost(requestContent1).map {
+        response =>
+          Try(upickle.default.read[ApiResponse[CreateUserStep1Response]](response)) toOption match {
+            case None => throw new ApiError(response)
+            case Some(rsp) => upickle.default.write(ApiRequest(ApiTypes.requestTypes.CREATE_USER_STEP2_REQUEST,
+              CreateUserStep2(signUpModel.email, Map("name" -> signUpModel.name),
+                true, rsp.content.salt, srpc.getVerifierHex(rsp.content.salt))))
+          }
+      }
+      result <- ajaxPost(requestContent2)
+    } yield result
+
+    futureResponse.recover {
+      case ae: ApiError => ae.response
+      case e: Throwable => upickle.default.write(ApiRequest(ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR, ErrorResponse(e.getMessage)))
+    }
+  }
 
   def emailValidation(emailValidationModel: EmailValidationModel): Future[String] = {
     val requestContent = upickle.default.write(ApiRequest(ApiTypes.requestTypes.CONFIRM_EMAIL, ConfirmEmail(emailValidationModel.token)))

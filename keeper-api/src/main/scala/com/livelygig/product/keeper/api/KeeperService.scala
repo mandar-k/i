@@ -28,14 +28,14 @@ trait KeeperService extends Service {
     * Take the UserAuth with email and password and return the Auth token
     * @return
     */
-  def login(): ServiceCall[UserLoginModel, String]
+  def login(): ServiceCall[UserLoginModel, UserAuthRes]
 
   /**
     * Take the user object with auth info and profile info
     * and returns success or failure
     * @return
     */
-  def createUser(): ServiceCall[User, Done]
+  def createUser(): ServiceCall[User, UserAuthRes]
 
    def descriptor = {
      import Service._

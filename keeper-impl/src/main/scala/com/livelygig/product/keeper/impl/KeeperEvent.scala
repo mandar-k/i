@@ -29,6 +29,12 @@ object UserLogin {
   implicit val format: Format[UserLogin] = Json.format
 }
 
+case class UserLoginFailed(email:String,reason: String) extends KeeperEvent
+
+object UserLoginFailed {
+  implicit val format: Format[UserLoginFailed] = Json.format
+}
+
 case class LoginFailed(userLoginInfo: UserLoginInfo) extends KeeperEvent
 
 object LoginFailed {
