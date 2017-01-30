@@ -42,7 +42,7 @@ class KeeperEntity extends PersistentEntity {
         // TODO send activation email using email and notification service and
         // TODO add the user profile on the user profile service
         // TODO add default alias on the different service
-        state.changeStatus(UserStatus.NotActivated)
+        state.copy(state = Some(user.userAuth), userStatus = UserStatus.NotActivated)
       }
     }
   }
@@ -64,9 +64,21 @@ class KeeperEntity extends PersistentEntity {
     }
   }
 
-  def userNotActivated = ???
+  def userNotActivated = {
+    Actions()
+      .onReadOnlyCommand[LoginUser, UserAuthRes] {
+      // TODO read response message from conf file
+      case (LoginUser(password), ctx, userState) => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Please check the activation link in the email sent to you.")))
+    }
+  }
 
-  def userDisabled = ???
+  def userDisabled = {
+    Actions()
+      .onReadOnlyCommand[LoginUser, UserAuthRes] {
+      // TODO read response message from conf file
+      case (LoginUser(password), ctx, userState) => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Your account is currently disabled.")))
+    }
+  }
 
   def userDeleted = ???
 }
