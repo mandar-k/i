@@ -12,7 +12,6 @@ import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.livelygig.product.security.resource.ResourceServerSecurity
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
 
 /**
   * Created by shubham.k on 09-01-2017.
@@ -26,7 +25,7 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     for {
       userId <- keeperRepo.searchForUsernameOrEmail(loginModel)
       res <- userId match {
-        case Some(uid) => refFor(uid).ask(LoginUser(uid,loginModel.password))
+        case Some(uid) => refFor(uid).ask(LoginUser(loginModel.password))
         case None => Future.successful(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Authentication Failed")))
       }
     } yield res
@@ -49,11 +48,13 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
         case Some(u) => Future.successful(u)
         case None => {
           val uid = UUID.randomUUID()
-          refFor(uid).ask(CreateUser(uid,userModel))
+          refFor(uid).ask(CreateUser(userModel))
         }
       }
     } yield reply
   }
+
+  override def keeperTopicProducer = ???
 
 
   private def refFor(userId: UUID) = registry.refFor[KeeperEntity](userId.toString)

@@ -29,8 +29,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
     readSide.builder[KeeperEvent]("keeperEventOffset")
       .setGlobalPrepare(createTables)
       .setPrepare(tag => preparedStatements)
-      .setEventHandler[UserLogin](e => insertToken(e.event.userId,e.event.userLoginInfo))
-      .setEventHandler[UserCreated](e => insertUserAuthDetails(e.event.user, e.event.userId))
+      .setEventHandler[UserLogin](e => insertToken( UUID.fromString(e.entityId),e.event.userLoginInfo))
+      .setEventHandler[UserCreated](e => insertUserAuthDetails(UUID.fromString(e.entityId),e.event.user))
 //      .setEventHandler[UserDeleted](e => removeUser(e.event.user.id))
 //      .setEventHandler[TokenCreated](e => )
 //      .setEventHandler[TokenDeleted](removeToken)
@@ -121,7 +121,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
     }
   }
 
-  private def insertUserAuthDetails(user:User, userId: UUID) = {
+  private def insertUserAuthDetails(userId: UUID,user:User) = {
     Future.successful(List(insertDefaultRole(userId), inserDefaultPermission(userId), insertEmailUserID(user,userId), insertUsernameUserID(user,userId)))
   }
 

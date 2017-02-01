@@ -34,11 +34,11 @@ class KeeperEntity extends PersistentEntity {
   def doesNotExists = {
     Actions()
       .onCommand[CreateUser, UserAuthRes] {
-      case (CreateUser(user,uid), ctx, userAuthState) =>
+      case (CreateUser(user), ctx, _) =>
         // TODO use srp to secure the user login details
-        ctx.thenPersist(UserCreated(user, uid))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse(""))))
+        ctx.thenPersist(UserCreated(user))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse(""))))
     }.onEvent{
-      case (UserCreated(uid,user), state) => {
+      case (UserCreated(user), state) => {
         // TODO send activation email using email and notification service and
         // TODO add the user profile on the user profile service
         // TODO add default alias on the different service
@@ -51,12 +51,12 @@ class KeeperEntity extends PersistentEntity {
   def userActivated = {
     Actions()
       .onCommand[LoginUser, UserAuthRes] {
-      case (LoginUser(uid,password), ctx, userState) =>
+      case (LoginUser(password), ctx, userState) =>
         // TODO use srp to secure the login info
         if (password == userState.state.get.password) {
           val authKey = UUID.randomUUID().toString
           val userLoginInfo = UserLoginInfo(new Date(), userState.state.get.email, authKey)
-          ctx.thenPersist(UserLogin(uid, userLoginInfo))(_ => ctx.reply(UserAuthRes(MsgTypes.INITIALIZE_SESSION_RESPONSE, InitializeSessionResponse(authKey))))
+          ctx.thenPersist(UserLogin(userLoginInfo))(_ => ctx.reply(UserAuthRes(MsgTypes.INITIALIZE_SESSION_RESPONSE, InitializeSessionResponse(authKey))))
         }
         else {
           ctx.thenPersist(UserLoginFailed(userState.state.get.email,"Authentication error"))(_ => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Authentication Failed"))))
@@ -68,7 +68,7 @@ class KeeperEntity extends PersistentEntity {
     Actions()
       .onReadOnlyCommand[LoginUser, UserAuthRes] {
       // TODO read response message from conf file
-      case (LoginUser(uid,password), ctx, userState) => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Please check the activation link in the email sent to you.")))
+      case (LoginUser(_), ctx, _) => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Please check the activation link in the email sent to you.")))
     }
   }
 
@@ -76,7 +76,7 @@ class KeeperEntity extends PersistentEntity {
     Actions()
       .onReadOnlyCommand[LoginUser, UserAuthRes] {
       // TODO read response message from conf file
-      case (LoginUser(uid,password), ctx, userState) => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Your account is currently disabled.")))
+      case (LoginUser(_), ctx, _) => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Your account is currently disabled.")))
     }
   }
 

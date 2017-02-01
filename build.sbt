@@ -134,7 +134,7 @@ lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
 
 lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
   .settings(commonSettings: _*)
-  .enablePlugins(LagomScala)
+  .enablePlugins(LagomScala && SbtTwirl)
   .dependsOn(emailnotificationsApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
@@ -145,7 +145,10 @@ lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
 lazy val keeperApi = (project in file("keeper-api"))
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies += lagomScaladslApi
+    libraryDependencies ++= Seq(
+      lagomScaladslApi,
+      "org.julienrf" %% "play-json-derived-codecs" % "3.3"
+    )
   )
   .dependsOn(security)
 
@@ -155,7 +158,6 @@ lazy val keeperImpl = (project in file("keeper-impl"))
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies ++= Seq(
-      "be.objectify" %% "deadbolt-scala" % "2.5.1",
       lagomScaladslPersistenceCassandra
     )
   )
