@@ -26,7 +26,7 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     for {
       userId <- keeperRepo.searchForUsernameOrEmail(loginModel)
       res <- userId match {
-        case Some(uid) => refFor(uid).ask(LoginUser(loginModel.password))
+        case Some(uid) => refFor(uid).ask(LoginUser(uid,loginModel.password))
         case None => Future.successful(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Authentication Failed")))
       }
     } yield res
@@ -49,7 +49,7 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
         case Some(u) => Future.successful(u)
         case None => {
           val uid = UUID.randomUUID()
-          refFor(uid).ask(CreateUser(userModel.copy(userId = uid)))
+          refFor(uid).ask(CreateUser(uid,userModel))
         }
       }
     } yield reply

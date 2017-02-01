@@ -96,6 +96,7 @@ object Settings {
   /*Dependency common to all api service implementation*/
   val apiImplDependencies = Def.setting(Seq(
     "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided",
-    "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test"
+    "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test",
+    "org.julienrf" %% "play-json-derived-codecs" % "3.3"
   ))
 }

@@ -1,5 +1,6 @@
 package com.livelygig.product.keeper.api.models
 
+import julienrf.json.derived
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -15,6 +16,8 @@ case class UserAuthRes(msgType: String, content: Content)
 sealed trait Content
 
 object Content {
+  /*implicit val format: Format[Content] =
+    derived.flat.oformat((__ \ "type").format[String])*/
   implicit val contentReads = {
     val err = Json.reads[ErrorResponse]
     val intit = Json.reads[InitializeSessionResponse]

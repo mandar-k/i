@@ -7,7 +7,7 @@ import play.api.libs.json.{Format, Json}
 /**
   * Created by shubham.k on 16-01-2017.
   */
-case class UserLoginInfo(time: Date, userEmail: String, authKeyGenerated: String, userId: UUID)
+case class UserLoginInfo(time: Date, userEmail: String, authKeyGenerated: String)
 
 
 object UserLoginInfo{

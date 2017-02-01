@@ -29,8 +29,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
     readSide.builder[KeeperEvent]("keeperEventOffset")
       .setGlobalPrepare(createTables)
       .setPrepare(tag => preparedStatements)
-      .setEventHandler[UserLogin](e => insertToken(e.event.userLoginInfo))
-      .setEventHandler[UserCreated](e => insertUserAuthDetails(e.event.user))
+      .setEventHandler[UserLogin](e => insertToken(e.event.userId,e.event.userLoginInfo))
+      .setEventHandler[UserCreated](e => insertUserAuthDetails(e.event.user, e.event.userId))
 //      .setEventHandler[UserDeleted](e => removeUser(e.event.user.id))
 //      .setEventHandler[TokenCreated](e => )
 //      .setEventHandler[TokenDeleted](removeToken)
@@ -121,21 +121,21 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
     }
   }
 
-  private def insertUserAuthDetails(user:User) = {
-    Future.successful(List(insertDefaultRole(user.userId), inserDefaultPermission(user.userId), insertEmailUserID(user), insertUsernameUserID(user)))
+  private def insertUserAuthDetails(user:User, userId: UUID) = {
+    Future.successful(List(insertDefaultRole(userId), inserDefaultPermission(userId), insertEmailUserID(user,userId), insertUsernameUserID(user,userId)))
   }
 
   private def insertDefaultRole(userId: UUID) = insertUserRoles.bind(userId, "USER")
 
   private def inserDefaultPermission(userId: UUID) = insertUserPermissions.bind(userId, "message.add")
 
-  private def insertEmailUserID(user:User) = insertUsernameUserId.bind(user.userAuth.email, user.userId)
+  private def insertEmailUserID(user:User, userId: UUID) = insertUsernameUserId.bind(user.userAuth.email,userId)
 
-  private def insertUsernameUserID(user: User) = insertUsernameUserId.bind(user.userAuth.username, user.userId)
+  private def insertUsernameUserID(user: User, userId: UUID) = insertUsernameUserId.bind(user.userAuth.username, userId)
 
   private def removeToken = ???
 
-  private def insertToken(userLoginInfo: UserLoginInfo) = Future.successful(List(insertAuthKeyStatement.bind(userLoginInfo.userId, userLoginInfo.authKeyGenerated)))
+  private def insertToken(userID:UUID,userLoginInfo: UserLoginInfo) = Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated)))
 
   private def removeUser = ???
 }

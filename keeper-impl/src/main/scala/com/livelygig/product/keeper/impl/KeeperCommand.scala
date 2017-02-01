@@ -1,5 +1,7 @@
 package com.livelygig.product.keeper.impl
 
+import java.util.UUID
+
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.livelygig.product.keeper.api.models.{User, UserAuth, UserAuthRes}
@@ -10,7 +12,7 @@ import play.api.libs.json.{Format, Json}
   */
 trait KeeperCommand
 
-case class LoginUser(password: String) extends KeeperCommand with ReplyType[UserAuthRes]
+case class LoginUser(userID:UUID,password: String) extends KeeperCommand with ReplyType[UserAuthRes]
 
 object LoginUser {
   implicit val format: Format[LoginUser] = Json.format
@@ -22,7 +24,7 @@ object DeleteToken {
   implicit val format: Format[LoginUser] = Json.format
 }
 
-case class CreateUser(user: User) extends KeeperCommand with ReplyType[UserAuthRes]
+case class CreateUser(userID:UUID,user: User) extends KeeperCommand with ReplyType[UserAuthRes]
 
 object CreateUser {
   implicit val format: Format[CreateUser] = Json.format

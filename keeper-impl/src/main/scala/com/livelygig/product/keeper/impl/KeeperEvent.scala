@@ -1,5 +1,7 @@
 package com.livelygig.product.keeper.impl
 
+import java.util.UUID
+
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, AggregateEventTagger}
 import com.livelygig.product.keeper.api.models.{User, UserAuth}
 import com.livelygig.product.keeper.impl.models.UserLoginInfo
@@ -17,13 +19,13 @@ object KeeperEvent {
   val Tag = AggregateEventTag.sharded[KeeperEvent](NumShards)
 }
 
-case class UserCreated(user:User) extends KeeperEvent
+case class UserCreated(userId: UUID,user:User) extends KeeperEvent
 
 object UserCreated {
   implicit val format: Format[UserCreated] = Json.format
 }
 
-case class UserLogin (userLoginInfo: UserLoginInfo) extends KeeperEvent
+case class UserLogin (userId:UUID, userLoginInfo: UserLoginInfo) extends KeeperEvent
 
 object UserLogin {
   implicit val format: Format[UserLogin] = Json.format
