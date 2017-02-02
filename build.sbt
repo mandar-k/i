@@ -50,7 +50,7 @@ lazy val clients = Seq(client)
 lazy val webGateway = (project in file("web-gateway"))
   .settings(commonSettings: _*)
   .enablePlugins(PlayScala && LagomPlay)
-  .dependsOn(userApi, messageApi, security, emailnotificationsApi, keeperApi)
+  .dependsOn(userProfileApi, contentApi, security, emailnotificationsApi, keeperApi, aliasApi, connectionsApi)
   .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
   .dependsOn(sharedJvm)
   .settings(
@@ -88,7 +88,7 @@ lazy val security = (project in file("security"))
     )
   )
 
-lazy val userApi = (project in file("user-api"))
+lazy val userProfileApi = (project in file("userProfile-api"))
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
@@ -98,16 +98,16 @@ lazy val userApi = (project in file("user-api"))
     )
   )
 
-lazy val userImpl = (project in file("user-impl"))
+lazy val userProfileImpl = (project in file("userProfile-impl"))
   .settings(commonSettings: _*)
   .enablePlugins(LagomScala)
-  .dependsOn(userApi, security)
+  .dependsOn(userProfileApi, security)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies += lagomScaladslPersistenceCassandra/* exclude("io.netty", "netty")*/
   )
 
-lazy val messageApi = (project in file("message-api"))
+lazy val contentApi = (project in file("content-api"))
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
@@ -115,13 +115,15 @@ lazy val messageApi = (project in file("message-api"))
     )
   )
 
-lazy val messageImpl = (project in file("message-impl"))
+lazy val contentImpl = (project in file("content-impl"))
   .settings(commonSettings: _*)
   .enablePlugins(LagomScala)
-  .dependsOn(messageApi, security, keeperApi)
+  .dependsOn(contentApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra /*exclude("io.netty", "netty")*/, lagomScaladslPubSub)
+    libraryDependencies ++= Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslPubSub)
   )
 
 lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
@@ -131,11 +133,57 @@ lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
       lagomScaladslApi
     )
   )
+  .dependsOn(security)
 
 lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
   .settings(commonSettings: _*)
   .enablePlugins(LagomScala && SbtTwirl)
   .dependsOn(emailnotificationsApi, security, keeperApi)
+  .settings(
+    libraryDependencies ++= Settings.apiImplDependencies.value,
+    libraryDependencies ++= Seq(
+      "com.typesafe.play" %% "play-mailer" % "5.0.0",
+        lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaClient
+    )
+  )
+  .dependsOn(security)
+
+lazy val aliasApi = (project in file("alias-api"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+  .dependsOn(security)
+
+lazy val aliasImpl = (project in file("alias-impl"))
+  .settings(commonSettings: _*)
+  .enablePlugins(LagomScala && SbtTwirl)
+  .dependsOn(aliasApi, security, keeperApi)
+  .settings(
+    libraryDependencies ++= Settings.apiImplDependencies.value,
+    libraryDependencies ++= Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaClient
+    )
+
+  )
+
+lazy val connectionsApi = (project in file("connections-api"))
+  .settings(commonSettings: _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+  .dependsOn(security)
+
+lazy val connectionsImpl = (project in file("connections-impl"))
+  .settings(commonSettings: _*)
+  .enablePlugins(LagomScala && SbtTwirl)
+  .dependsOn(connectionsApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies ++= Seq(

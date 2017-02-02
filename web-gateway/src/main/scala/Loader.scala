@@ -2,10 +2,10 @@ import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.api.{ServiceAcl, ServiceInfo}
 import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
+import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.keeper.api.KeeperService
 //import com.livelygig.product.keeper.api.KeeperService
-import com.livelygig.product.message.api.MessageService
 import com.livelygig.product.user.api.UserService
 import com.mohiva.play.silhouette.api.{Silhouette, SilhouetteProvider}
 import play.api.i18n.I18nComponents
@@ -68,7 +68,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   implicit val env = context.environment
 
   lazy val userServiceImpl = serviceClient.implement[UserService]
-  lazy val messageServiceImpl = serviceClient.implement[MessageService]
+  lazy val messageServiceImpl = serviceClient.implement[ContentService]
   lazy val emailNotificationImpl = serviceClient.implement[EmailNotificationsService]
   lazy val keeperService = serviceClient.implement[KeeperService]
   lazy val signupController: SignUpController = wire[SignUpController]

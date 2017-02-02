@@ -112,12 +112,12 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
           INSERT INTO userPermissions (userUri, permissions) VALUES (?,?)
         """)
       insertAuthToken <- session.prepare(
-        s"""
-          INSERT INTO userAuthToken (userUri, authToken) VALUES (?,?) USING TTL $accessTokenExpire
+        """
+          INSERT INTO userAuthToken (userUri, authToken) VALUES (?,?) USING TTL ?
         """)
       insertActivationToken <- session.prepare(
-        s"""
-          INSERT INTO userActivationToken (userUri, authToken) VALUES (?,?) USING TTL $activationTokenExpire
+        """
+          INSERT INTO userActivationToken (userUri, activationToken) VALUES (?,?) USING TTL ?
         """)
       insertUsernameAndUserId <- session.prepare(
         """
@@ -147,14 +147,14 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
         insertUserPermissions.bind(userId, "message.add"),
         insertUsernameUserId.bind(user.userAuth.email, userId),
         insertUsernameUserId.bind(user.userAuth.username, userId),
-        insertActivationTokenStatement.bind(userId, activationToken)
+        insertActivationTokenStatement.bind(userId, activationToken, activationTokenExpire)
       ))
   }
 
   private def removeToken = ???
 
   private def insertAuthToken(userID: String, userLoginInfo: UserLoginInfo) = {
-    Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated)))
+    Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated, accessTokenExpire)))
   }
 
 
