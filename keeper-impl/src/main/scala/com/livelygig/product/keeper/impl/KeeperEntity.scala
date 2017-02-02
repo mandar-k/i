@@ -7,6 +7,8 @@ import com.lightbend.lagom.scaladsl.api.transport.Forbidden
 import com.lightbend.lagom.scaladsl.persistence._
 import com.livelygig.product.keeper.api.models.{CreateUserResponse, ErrorResponse, InitializeSessionResponse, UserAuthRes}
 import com.livelygig.product.keeper.impl.models.{MsgTypes, UserLoginInfo}
+import com.livelygig.product.keeper.api.models.{User, UserAuth, UserProfile}
+import com.livelygig.product.keeper.impl.models.UserLoginInfo
 
 
 /**
@@ -42,11 +44,11 @@ class KeeperEntity extends PersistentEntity {
         // TODO send activation email using email and notification service and
         // TODO add the user profile on the user profile service
         // TODO add default alias on the different service
-        state.copy(state = Some(user.userAuth), userStatus = UserStatus.NotActivated)
+        // TODO change default state to not activated
+        state.copy(state = Some(user.userAuth), userStatus = UserStatus.Activated)
       }
     }
   }
-
 
   def userActivated = {
     Actions()

@@ -3,6 +3,8 @@ import com.lightbend.lagom.scaladsl.api.{ServiceAcl, ServiceInfo}
 import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
+import com.livelygig.product.keeper.api.KeeperService
+//import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.message.api.MessageService
 import com.livelygig.product.user.api.UserService
 import com.mohiva.play.silhouette.api.{Silhouette, SilhouetteProvider}
@@ -68,6 +70,9 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   lazy val userServiceImpl = serviceClient.implement[UserService]
   lazy val messageServiceImpl = serviceClient.implement[MessageService]
   lazy val emailNotificationImpl = serviceClient.implement[EmailNotificationsService]
+  lazy val keeperService = serviceClient.implement[KeeperService]
+  lazy val signupController: SignUpController = wire[SignUpController]
+  lazy val signinController: SignInController = wire[SignInController]
   lazy val messageController = wire[MessageController]
   //  lazy val main = wire[Main]
   //  lazy val assets = wire[Assets]
@@ -99,8 +104,9 @@ trait WebAppComponents extends BuiltInComponents
   lazy val assets: Assets = wire[Assets]
   lazy val applicationController: ApplicationController = wire[ApplicationController]
   lazy val socialAuthController: SocialAuthController = wire[SocialAuthController]
-  lazy val signupController: SignUpController = wire[SignUpController]
-  lazy val signinController: SignInController = wire[SignInController]
+
+
+
   lazy val webjarAssets: WebJarAssets = wire[WebJarAssets]
   lazy val forgotPasswordController: ForgotPasswordController = wire[ForgotPasswordController]
   lazy val resetPasswordController: ResetPasswordController = wire[ResetPasswordController]

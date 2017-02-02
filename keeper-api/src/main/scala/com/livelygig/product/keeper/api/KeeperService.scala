@@ -47,7 +47,8 @@ trait KeeperService extends Service {
     import Service._
     named("authorization").withCalls(
       namedCall("/api/auth/authorize", authorize _),
-      namedCall("/api/auth/login", login _)
+      namedCall("/api/auth/login", login _),
+      namedCall("/api/auth/createUser", createUser _)
     )
       .withTopics(topic("keeper-topics", keeperTopicProducer))
       .withHeaderFilter(SecurityHeaderFilter.Composed)

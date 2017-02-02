@@ -20,6 +20,8 @@ import play.api.mvc.Controller
 import play.api.libs.mailer._
 import java.io.File
 
+import com.livelygig.product.keeper.api.KeeperService
+import com.livelygig.product.keeper.api.models._
 import org.apache.commons.mail.EmailAttachment
 import utils.auth.DefaultEnv
 
@@ -39,86 +41,68 @@ import scala.concurrent.Future
  * @param mailerClient           The mailer client.
  * @param webJarAssets           The webjar assets implementation.
  */
-class SignUpController  (
-  val messagesApi: MessagesApi,
-  silhouette: Silhouette[DefaultEnv],
-  userService: UserService,
-  authInfoRepository: AuthInfoRepository,
-  authTokenService: AuthTokenService,
-  avatarService: AvatarService,
- passwordHasherRegistry: PasswordHasherRegistry,
-  passwordHasher: PasswordHasher,
-  mailerClient: MailerClient,
-  implicit val webJarAssets: WebJarAssets)
+class SignUpController @Inject() (
+                                   val messagesApi: MessagesApi,
+                                   silhouette: Silhouette[DefaultEnv],
+                                   userService: UserService,
+                                   authInfoRepository: AuthInfoRepository,
+                                   authTokenService: AuthTokenService,
+                                   avatarService: AvatarService,
+                                   //  passwordHasherRegistry: PasswordHasherRegistry,
+                                   passwordHasher: PasswordHasher,
+                                   mailerClient: MailerClient,
+                                   keeperService: KeeperService,
+                                   implicit val webJarAssets: WebJarAssets)
   extends Controller with I18nSupport {
 
   /**
-   * Views the `Sign Up` page.
-   *
-   * @return The result to display.
-   */
+    * Views the `Sign Up` page.
+    *
+    * @return The result to display.
+    */
   def view = silhouette.UnsecuredAction.async { implicit request =>
     Future.successful(Ok(views.html.signUp(SignUpForm.form)))
   }
 
   /**
-   * Handles the submitted form.
-   *
-   * @return The result to display.
-   */
-  def submit = silhouette.UnsecuredAction.async { implicit request =>
+    * Handles the submitted form.
+    *
+    * @return The result to display.
+    */
+  def submit = silhouette.UnsecuredAction.async{ implicit request =>
+    import com.livelygig.product.keeper.api.models.User
     SignUpForm.form.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.signUp(form))),
       data => {
         val result = Redirect(routes.SignUpController.view()).flashing("info" -> Messages("sign.up.email.sent", data.email))
-        val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
-        userService.retrieve(loginInfo).flatMap {
-          case Some(user) =>
-            val url = routes.SignInController.view().absoluteURL()
-            val cid = "1234"
-            val email = Email(
-              subject = Messages("email.already.signed.up.subject"),
-              from = Messages("email.from"),
-              to = Seq(data.email),
-              bodyText = Some(views.txt.emails.alreadySignedUp(user, url).body),
-              bodyHtml = Some(views.html.emails.alreadySignedUp(user, url).body)
-            )
-            mailerClient.send(email)
-
-            Future.successful(result)
-          case None =>
-            val authInfo = passwordHasher.hash(data.password)
-            val user = User(
-              userID = UUID.randomUUID(),
-              loginInfo = loginInfo,
-              firstName = Some(data.firstName),
-              lastName = Some(data.lastName),
-              fullName = Some(data.firstName + " " + data.lastName),
-              email = Some(data.email),
-              avatarURL = None,
-              activated = false
-            )
-            for {
-              avatar <- avatarService.retrieveURL(data.email)
-              user <- userService.save(user.copy(avatarURL = avatar))
-              authInfo <- authInfoRepository.add(loginInfo, authInfo)
-              authToken <- authTokenService.create(user.userID)
-            } yield {
-              val url = routes.ActivateAccountController.activate(authToken.id).absoluteURL()
-              val cid = "1234"
-              mailerClient.send(Email(
-                subject = Messages("email.sign.up.subject"),
-                from = Messages("email.from"),
-                to = Seq(data.email),
-                bodyText = Some(views.txt.emails.signUp(user, url).body),
-                bodyHtml = Some(views.html.emails.signUp(user, url).body)
-              ))
-
-              silhouette.env.eventBus.publish(SignUpEvent(user, request))
-              result
+//        val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
+        val userName = data.email.split("@"){0}
+        val userAuth = new UserAuth(userName, data.email, data.password)
+        val userProfile = new UserProfile("name","profilePic")
+        val user = new User(userAuth, userProfile)
+        keeperService.createUser.invoke(user).map {
+          userAuthRes =>
+            /*val user1: models.User =
+              models.User(
+                userID = UUID.randomUUID(),
+                loginInfo = loginInfo,
+                firstName = Some(data.firstName),
+                lastName = Some(data.lastName),
+                fullName = Some(data.firstName + " " + data.lastName),
+                email = Some(data.email),
+                avatarURL = None,
+                activated = false
+              )*/
+            userAuthRes match{
+              case UserAuthRes(_,ErrorResponse(msg)) =>
+                Redirect(routes.SignUpController.view()).flashing("error" -> Messages(msg))
+              case UserAuthRes("createUserWaiting", CreateUserResponse("")) =>
+//                silhouette.env.eventBus.publish(SignUpEvent(user1, request))
+                result
             }
         }
       }
     )
   }
 }
+
