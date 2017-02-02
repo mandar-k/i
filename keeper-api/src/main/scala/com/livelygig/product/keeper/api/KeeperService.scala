@@ -41,14 +41,17 @@ trait KeeperService extends Service {
     */
   def createUser(): ServiceCall[User, UserAuthRes]
 
-  def keeperTopicProducer: Topic[KeeperTopics]
+  def activateAccount(): ServiceCall[String, UserAuthRes]
+
+  def keeperTopicProducer: Topic[KeeperEventsForTopics]
 
   def descriptor = {
     import Service._
     named("authorization").withCalls(
       namedCall("/api/auth/authorize", authorize _),
       namedCall("/api/auth/login", login _),
-      namedCall("/api/auth/createUser", createUser _)
+      namedCall("/api/auth/createUser", createUser _),
+      namedCall("/api/auth/activate", activateAccount _)
     )
       .withTopics(topic("keeper-topics", keeperTopicProducer))
       .withHeaderFilter(SecurityHeaderFilter.Composed)

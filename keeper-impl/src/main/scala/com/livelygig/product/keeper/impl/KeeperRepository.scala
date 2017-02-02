@@ -15,27 +15,27 @@ private [impl] class KeeperRepository(session: CassandraSession)(implicit ec: Ex
 
   def searchForUsernameOrEmail(userLoginModel: UserLoginModel) =  {
     for {
-      uid <- searchForUsername(userLoginModel.usernameOrEmail)
-      userId <- if (uid.nonEmpty) Future.successful(uid) else searchForEmail(userLoginModel.usernameOrEmail)
-    } yield userId
+      uri <- searchForUsername(userLoginModel.usernameOrEmail)
+      userUri <- if (uri.nonEmpty) Future.successful(uri) else searchForEmail(userLoginModel.usernameOrEmail)
+    } yield userUri
   }
 
-  def searchForUsername(username:String):Future[Option[UUID]] = {
+  def searchForUsername(username:String):Future[Option[String]] = {
     session.selectOne(
       """
         SELECT * FROM userIdByUsername WHERE userName = ?
       """, username).map{
-      case Some(row) => Some(row.getUUID("userId"))
+      case Some(row) => Some(row.getString("userUri"))
       case None => None
     }
   }
 
-  def searchForEmail(email:String):Future[Option[UUID]] = {
+  def searchForEmail(email:String):Future[Option[String]] = {
     session.selectOne(
       """
         SELECT * FROM userIdByEmail WHERE email = ?
       """, email).map{
-      case Some(row) => Some(row.getUUID("userId"))
+      case Some(row) => Some(row.getString("userUri"))
       case None => None
     }
   }

@@ -19,7 +19,7 @@ object KeeperEvent {
   val Tag = AggregateEventTag.sharded[KeeperEvent](NumShards)
 }
 
-case class UserCreated(user:User) extends KeeperEvent
+case class UserCreated(user:User, activationToken: String) extends KeeperEvent
 
 object UserCreated {
   implicit val format: Format[UserCreated] = Json.format

@@ -138,7 +138,10 @@ lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
   .dependsOn(emailnotificationsApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
+    libraryDependencies ++= Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaClient
+    )
 
   )
 
@@ -159,7 +162,8 @@ lazy val keeperImpl = (project in file("keeper-impl"))
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies ++= Seq(
-      lagomScaladslPersistenceCassandra
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaBroker
     )
   )
   .enablePlugins(LagomScala)

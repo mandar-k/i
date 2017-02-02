@@ -1,13 +1,9 @@
 package com.livelygig.product.keeper.impl
 
 import java.util.{Date, UUID}
-
-import akka.Done
-import com.lightbend.lagom.scaladsl.api.transport.Forbidden
 import com.lightbend.lagom.scaladsl.persistence._
 import com.livelygig.product.keeper.api.models.{CreateUserResponse, ErrorResponse, InitializeSessionResponse, UserAuthRes}
-import com.livelygig.product.keeper.impl.models.{MsgTypes, UserLoginInfo}
-import com.livelygig.product.keeper.api.models.{User, UserAuth, UserProfile}
+import com.livelygig.product.keeper.impl.models.{MsgTypes}
 import com.livelygig.product.keeper.impl.models.UserLoginInfo
 
 
@@ -38,9 +34,11 @@ class KeeperEntity extends PersistentEntity {
       .onCommand[CreateUser, UserAuthRes] {
       case (CreateUser(user), ctx, _) =>
         // TODO use srp to secure the user login details
-        ctx.thenPersist(UserCreated(user))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse(""))))
+        // TODO create secure activation token
+        val activationToken = UUID.randomUUID().toString
+        ctx.thenPersist(UserCreated(user, activationToken))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse(""))))
     }.onEvent{
-      case (UserCreated(user), state) => {
+      case (UserCreated(user, token), state) => {
         // TODO send activation email using email and notification service and
         // TODO add the user profile on the user profile service
         // TODO add default alias on the different service
@@ -56,6 +54,7 @@ class KeeperEntity extends PersistentEntity {
       case (LoginUser(password), ctx, userState) =>
         // TODO use srp to secure the login info
         if (password == userState.state.get.password) {
+          // TODO generate secure authkey with jwt and add session uri and agent uri to it
           val authKey = UUID.randomUUID().toString
           val userLoginInfo = UserLoginInfo(new Date(), userState.state.get.email, authKey)
           ctx.thenPersist(UserLogin(userLoginInfo))(_ => ctx.reply(UserAuthRes(MsgTypes.INITIALIZE_SESSION_RESPONSE, InitializeSessionResponse(authKey))))

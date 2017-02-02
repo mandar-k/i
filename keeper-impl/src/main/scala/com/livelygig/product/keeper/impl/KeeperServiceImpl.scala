@@ -1,15 +1,20 @@
 package com.livelygig.product.keeper.impl
 
+import java.net.URI
+import java.security.SecureRandom
 import java.util.UUID
 
+import akka.persistence.query.Offset
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, NotFound}
-import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
+import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRegistry}
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
-import com.livelygig.product.keeper.api.KeeperService
+import com.livelygig.product.keeper.api.{KeeperEventsForTopics, KeeperService}
 import com.livelygig.product.keeper.api.models.{ErrorResponse, UserAuthRes}
 import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.livelygig.product.security.resource.ResourceServerSecurity
+import com.lightbend.lagom.scaladsl.broker.TopicProducer
+import com.livelygig.product.keeper.api
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -25,7 +30,7 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     for {
       userId <- keeperRepo.searchForUsernameOrEmail(loginModel)
       res <- userId match {
-        case Some(uid) => refFor(uid).ask(LoginUser(loginModel.password))
+        case Some(uid) => registry.refFor[KeeperEntity](uid).ask(LoginUser(loginModel.password))
         case None => Future.successful(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Authentication Failed")))
       }
     } yield res
@@ -48,16 +53,40 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
         case Some(u) => Future.successful(u)
         case None => {
           val uid = UUID.randomUUID()
-          refFor(uid).ask(CreateUser(userModel))
+          val rand = SecureRandom.getInstanceStrong()
+          val bytes = new Array[Byte](20)
+          // Generate random Agent URI
+          rand.nextBytes(bytes)
+          val uri = new URI("agent://" + bytes.map("%02X" format _).mkString)
+          registry.refFor[KeeperEntity](uri.toString).ask(CreateUser(userModel))
         }
       }
     } yield reply
   }
 
-  override def keeperTopicProducer = ???
+  override def activateAccount() = ???
+
+  override def keeperTopicProducer = TopicProducer.taggedStreamWithOffset(KeeperEvent.Tag.allTags.toList) {(tag, offset) =>
+    registry.eventStream(tag, offset)
+      .filter{
+        _.event match {
+          case x@(_: UserCreated) => true
+          case _ => false
+        }
+      }.mapAsync(1)(convertEvents)
+
+  }
 
 
-  private def refFor(userId: UUID) = registry.refFor[KeeperEntity](userId.toString)
+  private def convertEvents(eventStreamElement: EventStreamElement[KeeperEvent]): Future[(KeeperEventsForTopics, Offset)] = {
+    eventStreamElement match {
+      case EventStreamElement(userUri, UserCreated(user, activationToken), offset) =>
+        Future.successful{
+          (api.UserCreated(userUri,user.userAuth.email,user.userProfile,activationToken), offset)
+        }
+    }
+  }
+
 
   //  private
 }

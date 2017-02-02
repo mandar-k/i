@@ -13,9 +13,11 @@ import scala.util.Try
 
 case class UserAuthRes(msgType: String, content: Content)
 
+object UserAuthRes {
+  implicit val format: Format[UserAuthRes] = Json.format
+}
+
 sealed trait Content {}
-
-
 
 case class ErrorResponse (reason: String ) extends Content
 
@@ -35,21 +37,12 @@ object CreateUserResponse {
   implicit val format:Format[CreateUserResponse] = Json.format
 }
 
-object UserAuthRes {
-  implicit val format: Format[UserAuthRes] = Json.format
-}
+case class ActivateUserResponse (msg: String) extends Content
 
+object ActivateUserResponse {
+  implicit val format: Format[ActivateUserResponse] = Json.format
+}
 object Content {
   implicit val format: Format[Content] =
     derived.flat.oformat((__ \ "type").format[String])
-  /*implicit val contentReads = {
-    val err = Json.reads[ErrorResponse]
-    val intit = Json.reads[InitializeSessionResponse]
-    val creatUser = Json.reads[CreateUserResponse]
-    __.read[ErrorResponse](err).map(x => x: Content) | __.read[InitializeSessionResponse](intit).map(x => x: Content) | __.read[CreateUserResponse](creatUser).map(x => x: Content)
-  }
-  implicit val contentWrites = Writes[Content] {
-    case err: ErrorResponse => Json.writes[ErrorResponse].writes(err)
-    case init: InitializeSessionResponse =>  Json.writes[InitializeSessionResponse].writes(init)
-  }*/
 }
