@@ -97,6 +97,7 @@ object Settings {
   val apiImplDependencies = Def.setting(Seq(
     "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided",
     "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test",
-    "org.julienrf" %% "play-json-derived-codecs" % "3.3"
+    "org.julienrf" %% "play-json-derived-codecs" % "3.3",
+    "com.typesafe.play" %% "play-mailer" % "5.0.0"
   ))
 }

@@ -104,7 +104,7 @@ lazy val userImpl = (project in file("user-impl"))
   .dependsOn(userApi, security)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies += lagomScaladslPersistenceCassandra
+    libraryDependencies += lagomScaladslPersistenceCassandra/* exclude("io.netty", "netty")*/
   )
 
 lazy val messageApi = (project in file("message-api"))
@@ -121,7 +121,7 @@ lazy val messageImpl = (project in file("message-impl"))
   .dependsOn(messageApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
+    libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra /*exclude("io.netty", "netty")*/, lagomScaladslPubSub)
   )
 
 lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
@@ -139,6 +139,7 @@ lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies ++= Seq(lagomScaladslPersistenceCassandra, lagomScaladslPubSub)
+
   )
 
 

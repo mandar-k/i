@@ -12,6 +12,7 @@ import org.querki.jquery.$
 import client.components.Bootstrap._
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
+import scala.language.existentials
 
 object Footer {
   @inline private def bss = GlobalStyles.bootstrapStyles

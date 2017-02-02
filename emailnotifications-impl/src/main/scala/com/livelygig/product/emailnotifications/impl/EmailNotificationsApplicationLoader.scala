@@ -7,18 +7,19 @@ import com.lightbend.lagom.scaladsl.server._
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
-
+import play.api.libs.mailer._
 /**
   * Created by shubham.k on 09-01-2017.
   */
 
 abstract class EmailNotificationsApplication(context: LagomApplicationContext)
   extends LagomApplication(context)
-    with AhcWSComponents {
+    with AhcWSComponents
+    with MailerComponents{
   override lazy val lagomServer = LagomServer.forServices(
     bindService[EmailNotificationsService].to(wire[EmailNotificationsImpl])
   )
-//  override lazy val jsonSerializerRegistry = EmailNotificationJsonSerializerRegistry
+  //  override lazy val jsonSerializerRegistry = EmailNotificationJsonSerializerRegistry
 
   //  lazy val keeperRepo = wire[KeeperRepository]
   //  persistentEntityRegistry.register(wire[KeeperEntity])

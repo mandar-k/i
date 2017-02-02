@@ -15,13 +15,13 @@ import controllers.ChangePasswordController
 import controllers.ForgotPasswordController
 import controllers.ResetPasswordController
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Mode}
-import router.Routes
 
 import scala.collection.immutable
 import scala.concurrent.ExecutionContext
 import com.softwaremill.macwire._
 import controllers.ApplicationController
 import controllers.Assets
+import controllers.EmailNotificationController
 import controllers.MessageController
 import controllers.SignInController
 import controllers.SignUpController
@@ -39,11 +39,11 @@ import play.api.libs.openid.OpenIDComponents
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSClient
 import play.api.mvc.EssentialFilter
-import play.api.routing.Router
+
 import play.filters.csrf.{CSRFComponents, CSRFConfig, CSRFFilter}
 import play.filters.headers.SecurityHeadersComponents
 import utils.auth.DefaultEnv
-
+import router.Routes
 
 abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext(context)
   with I18nComponents
@@ -74,6 +74,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   lazy val signupController: SignUpController = wire[SignUpController]
   lazy val signinController: SignInController = wire[SignInController]
   lazy val messageController = wire[MessageController]
+  lazy val emailNotificationController=wire[EmailNotificationController]
   //  lazy val main = wire[Main]
   //  lazy val assets = wire[Assets]
 }
