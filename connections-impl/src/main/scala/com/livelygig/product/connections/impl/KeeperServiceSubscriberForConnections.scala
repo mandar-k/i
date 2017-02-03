@@ -12,6 +12,7 @@ import scala.concurrent.Future
 class KeeperServiceSubscriberForConnections(keeperService: KeeperService) {
   keeperService.keeperTopicProducer.subscribe.atLeastOnce(Flow[KeeperEventsForTopics].mapAsync(1) {
     case uc:api.UserCreated =>
+      println("in connection service")
       Future.successful(Done)
     case _ =>
       Future.successful(Done)

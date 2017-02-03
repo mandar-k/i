@@ -14,14 +14,15 @@ import scala.concurrent.Future
 class KeeperServiceSubscriberForEmailNotification(mailerClient: MailerClient, keeperService: KeeperService) {
   keeperService.keeperTopicProducer.subscribe.atLeastOnce(Flow[KeeperEventsForTopics].mapAsync(1) {
     case uc:api.UserCreated =>
-      val email = Email(
+      /*val email = Email(
         "User Authentication Mail",
         "tmail9192@gmail.com",
         Seq(uc.email),
         bodyText = Some("A text message"),
         bodyHtml = Some(views.html.emailNotification("nirvanictest@mailinator.com").body )
       )
-      mailerClient.send(email)
+      mailerClient.send(email)*/
+      println("in email service")
       Future.successful(Done)
     case _ =>
       Future.successful(Done)

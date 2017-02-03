@@ -4,8 +4,6 @@ import java.util.{Date, UUID}
 
 import com.livelygig.product.content.api.{Content, ContentService}
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
-import com.livelygig.product.message.api.Message
-import com.livelygig.product.message.api.{LiveMessagesRequest, Message}
 import com.livelygig.product.security.resource.ResourceClientSecurity
 import play.api.Environment
 import play.api.libs.json.JsValue
