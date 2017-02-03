@@ -137,7 +137,7 @@ lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
 
 lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
   .settings(commonSettings: _*)
-  .enablePlugins(LagomScala && SbtTwirl)
+  .enablePlugins( LagomScala && SbtTwirl)
   .dependsOn(emailnotificationsApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
@@ -241,3 +241,4 @@ lazy val ReleaseCmd = Command.command("release") {
 
 lagomCassandraCleanOnStart in ThisBuild := true
 onLoad in Global := (Command.process("project webGateway", _: State)) compose (onLoad in Global).value
+routesGenerator := InjectedRoutesGenerator
