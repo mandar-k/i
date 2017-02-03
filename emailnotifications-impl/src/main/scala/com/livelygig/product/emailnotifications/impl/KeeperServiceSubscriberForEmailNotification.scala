@@ -14,6 +14,12 @@ import scala.concurrent.Future
 class KeeperServiceSubscriberForEmailNotification(mailerClient: MailerClient, keeperService: KeeperService) {
   keeperService.keeperTopicProducer.subscribe.atLeastOnce(Flow[KeeperEventsForTopics].mapAsync(1) {
     case uc:api.UserCreated =>
+      // TODO get the running location of gateway
+      val url = s"http:localhost:9000/account/activate/${uc.authToken}"
+
+      println("----------------Activation Link-------------------")
+      println(s"----------------$url-------------------")
+      println("--------------------------------------------------")
       /*val email = Email(
         "User Authentication Mail",
         "tmail9192@gmail.com",

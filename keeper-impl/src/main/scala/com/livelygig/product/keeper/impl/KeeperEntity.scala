@@ -78,7 +78,7 @@ class KeeperEntity extends PersistentEntity {
       case (LoginUser(_), ctx, _) => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Please check the activation link in the email sent to you.")))
     }
       .onCommand[ActivateUser, UserAuthRes] {
-      case (ActivateUser(token), ctx, _) => ctx.thenPersist(UserActivated(token))(_ => ctx.reply(UserAuthRes(MsgTypes.ACCOUNT_ACTIVATED, ActivateUserResponse("Your account is not active."))))
+      case (ActivateUser(token), ctx, _) => ctx.thenPersist(UserActivated(token))(_ => ctx.reply(UserAuthRes(MsgTypes.ACCOUNT_ACTIVATED, ActivateUserResponse("Your account is now active."))))
     }
       .onEvent{
         case (UserActivated(_), state) => state.copy(userStatus = UserStatus.Activated)

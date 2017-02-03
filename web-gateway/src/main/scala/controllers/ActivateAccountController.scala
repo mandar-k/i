@@ -4,6 +4,8 @@ import java.net.URLDecoder
 import java.util.UUID
 import javax.inject.Inject
 
+import com.livelygig.product.keeper.api.KeeperService
+import com.livelygig.product.keeper.api.models.{ActivateUserResponse, ErrorResponse, UserAuthRes}
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import models.services.{AuthTokenService, UserService}
@@ -28,6 +30,7 @@ import scala.language.postfixOps
  */
 class ActivateAccountController (
   val messagesApi: MessagesApi,
+  keeperService: KeeperService,
   silhouette: Silhouette[DefaultEnv],
   userService: UserService,
   authTokenService: AuthTokenService,
@@ -49,7 +52,7 @@ class ActivateAccountController (
     userService.retrieve(loginInfo).flatMap {
       case Some(user) if !user.activated =>
         authTokenService.create(user.userID).map { authToken =>
-          val url = routes.ActivateAccountController.activate(authToken.id).absoluteURL()
+          val url = routes.ActivateAccountController.activate(authToken.id.toString).absoluteURL()
 
           mailerClient.send(Email(
             subject = Messages("email.activate.account.subject"),
@@ -70,8 +73,15 @@ class ActivateAccountController (
    * @param token The token to identify a user.
    * @return The result to display.
    */
-  def activate(token: UUID) = silhouette.UnsecuredAction.async { implicit request =>
-    authTokenService.validate(token).flatMap {
+  def activate(token: String) = silhouette.UnsecuredAction.async { implicit request =>
+    keeperService.activateAccount().invoke(token).map{
+      userAuthResponse =>
+        userAuthResponse match {
+          case UserAuthRes(_, ErrorResponse(msg)) => Redirect(routes.SignInController.view()).flashing("error" -> msg)
+          case UserAuthRes(_, ActivateUserResponse(msg)) => Redirect(routes.SignInController.view()).flashing("success" -> msg)
+        }
+    }
+    /*authTokenService.validate(token).flatMap {
       case Some(authToken) => userService.retrieve(authToken.userID).flatMap {
         case Some(user) if user.loginInfo.providerID == CredentialsProvider.ID =>
           userService.save(user.copy(activated = true)).map { _ =>
@@ -80,6 +90,6 @@ class ActivateAccountController (
         case _ => Future.successful(Redirect(routes.SignInController.view()).flashing("error" -> Messages("invalid.activation.link")))
       }
       case None => Future.successful(Redirect(routes.SignInController.view()).flashing("error" -> Messages("invalid.activation.link")))
-    }
+    }*/
   }
 }

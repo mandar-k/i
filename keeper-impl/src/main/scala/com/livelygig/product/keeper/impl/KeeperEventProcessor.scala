@@ -154,7 +154,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
         insertUserPermissions.bind(userId, "message.add"),
         insertUsernameUserId.bind(user.userAuth.email, userId),
         insertUsernameUserId.bind(user.userAuth.username, userId),
-        insertActivationTokenStatement.bind(userId, activationToken, activationTokenExpire.toString)
+        insertActivationTokenStatement.bind(userId, activationToken, activationTokenExpire.toInt.asInstanceOf[java.lang.Integer])
       ))
   }
 
@@ -163,9 +163,9 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
   }
 
   private def insertAuthToken(userID: String, userLoginInfo: UserLoginInfo) = {
-    Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated, accessTokenExpire.toString)))
+    // FIXME type conversion from long to integer
+    Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated, accessTokenExpire.toInt.asInstanceOf[java.lang.Integer])))
   }
-
 
   private def removeUser = ???
 }

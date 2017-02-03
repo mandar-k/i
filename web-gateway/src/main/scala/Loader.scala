@@ -75,6 +75,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   lazy val signinController: SignInController = wire[SignInController]
   lazy val messageController = wire[MessageController]
   lazy val emailNotificationController=wire[EmailNotificationController]
+  lazy val activateAccountController: ActivateAccountController = wire[ActivateAccountController]
   //  lazy val main = wire[Main]
   //  lazy val assets = wire[Assets]
 }
@@ -112,7 +113,6 @@ trait WebAppComponents extends BuiltInComponents
   lazy val forgotPasswordController: ForgotPasswordController = wire[ForgotPasswordController]
   lazy val resetPasswordController: ResetPasswordController = wire[ResetPasswordController]
   lazy val changePasswordController: ChangePasswordController = wire[ChangePasswordController]
-  lazy val activateAccountController: ActivateAccountController = wire[ActivateAccountController]
   lazy val wsClient: WSClient = AhcWSClient()
   //  lazy val router: Router = {
   //    wire[Routes] withPrefix "/"
