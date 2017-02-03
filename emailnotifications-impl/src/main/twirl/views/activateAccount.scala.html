@@ -1,4 +1,4 @@
-@(user:String)
+@(user: User, url: String)(implicit messages: Messages)
 
 <body style="background-color:#eaeced;padding: 3% 15%">
 <div style="font-weight: normal;padding-bottom: 50px;padding-top: 15px;font-style: :normal;display: flex;flex-direction: column;">
@@ -16,10 +16,11 @@
             style="width: 100%; height: 28vw;"></div>
     <div style="background-color : white;font-family: 'Open Sans',Helvetica,Arial,sans-serif!important;line-height: 30px!important;font-weight: 400!important;padding-right:10px">
         <ul style="display: inline;list-style: none;">
-            <li style="padding-left:  15px">Dear <b>Shubham</b>,</li>
-            <li style="padding-left:  15px">Almost done! Please click this link to activate your account and set a
+            <p>@messages("email.activate.account.hello", user.name.getOrElse("user"))</p>
+            <p>@Html(messages("email.activate.account.html.text", url))</p>
+            <!--<li style="padding-left:  15px">Almost done! Please click this link to activate your account and set a
                 password.
-            </li>
+            </li>-->
             <li style="text-align: center;margin: 10px">
                 <button style="background-color: #00a5ad ;padding : 15px ;color:white;border: 0px;cursor: pointer;">
                     Activate account
