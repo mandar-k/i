@@ -65,6 +65,11 @@ password.reset = We have reset your password. You can now sign in with your cred
 account.activated = Your account is now activated! Please sign in to use your new account.
 password.changed = Your password has been changed.
 
+agree.to.terms = I understand and agree to the
+terms.of.service = Terms of Service
+privacy.policy = Privacy Policy
+send.me.updates = Send me occasional email updates from LivelyGig
+
 google = Google
 facebook = Facebook
 twitter = Twitter

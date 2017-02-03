@@ -11,13 +11,17 @@
             @b3.text(signUpForm("lastName"), '_hiddenLabel -> Messages("last.name"), 'placeholder -> Messages("last.name"), 'class -> "form-control input-lg")
             @b3.text(signUpForm("email"), '_hiddenLabel -> Messages("email"), 'placeholder -> Messages("email"), 'class -> "form-control input-lg")
             @passwordStrength(signUpForm("password"), '_hiddenLabel -> Messages("password"), 'placeholder -> Messages("password"), 'class -> "form-control input-lg")
+        <div >
+            <p>@Messages("agree.to.terms") <a href="@routes.SignInController.view">@Messages("terms.of.service")</a> and <a href="@routes.SignInController.view">@Messages("privacy.policy")</a></p>
+        </div>
             <div class="form-group">
                 <div>
                     <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("sign.up")</button>
                 </div>
             </div>
             <div class="sign-in-now">
-                <p>@Messages("already.a.member") <a href="@routes.SignInController.view">@Messages("sign.in.now")</a></p>
+
+                <input type="checkbox">@Messages("already.a.member") <a href="@routes.SignInController.view">@Messages("sign.in.now")</a></input>
             </div>
         }
     </fieldset>
