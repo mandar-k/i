@@ -41,6 +41,10 @@ trait KeeperService extends Service {
     */
   def createUser(): ServiceCall[User, UserAuthRes]
 
+  /**
+    * Take the activation token and activate the user
+    * @return activation success response
+    */
   def activateAccount(): ServiceCall[String, UserAuthRes]
 
   def keeperTopicProducer: Topic[KeeperEventsForTopics]

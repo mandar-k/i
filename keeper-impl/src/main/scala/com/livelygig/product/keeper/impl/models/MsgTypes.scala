@@ -13,4 +13,8 @@ object MsgTypes {
   val AUTH_ERROR = "authenticationError"
   // woops!!! user does not exists
   val USER_NOT_FOUND = "userNotFound"
+
+  val ACCOUNT_ACTIVATED = "accountActivated"
+
+  val INVALID_ACTIVATION_TOKEN = "activationTokenInvalid"
 }

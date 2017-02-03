@@ -23,6 +23,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
   private var insertAuthKeyStatement: PreparedStatement = _
   private var insertActivationTokenStatement: PreparedStatement = _
   private var deleteAuthKeyStatement: PreparedStatement = _
+  private var deleteActivationToken: PreparedStatement = _
   private var insertUserPermissions: PreparedStatement = _
   private var insertUsernameUserId: PreparedStatement = _
   private var insertEmailUserId: PreparedStatement = _
@@ -36,7 +37,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
       .setPrepare(tag => preparedStatements)
       .setEventHandler[UserLogin](e => insertAuthToken(e.entityId, e.event.userLoginInfo))
       .setEventHandler[UserCreated](e => insertUserAuthDetails(e.entityId, e.event.user, e.event.activationToken))
-      //      .setEventHandler[UserDeleted](e => removeUser(e.event.user.id))
+      .setEventHandler[UserActivated](e => removeToken(e.event.tokenToDelete))
       //      .setEventHandler[TokenCreated](e => )
       //      .setEventHandler[TokenDeleted](removeToken)
       .build()
@@ -129,6 +130,11 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
            INSERT INTO userIdByEmail (email, userUri) VALUES (?,?)
         """
       )
+      deleteActivation <- session.prepare(
+        """
+          DELETE FROM userActivationToken where activationToken = ?
+        """
+      )
     } yield {
       insertUserRoles = insertRoles
       insertUserPermissions = insertPermissions
@@ -136,6 +142,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
       insertEmailUserId = insertEmailAndUserId
       insertUsernameUserId = insertUsernameAndUserId
       insertActivationTokenStatement = insertActivationToken
+      deleteActivationToken = deleteActivation
       Done
     }
   }
@@ -151,7 +158,9 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
       ))
   }
 
-  private def removeToken = ???
+  private def removeToken(tokenToRemove: String) = {
+    Future.successful(List(deleteActivationToken.bind(tokenToRemove)))
+  }
 
   private def insertAuthToken(userID: String, userLoginInfo: UserLoginInfo) = {
     Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated, accessTokenExpire.toString)))

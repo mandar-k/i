@@ -1,9 +1,10 @@
 package com.livelygig.product.keeper.impl
 
 import java.util.{Date, UUID}
+
 import com.lightbend.lagom.scaladsl.persistence._
-import com.livelygig.product.keeper.api.models.{CreateUserResponse, ErrorResponse, InitializeSessionResponse, UserAuthRes}
-import com.livelygig.product.keeper.impl.models.{MsgTypes}
+import com.livelygig.product.keeper.api.models._
+import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.livelygig.product.keeper.impl.models.UserLoginInfo
 
 
@@ -37,13 +38,13 @@ class KeeperEntity extends PersistentEntity {
         // TODO create secure activation token
         val activationToken = UUID.randomUUID().toString
         ctx.thenPersist(UserCreated(user, activationToken))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse(""))))
-    }.onEvent{
+    }.onEvent {
       case (UserCreated(user, token), state) => {
         // TODO send activation email using email and notification service and
         // TODO add the user profile on the user profile service
         // TODO add default alias on the different service
         // TODO change default state to not activated
-        state.copy(state = Some(user.userAuth), userStatus = UserStatus.Activated)
+        state.copy(state = Some(user.userAuth), userStatus = UserStatus.NotActivated)
       }
     }
   }
@@ -60,9 +61,14 @@ class KeeperEntity extends PersistentEntity {
           ctx.thenPersist(UserLogin(userLoginInfo))(_ => ctx.reply(UserAuthRes(MsgTypes.INITIALIZE_SESSION_RESPONSE, InitializeSessionResponse(authKey))))
         }
         else {
-          ctx.thenPersist(UserLoginFailed(userState.state.get.email,"Authentication error"))(_ => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Authentication Failed"))))
+          ctx.thenPersist(UserLoginFailed(userState.state.get.email, "Authentication error"))(_ => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Authentication Failed"))))
         }
     }
+      /*.onReadOnlyCommand[ActivateUser, UserAuthRes]{
+      case (ActivateUser(_), ctx, _) => ctx.reply(UserAuthRes())
+
+      } */
+
   }
 
   def userNotActivated = {
@@ -71,6 +77,12 @@ class KeeperEntity extends PersistentEntity {
       // TODO read response message from conf file
       case (LoginUser(_), ctx, _) => ctx.reply(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Please check the activation link in the email sent to you.")))
     }
+      .onCommand[ActivateUser, UserAuthRes] {
+      case (ActivateUser(token), ctx, _) => ctx.thenPersist(UserActivated(token))(_ => ctx.reply(UserAuthRes(MsgTypes.ACCOUNT_ACTIVATED, ActivateUserResponse("Your account is not active."))))
+    }
+      .onEvent{
+        case (UserActivated(_), state) => state.copy(userStatus = UserStatus.Activated)
+      }
   }
 
   def userDisabled = {

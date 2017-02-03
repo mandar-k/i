@@ -22,6 +22,9 @@ import scala.concurrent.{ExecutionContext, Future}
   * Created by shubham.k on 09-01-2017.
   */
 class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRepository)(implicit ec: ExecutionContext) extends KeeperService {
+
+  // TODO read response message from conf file
+
   // Return the authorization roles and permission of the subject
   override def authorize() = ???
 
@@ -64,7 +67,15 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     } yield reply
   }
 
-  override def activateAccount() = ???
+  override def activateAccount() = ServiceCall{ activationToken =>
+    for {
+      userUri <- keeperRepo.searchForActivationToken(activationToken)
+      res <- userUri match {
+        case Some(uri) => registry.refFor[KeeperEntity](uri).ask(ActivateUser(activationToken)).map(e => e)
+        case None => Future.successful(UserAuthRes(MsgTypes.INVALID_ACTIVATION_TOKEN, ErrorResponse("Invalid Activation Link.")))
+      }
+    } yield res
+  }
 
   override def keeperTopicProducer = TopicProducer.taggedStreamWithOffset(KeeperEvent.Tag.allTags.toList) {(tag, offset) =>
     registry.eventStream(tag, offset)

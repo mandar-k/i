@@ -66,3 +66,9 @@ case class TokenDeleted(userAuth: UserAuth) extends KeeperEvent
 object TokenDeleted {
   implicit val format: Format[TokenDeleted] = Json.format
 }
+
+case class UserActivated (tokenToDelete: String) extends KeeperEvent
+
+object UserActivated {
+  implicit val format: Format[UserActivated] =Json.format
+}

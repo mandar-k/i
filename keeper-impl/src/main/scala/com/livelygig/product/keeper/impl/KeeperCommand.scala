@@ -35,3 +35,9 @@ case class DeleteUser(userAuth: UserAuth) extends KeeperCommand with ReplyType[D
 object DeleteUser {
   implicit val format: Format[DeleteUser] = Json.format
 }
+
+case class ActivateUser(activationToken: String) extends KeeperCommand with ReplyType[UserAuthRes]
+
+object ActivateUser {
+  implicit val format: Format[ActivateUser] = Json.format
+}
