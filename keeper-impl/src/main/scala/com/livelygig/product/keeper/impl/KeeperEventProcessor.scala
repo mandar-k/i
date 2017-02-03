@@ -18,8 +18,8 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: CassandraReadSide, config: Configuration)(implicit ec: ExecutionContext)
   extends ReadSideProcessor[KeeperEvent] {
-  private val accessTokenExpire = Some(config.getMilliseconds("authentication.tokenExpire").getOrElse(60 * 60L * 1000) / 1000)
-  private val activationTokenExpire = Some(config.getMilliseconds("activation.tokenExpire").getOrElse(60 * 60L * 1000) / 1000)
+  private val accessTokenExpire = config.getMilliseconds("authentication.tokenExpire").getOrElse(60 * 60L * 24 * 1000) / 1000
+  private val activationTokenExpire = config.getMilliseconds("activation.tokenExpire").getOrElse(60 * 60L * 24 * 1000) / 1000
   private var insertAuthKeyStatement: PreparedStatement = _
   private var insertActivationTokenStatement: PreparedStatement = _
   private var deleteAuthKeyStatement: PreparedStatement = _
@@ -147,14 +147,14 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
         insertUserPermissions.bind(userId, "message.add"),
         insertUsernameUserId.bind(user.userAuth.email, userId),
         insertUsernameUserId.bind(user.userAuth.username, userId),
-        insertActivationTokenStatement.bind(userId, activationToken, activationTokenExpire)
+        insertActivationTokenStatement.bind(userId, activationToken, activationTokenExpire.toString)
       ))
   }
 
   private def removeToken = ???
 
   private def insertAuthToken(userID: String, userLoginInfo: UserLoginInfo) = {
-    Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated, accessTokenExpire)))
+    Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated, accessTokenExpire.toString)))
   }
 
 

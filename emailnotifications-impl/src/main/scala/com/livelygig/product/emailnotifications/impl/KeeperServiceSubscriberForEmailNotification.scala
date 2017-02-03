@@ -22,7 +22,6 @@ class KeeperServiceSubscriberForEmailNotification(mailerClient: MailerClient, ke
         bodyHtml = Some(views.html.emailNotification("nirvanictest@mailinator.com").body )
       )
       mailerClient.send(email)*/
-      println("in email service")
       Future.successful(Done)
     case _ =>
       Future.successful(Done)

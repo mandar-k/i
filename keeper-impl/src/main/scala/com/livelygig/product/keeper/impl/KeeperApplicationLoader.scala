@@ -1,6 +1,7 @@
 package com.livelygig.product.keeper.impl
 
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
+import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.server._
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -16,7 +17,8 @@ import com.softwaremill.macwire._
 abstract class KeeperApplication(context: LagomApplicationContext)
   extends LagomApplication(context)
     with AhcWSComponents
-    with CassandraPersistenceComponents {
+    with CassandraPersistenceComponents
+    with LagomKafkaComponents{
   override lazy val lagomServer = LagomServer.forServices(
     bindService[KeeperService].to(wire[KeeperServiceImpl])
   )
