@@ -75,7 +75,7 @@ class SignInController(
             userAuthRes match {
               case UserAuthRes(_, ErrorResponse(msg)) =>
                 Redirect(routes.SignInController.view()).flashing("error" -> Messages(msg))
-              case _ =>
+              case UserAuthRes(_, InitializeSessionResponse(authToken)) =>
                 Redirect(routes.ApplicationController.index())
             }}
       }

@@ -15,8 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * Created by shubham.k on 25-01-2017.
   */
 class EmailNotificationsImpl( val messagesApi: MessagesApi, mailerClient: MailerClient , environment: Environment)(implicit ec: ExecutionContext) extends  EmailNotificationsService with I18nSupport{
-  override def sendEmail = ServiceCall{ s: String => /*Future.successful("Email sent")*/ Future{
-    val cid = "1234"
+  override def sendEmail = ServiceCall{ s: String => Future{
     val email = Email(
       "Reset Password",
       "Livelygig",

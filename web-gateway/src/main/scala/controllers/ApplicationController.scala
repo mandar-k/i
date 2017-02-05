@@ -13,43 +13,43 @@ import scala.concurrent.Future
 
 
 /**
- * The basic application controller.
- *
- * @param messagesApi The Play messages API.
- * @param silhouette The Silhouette stack.
- * @param socialProviderRegistry The social provider registry.
- * @param webJarAssets The webjar assets implementation.
- */
-class ApplicationController  (
-  val messagesApi: MessagesApi,
-  silhouette: Silhouette[DefaultEnv],
-  socialProviderRegistry: SocialProviderRegistry,
-  implicit val webJarAssets: WebJarAssets)
+  * The basic application controller.
+  *
+  * @param messagesApi            The Play messages API.
+  * @param silhouette             The Silhouette stack.
+  * @param socialProviderRegistry The social provider registry.
+  * @param webJarAssets           The webjar assets implementation.
+  */
+class ApplicationController(
+                             val messagesApi: MessagesApi,
+                             silhouette: Silhouette[DefaultEnv],
+                             socialProviderRegistry: SocialProviderRegistry,
+                             implicit val webJarAssets: WebJarAssets)
   extends Controller with I18nSupport {
 
   /**
-   * Handles the index action.
-   *
-   * @return The result to display.
-   */
+    * Handles the index action.
+    *
+    * @return The result to display.
+    */
   def index = silhouette.SecuredAction.async { implicit request =>
-//    Future.successful(Ok(views.html.home(request.identity)))
+    //    Future.successful(Ok(views.html.home(request.identity)))
     Future.successful(Ok(views.html.index(request.identity)))
   }
 
-    def logging = Action.async {
-      implicit request =>
-        request.body.asJson.foreach { msg =>
-          println(s"Application - CLIENT - $msg")
-        }
-        Future.successful(Ok(""))
-    }
+  def logging = Action(parse.anyContent) {
+    implicit request =>
+      request.body.asJson.foreach { msg =>
+        println(s"CLIENT - $msg")
+      }
+      Ok("")
+  }
 
   /**
-   * Handles the Sign Out action.
-   *
-   * @return The result to display.
-   */
+    * Handles the Sign Out action.
+    *
+    * @return The result to display.
+    */
   def signOut = silhouette.SecuredAction.async { implicit request =>
     val result = Redirect(routes.ApplicationController.index())
     silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
