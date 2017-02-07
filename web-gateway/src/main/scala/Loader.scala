@@ -34,8 +34,6 @@ import play.api.libs.openid.OpenIDComponents
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSClient
 import play.api.mvc.EssentialFilter
-
-import play.filters.csrf.{CSRFComponents, CSRFConfig, CSRFFilter}
 import play.filters.headers.SecurityHeadersComponents
 import utils.auth.DefaultEnv
 import router.Routes
@@ -91,7 +89,6 @@ trait WebAppComponents extends BuiltInComponents
   with OpenIDComponents
   with EhCacheComponents
   with WebAppModule
-  with CSRFComponents
   with SecurityHeadersComponents {
   lazy val silhouette: Silhouette[DefaultEnv] = wire[SilhouetteProvider[DefaultEnv]]
   lazy val assets: Assets = wire[Assets]
@@ -106,6 +103,6 @@ trait WebAppComponents extends BuiltInComponents
   //    wire[Routes] withPrefix "/"
   //  }
   override lazy val httpFilters: Seq[EssentialFilter] = {
-    Seq(csrfFilter, securityHeadersFilter)
+    Seq(securityHeadersFilter)
   }
 }

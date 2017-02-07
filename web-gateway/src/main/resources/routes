@@ -5,9 +5,9 @@
 
 
 # Home page
-GET         /                                controllers.ApplicationController.index(x_auth_token: Option[String])
+GET         /                                controllers.ApplicationController.index
 
-GET         /app                             controllers.ApplicationController.app
+GET         /app                             controllers.ApplicationController.app(x_auth_token: Option[String])
 GET         /validateToken                   controllers.ApplicationController.validateToken
 GET         /signOut                         controllers.ApplicationController.signOut
 GET         /authenticate/:provider          controllers.SocialAuthController.authenticate(provider)

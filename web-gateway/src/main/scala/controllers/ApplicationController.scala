@@ -30,11 +30,11 @@ class ApplicationController(
     *
     * @return The result to display.
     */
-  def index(x_auth_token: Option[String]) = Action.async { implicit request =>
-    Future.successful(Ok(views.html.home(x_auth_token)))
+  def index() = Action.async { implicit request =>
+    Future.successful(Ok(views.html.home()))
   }
 
-  def app = Action.async { implicit request =>
+  def app(x_auth_token: Option[String]) = Action.async { implicit request =>
     Future.successful(Ok(views.html.app()))
   }
 
@@ -57,7 +57,7 @@ class ApplicationController(
     * @return The result to display.
     */
   def signOut = silhouette.SecuredAction.async { implicit request =>
-    val result = Redirect(routes.ApplicationController.index(None))
+    val result = Redirect(routes.ApplicationController.index())
     silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
     silhouette.env.authenticatorService.discard(request.authenticator, result)
   }

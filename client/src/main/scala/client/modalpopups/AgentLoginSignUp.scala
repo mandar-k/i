@@ -166,7 +166,7 @@ object AgentLoginSignUp {
 //      }
       CoreApi.loginFromApi(userModel).onComplete{
         case Success(response)=> {
-         LGCircuit.dispatch(LoginUser(UserModel(name = userModel.name)))
+         LGCircuit.dispatch(LoginUser(UserModel()))
           $(loginLoader).addClass("hidden")
           $(dashboardContainer).removeClass("hidden")
           window.location.replace("/#messages")

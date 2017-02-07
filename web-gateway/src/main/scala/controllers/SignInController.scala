@@ -82,8 +82,9 @@ class SignInController(
                   val identity = UserIdentity(userUri, LoginInfo(credentialsProvider.id, email), username)
                   silhouette.env.eventBus.publish(LoginEvent(identity, request))
                   silhouette.env.authenticatorService.init(authenticator).flatMap { token =>
-                    val res = Redirect(routes.ApplicationController.index(Some(token)))
-                    silhouette.env.authenticatorService.embed(token, res)
+                    val res = Redirect(routes.ApplicationController.app(Some(token)))
+                    val yo = silhouette.env.authenticatorService.embed(token, res)
+                    yo
                   }
                 }
             }
