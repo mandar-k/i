@@ -25,7 +25,7 @@ object ErrorResponse {
   implicit val format: Format[ErrorResponse] = Json.format
 }
 
-case  class InitializeSessionResponse(authToken: String) extends Content
+case  class InitializeSessionResponse(agentUri: String, email: String, username: String) extends Content
 
 object InitializeSessionResponse {
   implicit val format: Format[InitializeSessionResponse] = Json.format
@@ -41,6 +41,12 @@ case class ActivateUserResponse (msg: String) extends Content
 
 object ActivateUserResponse {
   implicit val format: Format[ActivateUserResponse] = Json.format
+}
+
+case class UserFound (userUri: String, username: String, email: String) extends Content
+
+object UserFound {
+  implicit val format: Format[UserFound] = Json.format
 }
 object Content {
   implicit val format: Format[Content] =

@@ -5,13 +5,11 @@ import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.keeper.api.KeeperService
+import models.services.SilhouetteIdentityServiceImpl
 //import com.livelygig.product.keeper.api.KeeperService
-import com.livelygig.product.user.api.UserService
 import com.mohiva.play.silhouette.api.{Silhouette, SilhouetteProvider}
 import play.api.i18n.I18nComponents
-import play.api.libs.ws.ahc.AhcWSComponents
 import controllers.ActivateAccountController
-import controllers.ChangePasswordController
 import controllers.ForgotPasswordController
 import controllers.ResetPasswordController
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Mode}
@@ -27,14 +25,11 @@ import controllers.SignInController
 import controllers.SignUpController
 import controllers.SocialAuthController
 import controllers.WebJarAssets
-import models.daos.UserDAOImpl
-import models.services.UserServiceImpl
 import modules.SilhouetteModule
 import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.cache.EhCacheComponents
 import play.api.http.HttpErrorHandler
-import play.api.libs.mailer.MailerComponents
 import play.api.libs.openid.OpenIDComponents
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSClient
@@ -47,7 +42,6 @@ import router.Routes
 
 abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext(context)
   with I18nComponents
-  //  with AhcWSComponents
   with WebAppComponents
 
   with LagomServiceClientComponents {
@@ -59,7 +53,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
     )
   )
   override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
- override  lazy val httpErrorHandler:HttpErrorHandler = wire[WebGatewayErrorHandler]
+  override lazy val httpErrorHandler: HttpErrorHandler = wire[WebGatewayErrorHandler]
   lazy val routerOption = None
   override lazy val router = {
     val prefix = "/"
@@ -67,17 +61,17 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   }
   implicit val env = context.environment
 
-  lazy val userServiceImpl = serviceClient.implement[UserService]
   lazy val messageServiceImpl = serviceClient.implement[ContentService]
   lazy val emailNotificationImpl = serviceClient.implement[EmailNotificationsService]
   lazy val keeperService = serviceClient.implement[KeeperService]
   lazy val signupController: SignUpController = wire[SignUpController]
   lazy val signinController: SignInController = wire[SignInController]
   lazy val messageController = wire[MessageController]
-  lazy val emailNotificationController=wire[EmailNotificationController]
+  lazy val emailNotificationController = wire[EmailNotificationController]
   lazy val activateAccountController: ActivateAccountController = wire[ActivateAccountController]
-  //  lazy val main = wire[Main]
-  //  lazy val assets = wire[Assets]
+  lazy val applicationController: ApplicationController = wire[ApplicationController]
+  lazy val silhouetteIdentityService = wire[SilhouetteIdentityServiceImpl]
+
 }
 
 class WebGatewayLoader extends ApplicationLoader {
@@ -97,22 +91,16 @@ trait WebAppComponents extends BuiltInComponents
   with OpenIDComponents
   with EhCacheComponents
   with WebAppModule
-  with MailerComponents
-   with CSRFComponents
-  with SecurityHeadersComponents
-  {
-    lazy val silhouette: Silhouette[DefaultEnv] = wire[SilhouetteProvider[DefaultEnv]]
-  lazy val userService = new UserServiceImpl(new UserDAOImpl)
+  with CSRFComponents
+  with SecurityHeadersComponents {
+  lazy val silhouette: Silhouette[DefaultEnv] = wire[SilhouetteProvider[DefaultEnv]]
   lazy val assets: Assets = wire[Assets]
-  lazy val applicationController: ApplicationController = wire[ApplicationController]
   lazy val socialAuthController: SocialAuthController = wire[SocialAuthController]
-
 
 
   lazy val webjarAssets: WebJarAssets = wire[WebJarAssets]
   lazy val forgotPasswordController: ForgotPasswordController = wire[ForgotPasswordController]
   lazy val resetPasswordController: ResetPasswordController = wire[ResetPasswordController]
-  lazy val changePasswordController: ChangePasswordController = wire[ChangePasswordController]
   lazy val wsClient: WSClient = AhcWSClient()
   //  lazy val router: Router = {
   //    wire[Routes] withPrefix "/"

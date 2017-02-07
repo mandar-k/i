@@ -23,7 +23,7 @@ private[impl] class KeeperRepository(session: CassandraSession)(implicit ec: Exe
   def searchForUsername(username: String): Future[Option[String]] = {
     session.selectOne(
       """
-        SELECT * FROM userIdByUsername WHERE userName = ?
+        SELECT * FROM userUriByUsername WHERE userName = ?
       """, username).map {
       case Some(row) => Some(row.getString("userUri"))
       case None => None
@@ -33,7 +33,7 @@ private[impl] class KeeperRepository(session: CassandraSession)(implicit ec: Exe
   def searchForEmail(email: String): Future[Option[String]] = {
     session.selectOne(
       """
-        SELECT * FROM userIdByEmail WHERE email = ?
+        SELECT * FROM userUriByEmail WHERE email = ?
       """, email).map {
       case Some(row) => Some(row.getString("userUri"))
       case None => None

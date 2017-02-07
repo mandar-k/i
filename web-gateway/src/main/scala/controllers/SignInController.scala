@@ -1,19 +1,14 @@
 package controllers
 
-import java.util.UUID
-import javax.inject.Inject
-
 import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.keeper.api.models.{ErrorResponse, InitializeSessionResponse, UserAuthRes, UserLoginModel}
 import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.{Clock, Credentials}
-import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
+import com.mohiva.play.silhouette.api.util.{Clock}
 import com.mohiva.play.silhouette.impl.providers._
 import forms.SignInForm
-import models.services.UserService
+import models.UserIdentity
 import net.ceedubs.ficus.Ficus._
 import play.api.Configuration
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -30,7 +25,6 @@ import scala.language.postfixOps
   *
   * @param messagesApi            The Play messages API.
   * @param silhouette             The Silhouette stack.
-  * @param userService            The user service implementation.
   * @param authInfoRepository     The auth info repository implementation.
   * @param credentialsProvider    The credentials provider.
   * @param socialProviderRegistry The social provider registry.
@@ -41,7 +35,6 @@ import scala.language.postfixOps
 class SignInController(
                         val messagesApi: MessagesApi,
                         silhouette: Silhouette[DefaultEnv],
-                        userService: UserService,
                         authInfoRepository: AuthInfoRepository,
                         credentialsProvider: CredentialsProvider,
                         socialProviderRegistry: SocialProviderRegistry,
@@ -70,14 +63,31 @@ class SignInController(
       form => Future.successful(BadRequest(views.html.signIn(form, socialProviderRegistry))),
       data => {
         val userLoginModel = new UserLoginModel(usernameOrEmail = data.email, data.password)
-        keeperService.login.invoke(userLoginModel).map {
+        keeperService.login.invoke(userLoginModel).flatMap {
           userAuthRes =>
             userAuthRes match {
               case UserAuthRes(_, ErrorResponse(msg)) =>
-                Redirect(routes.SignInController.view()).flashing("error" -> Messages(msg))
-              case UserAuthRes(_, InitializeSessionResponse(authToken)) =>
-                Redirect(routes.ApplicationController.index())
-            }}
+                Future.successful(Redirect(routes.SignInController.view()).flashing("error" -> Messages(msg)))
+              case UserAuthRes(_, InitializeSessionResponse(userUri, email, username)) =>
+                val loginInfo = LoginInfo(credentialsProvider.id, email)
+                silhouette.env.authenticatorService.create(loginInfo).map {
+                  case authenticator if data.rememberMe =>
+                    val c = configuration.underlying
+                    authenticator.copy(
+                      expirationDateTime = clock.now + c.as[FiniteDuration]("silhouette.jwt.authenticator.rememberMe.authenticatorExpiry"),
+                      idleTimeout = c.getAs[FiniteDuration]("silhouette.jwt.authenticator.rememberMe.authenticatorIdleTimeout")
+                    )
+                  case authenticator => authenticator
+                }.flatMap { authenticator =>
+                  val identity = UserIdentity(userUri, LoginInfo(credentialsProvider.id, email), username)
+                  silhouette.env.eventBus.publish(LoginEvent(identity, request))
+                  silhouette.env.authenticatorService.init(authenticator).flatMap { token =>
+                    val res = Redirect(routes.ApplicationController.index(Some(token)))
+                    silhouette.env.authenticatorService.embed(token, res)
+                  }
+                }
+            }
+        }
       }
     )
   }

@@ -1,20 +1,9 @@
 package client.utils
 
-import client.components.{ConnectionsSelectize, LabelsSelectize}
-import client.handler._
 import client.modules.AppModule
-import client.services.{CoreApi, LGCircuit}
+import client.services.LGCircuit
 import shared.dtos._
 import shared.models._
-import org.scalajs.dom._
-import client.sessionitems.SessionItems.{MessagesViewItems, ProfilesViewItems, ProjectsViewItems}
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.scalajs.js.timers._
-import scala.util.{Failure, Success}
-import diode.AnyAction._
-import client.sessionitems.SessionItems
-
 import scala.scalajs.js.JSON
 
 //scalastyle:off

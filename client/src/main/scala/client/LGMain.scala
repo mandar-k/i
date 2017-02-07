@@ -15,9 +15,8 @@ import japgolly.scalajs.react.{React, ReactDOM}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
 import org.scalajs.dom._
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js
-import scala.util.{Failure, Success}
 import scalacss.internal.mutable.GlobalRegistry
 
 // scalastyle:off
@@ -60,7 +59,6 @@ object LGMain extends js.JSApp {
   case object NotificationsLoc extends Loc
 
 
-
   val userProxy = LGCircuit.connect(_.user)
   val appProxy = LGCircuit.connect(_.appRootModel)
   val introProxy = LGCircuit.connect(_.introduction)
@@ -68,19 +66,19 @@ object LGMain extends js.JSApp {
   // configure the router
   val routerConfig = RouterConfigDsl[Loc].buildConfig { dsl =>
     import dsl._
-    (staticRoute(root, LandingLoc) ~>  /*renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))*/renderR(ctl => LandingLocation.component(ctl))
-      | staticRoute(s"#${AppModule.DASHBOARD_VIEW}", DashboardLoc) ~> renderR(ctl => Dashboard.component(ctl))
-      | staticRoute(s"#${AppModule.NOTIFICATIONS_VIEW}", NotificationsLoc) ~> renderR(ctl => introProxy(proxy => NotificationResults(NotificationResults.Props(proxy))))
-      | staticRoute(s"#${AppModule.MESSAGES_VIEW}", MessagesLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))
+    (staticRoute(root, LandingLoc) ~> /*renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))*/ renderR(ctl => LandingLocation.component(ctl))
+      | staticRoute(s"app#${AppModule.DASHBOARD_VIEW}", DashboardLoc) ~> renderR(ctl => Dashboard.component(ctl))
+      | staticRoute(s"app#${AppModule.NOTIFICATIONS_VIEW}", NotificationsLoc) ~> renderR(ctl => introProxy(proxy => NotificationResults(NotificationResults.Props(proxy))))
+      | staticRoute(s"app#${AppModule.MESSAGES_VIEW}", MessagesLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.MESSAGES_VIEW, proxy))))
       // ToDo: the following should be renamed from projects to jobs ?
-      | staticRoute(s"#${AppModule.PROJECTS_VIEW}", JobPostsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.PROJECTS_VIEW, proxy))))
+      | staticRoute(s"app#${AppModule.PROJECTS_VIEW}", JobPostsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.PROJECTS_VIEW, proxy))))
       // ToDo: the following should be contracts not contract
-      | staticRoute(s"#${AppModule.CONTRACTS_VIEW}", ContractsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.CONTRACTS_VIEW, proxy))))
+      | staticRoute(s"app#${AppModule.CONTRACTS_VIEW}", ContractsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.CONTRACTS_VIEW, proxy))))
       // ToDo: following route should be called Profiles not Talent.
-      | staticRoute(s"#${AppModule.PROFILES_VIEW}", ProfilesLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.PROFILES_VIEW, proxy))))
-      | staticRoute(s"#${AppModule.OFFERINGS_VIEW}", OfferingsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.OFFERINGS_VIEW, proxy))))
-      //      | staticRoute(s"#${AppModule.NOTIFICATIONS_VIEW}", NotificationsLoc) ~> renderR(ctl =>appProxy(proxy => AppModule(AppModule.Props(AppModule.NOTIFICATIONS_VIEW, proxy))))
-      | staticRoute(s"#${AppModule.CONNECTIONS_VIEW}", ConnectionsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.CONNECTIONS_VIEW, proxy)))))
+      | staticRoute(s"app#${AppModule.PROFILES_VIEW}", ProfilesLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.PROFILES_VIEW, proxy))))
+      | staticRoute(s"app#${AppModule.OFFERINGS_VIEW}", OfferingsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.OFFERINGS_VIEW, proxy))))
+      //      | staticRoute(s"app#${AppModule.NOTIFICATIONS_VIEW}", NotificationsLoc) ~> renderR(ctl =>appProxy(proxy => AppModule(AppModule.Props(AppModule.NOTIFICATIONS_VIEW, proxy))))
+      | staticRoute(s"app#${AppModule.CONNECTIONS_VIEW}", ConnectionsLoc) ~> renderR(ctl => appProxy(proxy => AppModule(AppModule.Props(AppModule.CONNECTIONS_VIEW, proxy)))))
       .notFound(redirectToPage(LandingLoc)(Redirect.Replace))
 
   }.renderWith(layout)
@@ -94,7 +92,7 @@ object LGMain extends js.JSApp {
         <.div(^.className := "col-lg-1")(),
         <.div(^.className := "col-lg-10")(
           <.div(/*^.className := "navbar-header"*/)(
-            <.div(^.className := " pull-left"/*col-md-10 col-sm-10 col-xs-6*/, DashBoardCSS.Style.padding0px, DashBoardCSS.Style.DisplayFlex)(
+            <.div(^.className := " pull-left" /*col-md-10 col-sm-10 col-xs-6*/ , DashBoardCSS.Style.padding0px, DashBoardCSS.Style.DisplayFlex)(
               c.link(LandingLoc)(^.className := "navbar-header", <.img(HeaderCSS.Style.imgLogo, HeaderCSS.Style.logoImage, ^.src := "./assets/images/LivelyGig-logo-symbol.svg")),
               <.button(^.className := "navbar-toggle", "data-toggle".reactAttr := "collapse", HeaderCSS.Style.navbarToggle, "data-target".reactAttr := "#navi-collapse")(
                 r.page match {
@@ -113,7 +111,7 @@ object LGMain extends js.JSApp {
                 userProxy(userProxy => MainMenu(MainMenu.Props(c, r.page, userProxy)))
               )
             ),
-            <.div(^.className := "pull-right "/*col-md-2 col-sm-2 col-xs-6*/ , DashBoardCSS.Style.padding0px)(userProxy(userProxy => LoggedInUser(LoggedInUser.Props(c, r.page, userProxy))))
+            <.div(^.className := "pull-right " /*col-md-2 col-sm-2 col-xs-6*/ , DashBoardCSS.Style.padding0px)(userProxy(userProxy => LoggedInUser(LoggedInUser.Props(c, r.page, userProxy))))
           ),
           <.div(^.className := "loggedInUserNav")(
             <.div(^.id := "navi-collapse", ^.className := "collapse navbar-collapse")(
@@ -135,20 +133,25 @@ object LGMain extends js.JSApp {
     // send log messages also to the server
     log.enableServerLogging("/logging")
     log.info("LGMain - This message goes to server as well")
-    // create stylesheet
-    GlobalStyles.addToDocument()
-    AppCSS.load
-    import scala.concurrent.ExecutionContext.Implicits.global
 
-
-    window.sessionStorage.removeItem("sessionPingTriggered")
-    //    standaloneCSS.render[HTMLStyleElement].outerHTML
-    GlobalRegistry.addToDocumentOnRegistration()
-    // create the router
-    val router = Router(BaseUrl(dom.window.location.href.takeWhile(_ != '#')), routerConfig)
-    // tell React to render the router in the document body
-    //ReactDOM.render(router(), dom.document.getElementById("root"))
-    ReactDOM.render(router(), dom.document.getElementById("root"))
-    window.location.href = "/#messages"
+    val token = window.localStorage.getItem("X-Auth-Token")
+    if (token.isEmpty)
+      window.location.href = "/signIn"
+    else {
+      CoreApi.validateToken(token)
+        .map { _ =>
+          // create stylesheet
+          GlobalStyles.addToDocument()
+          AppCSS.load
+          GlobalRegistry.addToDocumentOnRegistration()
+          // create the router
+          val router = Router(BaseUrl(dom.window.location.href.takeWhile(_ != '#')), routerConfig)
+          ReactDOM.render(router(), dom.document.getElementById("root"))
+          window.location.replace("/app#messages")
+        }
+        .recover {
+          case _ => window.location.href = "/signIn"
+        }
+    }
   }
 }
