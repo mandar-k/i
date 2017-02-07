@@ -41,3 +41,9 @@ case class ActivateUser(activationToken: String) extends KeeperCommand with Repl
 object ActivateUser {
   implicit val format: Format[ActivateUser] = Json.format
 }
+
+case class FindUser(userUri: String) extends KeeperCommand with ReplyType[UserAuthRes]
+
+object FindUser {
+  implicit val format: Format[FindUser] = Json.format
+}

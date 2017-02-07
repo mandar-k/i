@@ -47,6 +47,9 @@ trait KeeperService extends Service {
     */
   def activateAccount(): ServiceCall[String, UserAuthRes]
 
+  // TODO think of better way to retreive auth info
+  def getUriFromEmail(): ServiceCall[String, UserAuthRes]
+
   def keeperTopicProducer: Topic[KeeperEventsForTopics]
 
   def descriptor = {
@@ -55,7 +58,8 @@ trait KeeperService extends Service {
       namedCall("/api/auth/authorize", authorize _),
       namedCall("/api/auth/login", login _),
       namedCall("/api/auth/createUser", createUser _),
-      namedCall("/api/auth/activate", activateAccount _)
+      namedCall("/api/auth/activate", activateAccount _),
+      namedCall("/api/auth/getUriFromEmail", getUriFromEmail _)
     )
       .withTopics(topic("keeper-topics", keeperTopicProducer))
       .withHeaderFilter(SecurityHeaderFilter.Composed)

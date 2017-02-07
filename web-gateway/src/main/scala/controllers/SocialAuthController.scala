@@ -6,7 +6,8 @@ import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.impl.providers._
-import models.services.UserService
+import models.UserIdentity
+import models.services.SilhouetteIdentityService
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.{Action, Controller}
@@ -25,12 +26,12 @@ import scala.concurrent.Future
  * @param webJarAssets The webjar assets implementation.
  */
 class SocialAuthController (
-  val messagesApi: MessagesApi,
-  silhouette: Silhouette[DefaultEnv],
-  userService: UserService,
-  authInfoRepository: AuthInfoRepository,
-  socialProviderRegistry: SocialProviderRegistry,
-  implicit val webJarAssets: WebJarAssets)
+                             val messagesApi: MessagesApi,
+                             silhouette: Silhouette[DefaultEnv],
+                             userService: SilhouetteIdentityService,
+                             authInfoRepository: AuthInfoRepository,
+                             socialProviderRegistry: SocialProviderRegistry,
+                             implicit val webJarAssets: WebJarAssets)
   extends Controller with I18nSupport with Logger {
 
   /**
@@ -46,7 +47,7 @@ class SocialAuthController (
           case Left(result) => Future.successful(result)
           case Right(authInfo) => for {
             profile <- p.retrieveProfile(authInfo)
-            user <- userService.save(profile)
+            user <- Future.successful(UserIdentity("", LoginInfo("",""), ""))
             authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
             authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
             value <- silhouette.env.authenticatorService.init(authenticator)

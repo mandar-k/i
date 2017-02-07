@@ -10,7 +10,7 @@ import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, NotFound}
 import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRegistry}
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.livelygig.product.keeper.api.{KeeperEventsForTopics, KeeperService}
-import com.livelygig.product.keeper.api.models.{ErrorResponse, UserAuthRes}
+import com.livelygig.product.keeper.api.models.{ErrorResponse, InitializeSessionResponse, UserAuthRes, UserFound}
 import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.livelygig.product.security.resource.ResourceServerSecurity
 import com.lightbend.lagom.scaladsl.broker.TopicProducer
@@ -31,23 +31,31 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
   override def login() = ServiceCall { loginModel =>
 
     for {
-      userId <- keeperRepo.searchForUsernameOrEmail(loginModel)
-      res <- userId match {
-        case Some(uid) => registry.refFor[KeeperEntity](uid).ask(LoginUser(loginModel.password))
+      userUri <- keeperRepo.searchForUsernameOrEmail(loginModel)
+      res <- userUri match {
+        case Some(uri) => registry.refFor[KeeperEntity](uri).ask(LoginUser(loginModel.password))
         case None => Future.successful(UserAuthRes(MsgTypes.AUTH_ERROR, ErrorResponse("Authentication Failed")))
       }
     } yield res
   }
 
+  // TODO think of better way to retreive auth info
+  override def getUriFromEmail() = ServiceCall{email =>
+    keeperRepo.searchForEmail(email).flatMap{
+      case Some(uri) => registry.refFor[KeeperEntity](uri).ask(FindUser(uri))
+      case None => Future.successful(UserAuthRes("error", ErrorResponse("Not found")))
+    }
+
+  }
 
   override def createUser() = ServiceCall { userModel =>
     for {
       userFromEmail <- keeperRepo.searchForEmail(userModel.userAuth.email)
       userFromUserName <- userFromEmail match {
-        case Some(usr) => Future.successful(Some(UserAuthRes(MsgTypes.CREATE_USER_ERROR,ErrorResponse("Email already registered"))))
+        case Some(usr) => Future.successful(Some(UserAuthRes(MsgTypes.CREATE_USER_ERROR, ErrorResponse("Email already registered"))))
         case None => {
-          keeperRepo.searchForUsername(userModel.userAuth.username).map{
-            case Some(u) => Some(UserAuthRes(MsgTypes.CREATE_USER_ERROR,ErrorResponse("Username already registered")))
+          keeperRepo.searchForUsername(userModel.userAuth.username).map {
+            case Some(u) => Some(UserAuthRes(MsgTypes.CREATE_USER_ERROR, ErrorResponse("Username already registered")))
             case None => None
           }
         }
@@ -55,7 +63,6 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
       reply <- userFromUserName match {
         case Some(u) => Future.successful(u)
         case None => {
-          val uid = UUID.randomUUID()
           val rand = SecureRandom.getInstanceStrong()
           val bytes = new Array[Byte](20)
           // Generate random Agent URI
@@ -67,7 +74,7 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     } yield reply
   }
 
-  override def activateAccount() = ServiceCall{ activationToken =>
+  override def activateAccount() = ServiceCall { activationToken =>
     for {
       userUri <- keeperRepo.searchForActivationToken(activationToken)
       res <- userUri match {
@@ -77,9 +84,9 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     } yield res
   }
 
-  override def keeperTopicProducer = TopicProducer.taggedStreamWithOffset(KeeperEvent.Tag.allTags.toList) {(tag, offset) =>
+  override def keeperTopicProducer = TopicProducer.taggedStreamWithOffset(KeeperEvent.Tag.allTags.toList) { (tag, offset) =>
     registry.eventStream(tag, offset)
-      .filter{
+      .filter {
         _.event match {
           case x@(_: UserCreated) => true
           case _ => false
@@ -92,8 +99,8 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
   private def convertEvents(eventStreamElement: EventStreamElement[KeeperEvent]): Future[(KeeperEventsForTopics, Offset)] = {
     eventStreamElement match {
       case EventStreamElement(userUri, UserCreated(user, activationToken), offset) =>
-        Future.successful{
-          (api.UserCreated(userUri,user.userAuth.email,user.userProfile,activationToken), offset)
+        Future.successful {
+          (api.UserCreated(userUri, user.userAuth.email, user.userProfile, activationToken), offset)
         }
     }
   }

@@ -47,12 +47,6 @@ object Settings {
 
     ws,
     "org.asynchttpclient" % "async-http-client" % "2.0.4" force(),
-    "com.typesafe.play" %% "play-mailer" % "5.0.0",
-    "com.enragedginger" %% "akka-quartz-scheduler" % "1.5.0-akka-2.4.x",
-
-    /////////
-
- // "net.codingwell" %% "scala-guice" % "4.0.1",
  // "com.iheart" %% "ficus" % "1.2.6",
   "com.mohiva" %% "play-silhouette-testkit" % "4.0.0" % "test",
   "com.softwaremill.macwire" %% "macros" % "2.2.5",

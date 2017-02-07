@@ -28,7 +28,8 @@ object KeeperJsonSerializerRegistry extends JsonSerializerRegistry {
     JsonSerializer[UserDisabled],
     JsonSerializer[UserDeleted],
     JsonSerializer[TokenCreated],
-    JsonSerializer[TokenDeleted]
+    JsonSerializer[TokenDeleted],
+    JsonSerializer[UserActivated]
 
   )
 }

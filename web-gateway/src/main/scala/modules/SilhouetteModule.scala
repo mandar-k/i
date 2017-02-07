@@ -11,8 +11,7 @@ import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.daos.{DelegableAuthInfoDAO, InMemoryAuthInfoDAO}
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import com.softwaremill.macwire._
-import models.daos._
-import models.services.UserService
+import models.services.SilhouetteIdentityService
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.ceedubs.ficus.readers.EnumerationReader._
@@ -44,7 +43,7 @@ trait SilhouetteModule {
 
   def openIdClient: OpenIdClient
 
-  def userService: UserService
+  def silhouetteIdentityService: SilhouetteIdentityService
 
   lazy val oath1InfoDAO = new InMemoryAuthInfoDAO[OAuth1Info]
   lazy val oath2InfoDAO = new InMemoryAuthInfoDAO[OAuth2Info]
@@ -52,7 +51,6 @@ trait SilhouetteModule {
   lazy val passwordInfoDAO = new InMemoryAuthInfoDAO[PasswordInfo]
   lazy val jcaCookieSignerSettings = new JcaCookieSignerSettings("silhouette.oauth1TokenSecretProvider.cookie.signer")
   lazy val jcacookieSigner = new JcaCookieSigner(jcaCookieSignerSettings)
-  lazy val userDAO: UserDAO = wire[UserDAOImpl]
   lazy val crypter = new JcaCrypter(config)
   lazy val authenticatorEncoder = new Base64AuthenticatorEncoder()
   lazy val clock = Clock()
@@ -85,16 +83,16 @@ trait SilhouetteModule {
     def apply(fingerprintGenerator: FingerprintGenerator,cookieSigner: JcaCookieSigner,
                idGenerator: IDGenerator, authenticatorEncoder: AuthenticatorEncoder,
                clock: Clock, configuration: Configuration
-             ): AuthenticatorService[CookieAuthenticator] = {
-      val config = configuration.underlying.as[CookieAuthenticatorSettings]("silhouette.authenticator")
-      new CookieAuthenticatorService(config, None, cookieSigner,authenticatorEncoder,fingerprintGenerator, idGenerator, clock)
+             ): AuthenticatorService[JWTAuthenticator] = {
+      val config = configuration.underlying.as[JWTAuthenticatorSettings]("silhouette.jwt.authenticator")
+      new JWTAuthenticatorService(config, None,authenticatorEncoder, idGenerator, clock)
     }
   }
 
   object SilhouetteEnvironment {
     def apply(
-               userService: UserService,
-               authenticatorService: AuthenticatorService[CookieAuthenticator],
+               userService: SilhouetteIdentityService,
+               authenticatorService: AuthenticatorService[JWTAuthenticator],
                eventBus: EventBus
              ): Environment[DefaultEnv] = {
       Environment[DefaultEnv](userService, authenticatorService, Seq(), eventBus)

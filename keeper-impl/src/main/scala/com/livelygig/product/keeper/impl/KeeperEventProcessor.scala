@@ -25,8 +25,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
   private var deleteAuthKeyStatement: PreparedStatement = _
   private var deleteActivationToken: PreparedStatement = _
   private var insertUserPermissions: PreparedStatement = _
-  private var insertUsernameUserId: PreparedStatement = _
-  private var insertEmailUserId: PreparedStatement = _
+  private var insertUsernameUserUri: PreparedStatement = _
+  private var insertEmailUserUri: PreparedStatement = _
   private var insertUserRoles: PreparedStatement = _
   private var updateUserRoles: PreparedStatement = _
   private var updateUserPermissions: PreparedStatement = _
@@ -35,7 +35,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
     readSide.builder[KeeperEvent]("keeperEventOffset")
       .setGlobalPrepare(createTables)
       .setPrepare(tag => preparedStatements)
-      .setEventHandler[UserLogin](e => insertAuthToken(e.entityId, e.event.userLoginInfo))
+      // TODO generate and add auth key to db
+//      .setEventHandler[UserLogin](e => insertAuthToken(e.entityId, e.event.userLoginInfo))
       .setEventHandler[UserCreated](e => insertUserAuthDetails(e.entityId, e.event.user, e.event.activationToken))
       .setEventHandler[UserActivated](e => removeToken(e.event.tokenToDelete))
       //      .setEventHandler[TokenCreated](e => )
@@ -74,7 +75,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
           """)
       _ <- session.executeCreateTable(
         """
-          CREATE TABLE IF NOT EXISTS userIdByUsername (
+          CREATE TABLE IF NOT EXISTS userUriByUsername (
           username text,
           userUri text,
           PRIMARY KEY (username)
@@ -82,7 +83,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
         """)
       _ <- session.executeCreateTable(
         """
-          CREATE TABLE IF NOT EXISTS userIdByEmail (
+          CREATE TABLE IF NOT EXISTS userUriByEmail (
           email text,
           userUri text,
           PRIMARY KEY (email)
@@ -120,14 +121,14 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
         """
           INSERT INTO userActivationToken (userUri, activationToken) VALUES (?,?) USING TTL ?
         """)
-      insertUsernameAndUserId <- session.prepare(
+      insertUsernameAndUserUri <- session.prepare(
         """
-           INSERT INTO userIdByUsername (username, userUri) VALUES (?,?)
+           INSERT INTO userUriByUsername (username, userUri) VALUES (?,?)
         """
       )
-      insertEmailAndUserId <- session.prepare(
+      insertEmailAndUserUri <- session.prepare(
         """
-           INSERT INTO userIdByEmail (email, userUri) VALUES (?,?)
+           INSERT INTO userUriByEmail (email, userUri) VALUES (?,?)
         """
       )
       deleteActivation <- session.prepare(
@@ -139,22 +140,22 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
       insertUserRoles = insertRoles
       insertUserPermissions = insertPermissions
       insertAuthKeyStatement = insertAuthToken
-      insertEmailUserId = insertEmailAndUserId
-      insertUsernameUserId = insertUsernameAndUserId
+      insertEmailUserUri = insertEmailAndUserUri
+      insertUsernameUserUri = insertUsernameAndUserUri
       insertActivationTokenStatement = insertActivationToken
       deleteActivationToken = deleteActivation
       Done
     }
   }
 
-  private def insertUserAuthDetails(userId: String, user: User, activationToken: String) = {
+  private def insertUserAuthDetails(userUri: String, user: User, activationToken: String) = {
     Future.successful(
       List(
-        insertUserRoles.bind(userId, "USER"),
-        insertUserPermissions.bind(userId, "message.add"),
-        insertUsernameUserId.bind(user.userAuth.email, userId),
-        insertUsernameUserId.bind(user.userAuth.username, userId),
-        insertActivationTokenStatement.bind(userId, activationToken, activationTokenExpire.toInt.asInstanceOf[java.lang.Integer])
+        insertUserRoles.bind(userUri, "USER"),
+        insertUserPermissions.bind(userUri, "message.add"),
+        insertEmailUserUri.bind(user.userAuth.email, userUri),
+        insertUsernameUserUri.bind(user.userAuth.username, userUri),
+        insertActivationTokenStatement.bind(userUri, activationToken, activationTokenExpire.toInt.asInstanceOf[java.lang.Integer])
       ))
   }
 
@@ -162,9 +163,9 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
     Future.successful(List(deleteActivationToken.bind(tokenToRemove)))
   }
 
-  private def insertAuthToken(userID: String, userLoginInfo: UserLoginInfo) = {
+  private def insertAuthToken(userUri: String, userLoginInfo: UserLoginInfo) = {
     // FIXME type conversion from long to integer
-    Future.successful(List(insertAuthKeyStatement.bind(userID, userLoginInfo.authKeyGenerated, accessTokenExpire.toInt.asInstanceOf[java.lang.Integer])))
+    Future.successful(List(insertAuthKeyStatement.bind(userUri, userLoginInfo.authKeyGenerated, accessTokenExpire.toInt.asInstanceOf[java.lang.Integer])))
   }
 
   private def removeUser = ???
