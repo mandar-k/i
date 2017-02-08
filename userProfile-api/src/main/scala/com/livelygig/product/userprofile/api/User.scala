@@ -1,4 +1,4 @@
-package com.livelygig.product.user.api
+package com.livelygig.product.userprofile.api
 
 import java.util.UUID
 

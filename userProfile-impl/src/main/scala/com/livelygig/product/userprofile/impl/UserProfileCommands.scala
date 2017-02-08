@@ -1,9 +1,8 @@
-package com.livelygig.product.user.impl
+package com.livelygig.product.userprofile.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
-import com.livelygig.product.user.api.User
-import com.livelygig.product.utils.JsonFormats.singletonFormat
+import com.livelygig.product.userprofile.api.User
 import play.api.libs.json.{Format, Json}
 
 /**

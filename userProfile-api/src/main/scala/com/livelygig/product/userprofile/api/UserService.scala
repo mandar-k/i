@@ -1,4 +1,4 @@
-package com.livelygig.product.user.api
+package com.livelygig.product.userprofile.api
 
 import akka.NotUsed
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}

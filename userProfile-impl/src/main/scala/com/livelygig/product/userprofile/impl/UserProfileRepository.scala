@@ -1,21 +1,14 @@
-package com.livelygig.product.user.impl
+package com.livelygig.product.userprofile.impl
 
-
-import akka.Done
-import com.datastax.driver.core.{PreparedStatement, Row}
-import com.lightbend.lagom.scaladsl.api.transport.NotFound
-import com.lightbend.lagom.scaladsl.persistence.{ReadSide, ReadSideProcessor}
 import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, CassandraSession}
-import com.livelygig.product.user.api
-import com.livelygig.product.user.api.User
 
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by shubham.k on 21-12-2016.
   */
-private[impl] class UserRepository(session: CassandraSession)(implicit ec: ExecutionContext) {
-  def getUser(user: api.User) = {
+private[impl] class UserProfileRepository(session: CassandraSession)(implicit ec: ExecutionContext) {
+  /*def getUser(user: api.User) = {
     session.selectOne("SELECT * from users WHERE email = ? AND password = ?", user.email, user.password)
       .map {
         case Some(userRow) => getUserFromRow(userRow)
@@ -34,5 +27,5 @@ private[impl] class UserRepository(session: CassandraSession)(implicit ec: Execu
 
   def getUserFromRow(row: Row) = {
     api.User(row.getUUID("id"), row.getString("email"), "", row.getString("name"))
-  }
+  }*/
 }

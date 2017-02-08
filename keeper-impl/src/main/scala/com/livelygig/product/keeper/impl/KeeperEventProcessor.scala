@@ -104,6 +104,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
   }
 
   private def preparedStatements() = {
+//    session.
     for {
       insertRoles <- session.prepare(
         """

@@ -18,13 +18,5 @@ private[impl] class ContentRepository(session: CassandraSession)(implicit ec: Ex
 
   }*/
 
-  def convertMessage(item: Row) = {
-    Content(
-      id = item.getUUID("id"),
-      userId = item.getUUID("userId"),
-      content = item.getString("content"),
-      posttime = item.getTimestamp("timestamp") //.toInstant
-    )
-  }
 }
 

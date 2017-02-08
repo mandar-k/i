@@ -1,7 +1,7 @@
-package com.livelygig.product.user.impl
+package com.livelygig.product.userprofile.impl
 
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, AggregateEventTagger}
-import com.livelygig.product.user.api.User
+import com.livelygig.product.userprofile.api.User
 import play.api.libs.json.{Format, Json}
 
 /**

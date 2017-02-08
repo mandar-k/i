@@ -17,9 +17,9 @@ private[impl] class ContentEventProcessor(session: CassandraSession, readSide: C
 
   override def buildHandler() = {
     readSide.builder[ContentEvent]("MessageEventOffset")
-      .setGlobalPrepare(createTables)
-      .setPrepare(_ => preparedStatements())
-      .setEventHandler[ContentPosted](e => insertMessage(e.event.message))
+//      .setGlobalPrepare(createTables)
+//      .setPrepare(_ => preparedStatements())
+//      .setEventHandler[ContentPosted](e => insertMessage(e.event.message))
       .build
   }
 
@@ -53,6 +53,6 @@ private[impl] class ContentEventProcessor(session: CassandraSession, readSide: C
   }
 
   def insertMessage(message: Content) = {
-    Future.successful(List(insertMessageStatement.bind(message.userId, message.id, message.content, message.posttime)))
+    Future.successful(List(insertMessageStatement.bind(/*message.userId, message.id, */message.content, message.posttime)))
   }
 }

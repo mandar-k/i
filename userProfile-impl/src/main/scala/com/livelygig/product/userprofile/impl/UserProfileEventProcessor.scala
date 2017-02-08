@@ -1,17 +1,17 @@
-package com.livelygig.product.user.impl
+package com.livelygig.product.userprofile.impl
 
 import akka.Done
 import com.datastax.driver.core.PreparedStatement
 import com.lightbend.lagom.scaladsl.persistence.ReadSideProcessor
 import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, CassandraSession}
-import com.livelygig.product.user.api.User
+import com.livelygig.product.userprofile.api.User
 
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by shubham.k on 28-12-2016.
   */
-private[impl] class UserEventProcessor(session: CassandraSession, readSide: CassandraReadSide)(implicit ec: ExecutionContext)
+private[impl] class UserProfileEventProcessor(session: CassandraSession, readSide: CassandraReadSide)(implicit ec: ExecutionContext)
   extends ReadSideProcessor[UserEvent] {
   private var insertUserAuthStatement: PreparedStatement = null
 

@@ -1,13 +1,13 @@
-package com.livelygig.product.user.impl
+package com.livelygig.product.userprofile.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence._
-import com.livelygig.product.user.api.User
+import com.livelygig.product.userprofile.api.User
 
 /**
   * Created by shubham.k on 16-12-2016.
   */
-class UserEntity extends PersistentEntity{
+class UserProfileEntity extends PersistentEntity{
   override type Command = UserCommand
 
   override type Event = UserEvent

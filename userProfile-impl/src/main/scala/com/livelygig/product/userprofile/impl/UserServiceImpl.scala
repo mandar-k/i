@@ -1,4 +1,4 @@
-package com.livelygig.product.user.impl
+package com.livelygig.product.userprofile.impl
 
 import java.util.UUID
 
@@ -8,10 +8,10 @@ import com.lightbend.lagom.scaladsl.api.transport.Forbidden
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
-import com.livelygig.product.user.api.UserService
+import com.livelygig.product.userprofile.api.UserService
 
 import scala.concurrent.ExecutionContext
-class UserServiceImpl(registry: PersistentEntityRegistry,cassandraSession: CassandraSession, userRepository: UserRepository)(implicit ec: ExecutionContext, mat: Materializer) extends UserService {
+class UserServiceImpl(registry: PersistentEntityRegistry,cassandraSession: CassandraSession, userRepository: UserProfileRepository)(implicit ec: ExecutionContext, mat: Materializer) extends UserService {
 
 
   /*override def login = authenticated(userId => ServerServiceCall { user =>
@@ -39,5 +39,5 @@ class UserServiceImpl(registry: PersistentEntityRegistry,cassandraSession: Cassa
     refFor(user.email).ask(CreateUser(user.copy(id = userId))).map(_ => null)
   }
 
-  private def refFor(email:String) = registry.refFor[UserEntity](email)
+  private def refFor(email:String) = registry.refFor[UserProfileEntity](email)
 }

@@ -52,6 +52,7 @@ trait KeeperService extends Service {
 
   def keeperTopicProducer: Topic[KeeperEventsForTopics]
 
+
   def descriptor = {
     import Service._
     named("authorization").withCalls(

@@ -23,24 +23,30 @@ class ContentServiceImpl(registry: PersistentEntityRegistry,
                          analyser: ConstraintAnalyser)
                         (implicit ec: ExecutionContext, mat: Materializer) extends ContentService {
 
-  override def addMessage() =
-    ResourceServerSecurity.authenticated((authKey, rh) => ServerServiceCall { msg =>
-      analyser.hasRolesAndPermissions(List(Array(UserRole("user"))), UserPermission("add"), handler, rh)
-          .flatMap{ auth => auth match {
-            case true =>
-              val msgUid = UUID.randomUUID()
-              refFor(msgUid.toString).ask(AddContent(msg.copy(id = msgUid))).map { _ => null }
-            case false => throw Forbidden("Authorization failed")
-          }
-        }
-    })
+  override def addMessage() = ServiceCall {
+    content =>
+      val msgUid = UUID.randomUUID()
+      refFor(msgUid.toString).ask(AddContent(content)).map { _ => null }
+  }
 
- /* override def getLiveMessages() = ResourceServerSecurity.authenticated(userId => ServerServiceCall {
-    live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
-    })*/
- override def getLiveMessages() = /*ServerSecurity.authenticated( userId => ServerServiceCall {*/ServiceCall{
-   live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
- }
+  /*ResourceServerSecurity.authenticated((authKey, rh) => ServerServiceCall { msg =>
+    analyser.hasRolesAndPermissions(List(Array(UserRole("user"))), UserPermission("add"), handler, rh)
+        .flatMap{ auth => auth match {
+          case true =>
+            val msgUid = UUID.randomUUID()
+            refFor(msgUid.toString).ask(AddContent(msg)).map { _ => null }
+          case false => throw Forbidden("Authorization failed")
+        }
+      }
+  })*/
+
+  /* override def getLiveMessages() = ResourceServerSecurity.authenticated(userId => ServerServiceCall {
+     live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
+     })*/
+  override def getLiveMessages() = /*ServerSecurity.authenticated( userId => ServerServiceCall {*/ ServiceCall {
+    live => Future(msgPubSub.refFor("MESSAGE").subscriber)
+  }
+
   //)
 
 

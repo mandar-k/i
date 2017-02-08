@@ -28,7 +28,7 @@ class ContentEntity(msgPubSub: ContentPubSub)  extends PersistentEntity {
       case (AddContent(msg),ctx,state) => {
         ctx.thenPersist(ContentPosted(msg))(evt => {
           ctx.reply(Done)
-          msgPubSub.refFor(msg.userId.toString).publish(msg)
+          msgPubSub.refFor("MESSAGE").publish(msg)
         })
       }
     }

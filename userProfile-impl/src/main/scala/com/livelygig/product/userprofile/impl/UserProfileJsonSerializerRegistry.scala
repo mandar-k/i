@@ -1,8 +1,9 @@
-package com.livelygig.product.user.impl
-import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
-import com.livelygig.product.user.api.User
+package com.livelygig.product.userprofile.impl
 
-object UserJsonSerializerRegistry extends JsonSerializerRegistry {
+import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegistry}
+import com.livelygig.product.userprofile.api.User
+
+object UserProfileJsonSerializerRegistry extends JsonSerializerRegistry {
   override def serializers = List(
     JsonSerializer[User],
     JsonSerializer[LoginUser],
