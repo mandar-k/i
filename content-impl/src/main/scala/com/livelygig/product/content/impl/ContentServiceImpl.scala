@@ -2,16 +2,17 @@ package com.livelygig.product.content.impl
 
 import java.util.UUID
 
+import akka.actor.ActorSystem
+import akka.persistence.cassandra.query.scaladsl.CassandraReadJournal
+import akka.persistence.query.PersistenceQuery
 import akka.stream.Materializer
+import akka.stream.scaladsl.Sink
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.livelygig.product.keeper.api.models.{UserPermission, UserRole}
-import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, RequestHeader}
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.security.resource.ResourceServerSecurity
-import play.api.mvc.Request
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -20,35 +21,36 @@ class ContentServiceImpl(registry: PersistentEntityRegistry,
                          msgPubSub: ContentPubSub,
                          msgRepo: ContentRepository,
                          handler: ContentAuthHandler,
-                         analyser: ConstraintAnalyser)
+                         analyser: ConstraintAnalyser,
+                         system: ActorSystem)
                         (implicit ec: ExecutionContext, mat: Materializer) extends ContentService {
 
-  override def addMessage() = ServiceCall {
-    content =>
-      val msgUid = UUID.randomUUID()
-      refFor(msgUid.toString).ask(AddContent(content)).map { _ => null }
-  }
 
-  /*ResourceServerSecurity.authenticated((authKey, rh) => ServerServiceCall { msg =>
-    analyser.hasRolesAndPermissions(List(Array(UserRole("user"))), UserPermission("add"), handler, rh)
-        .flatMap{ auth => auth match {
-          case true =>
-            val msgUid = UUID.randomUUID()
-            refFor(msgUid.toString).ask(AddContent(msg)).map { _ => null }
-          case false => throw Forbidden("Authorization failed")
-        }
-      }
-  })*/
+  override def addMessage() = ResourceServerSecurity.authenticated((userUri, rh) => ServerServiceCall { content =>
+    val msgUid = UUID.randomUUID()
+    refFor(msgUid.toString).ask(AddContent(content)).map { _ => null }
+  })
 
-  /* override def getLiveMessages() = ResourceServerSecurity.authenticated(userId => ServerServiceCall {
-     live => Future(msgPubSub.refFor(live.userIds(0)).subscriber)
-     })*/
   override def getLiveMessages() = /*ServerSecurity.authenticated( userId => ServerServiceCall {*/ ServiceCall {
     live => Future(msgPubSub.refFor("MESSAGE").subscriber)
   }
 
   //)
-
+  //TODO make it user specific
+  override def getAllMessages() = ResourceServerSecurity.authenticated((userUri, rh) => ServerServiceCall { _ =>
+    val currentIdsQuery = PersistenceQuery(system).readJournalFor[CassandraReadJournal](CassandraReadJournal.Identifier)
+    currentIdsQuery.currentPersistenceIds()
+      .filter(_.startsWith("ContentEntity|"))
+      .mapAsync(4) { id =>
+        val entityId = id.split("\\|", 2).last
+        refFor(entityId)
+          .ask(GetContent)
+          .map(_.map(e => e))
+      }.collect {
+      case Some(content) => content
+    }
+      .runWith(Sink.seq)
+  })
 
   private def refFor(messageId: String) = registry.refFor[ContentEntity](messageId)
 }

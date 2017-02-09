@@ -42,6 +42,7 @@ GET         /webjars/*file                   controllers.WebJarAssets.at(file)
 # Messages
 
 POST    /addMessage                         controllers.MessageController.addMessage
+GET     /allMessages                        controllers.MessageController.getAllMessage
 
 # GET  /liveMsg                             controllers.MessageController.liveMsg
 

@@ -1,7 +1,7 @@
 package com.livelygig.product.content.impl
 
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, AggregateEventTagger}
-import com.livelygig.product.content.api.Content
+import com.livelygig.product.content.api.models.{UserContent}
 import play.api.libs.json.Json
 
 /**
@@ -16,7 +16,7 @@ object ContentEvent {
   val Tag = AggregateEventTag.sharded[ContentEvent](NumShards)
 }
 
-case class ContentPosted(message: Content) extends ContentEvent
+case class ContentPosted(content: UserContent) extends ContentEvent
 
 object ContentPosted {
   implicit val format = Json.format[ContentPosted]

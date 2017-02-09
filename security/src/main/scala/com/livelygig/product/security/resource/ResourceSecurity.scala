@@ -8,23 +8,23 @@ import com.lightbend.lagom.scaladsl.api.transport._
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 
 sealed trait UserPrincipal extends Principal {
-  val authKey: String
-  override def getName: String = authKey
+  val userUri: String
+  override def getName: String = userUri
   override def implies(subject: Subject): Boolean = false
 }
 
 object UserPrincipal {
-  case class ServicelessUserPrincipal(authKey: String) extends UserPrincipal
-  case class UserServicePrincipal(authKey: String, servicePrincipal: ServicePrincipal) extends UserPrincipal with ServicePrincipal {
+  case class ServicelessUserPrincipal(userUri: String) extends UserPrincipal
+  case class UserServicePrincipal(userUri: String, servicePrincipal: ServicePrincipal) extends UserPrincipal with ServicePrincipal {
     override def serviceName: String = servicePrincipal.serviceName
   }
 
-  def of(authKey: String, principal: Option[Principal]) = {
+  def of(userUri: String, principal: Option[Principal]) = {
     principal match {
       case Some(servicePrincipal: ServicePrincipal) =>
-        UserPrincipal.UserServicePrincipal(authKey, servicePrincipal)
+        UserPrincipal.UserServicePrincipal(userUri, servicePrincipal)
       case other =>
-        UserPrincipal.ServicelessUserPrincipal(authKey)
+        UserPrincipal.ServicelessUserPrincipal(userUri)
     }
   }
 }
@@ -32,15 +32,15 @@ object UserPrincipal {
 object SecurityHeaderFilter extends HeaderFilter {
   override def transformClientRequest(request: RequestHeader) = {
     request.principal match {
-      case Some(userPrincipal: UserPrincipal) => request.withHeader("X-Auth-Token", userPrincipal.authKey)
+      case Some(userPrincipal: UserPrincipal) => request.withHeader("userUri", userPrincipal.userUri)
       case other => request
     }
   }
 
   override def transformServerRequest(request: RequestHeader) = {
-    request.getHeader("X-Auth-Token") match {
-      case Some(token) =>
-        request.withPrincipal(UserPrincipal.of(token, request.principal))
+    request.getHeader("userUri") match {
+      case Some(userUri) =>
+        request.withPrincipal(UserPrincipal.of(userUri, request.principal))
       case None => request
     }
   }
@@ -60,7 +60,7 @@ object ResourceServerSecurity {
       val request = SecurityHeaderFilter.transformServerRequest(requestHeader)
       request.principal match {
         case Some(userPrincipal: UserPrincipal) =>
-          serviceCall(userPrincipal.authKey, requestHeader)
+          serviceCall(userPrincipal.userUri, requestHeader)
         case other =>
           throw Forbidden("User not authenticated")
       }
@@ -72,15 +72,9 @@ object ResourceClientSecurity {
   /**
     * Authenticate a resource client request.
     */
-  def authenticate(): RequestHeader => RequestHeader = { requestHeader =>
-
-    requestHeader.getHeader("X-Auth-Token") match {
-      case Some(token) =>
-          val requestWithPrincipal = requestHeader.withPrincipal(UserPrincipal.of(token, requestHeader.principal))
-          SecurityHeaderFilter.transformClientRequest(requestWithPrincipal)
-      case other =>
-          throw Forbidden("User not authenticated")
-    }
+  def authenticate(userUri: String): RequestHeader => RequestHeader = { requestHeader =>
+    val requestWithPrincipal = requestHeader.withPrincipal(UserPrincipal.of(userUri, requestHeader.principal))
+    SecurityHeaderFilter.transformClientRequest(requestWithPrincipal)
   }
 }
 

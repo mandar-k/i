@@ -1,8 +1,6 @@
 package com.livelygig.product.content.impl
 
-import com.datastax.driver.core.Row
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
-import com.livelygig.product.content.api.Content
 
 import scala.concurrent.ExecutionContext
 

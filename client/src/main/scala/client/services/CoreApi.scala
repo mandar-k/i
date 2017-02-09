@@ -30,11 +30,17 @@ object CoreApi {
   var CREATE_USER_REQUEST = "createUserRequest"
 
   def ajaxPost(requestContent: String, apiUrl : String): Future[String] = {
-       console.log("SignUpModel "+upickle.default.write(requestContent))
     Ajax.post(
       url = apiUrl,
       data =requestContent,
-      headers = Map("Content-Type" -> "application/json;charset=UTF-8")
+      headers = Map("Content-Type" -> "application/json;charset=UTF-8","X-Auth-Token" -> window.localStorage.getItem("X-Auth-Token"))
+    ).map(_.responseText)
+  }
+
+  def ajaxGet(url: String): Future[String] = {
+    Ajax.get(
+      url = url,
+      headers = Map("X-Auth-Token" -> window.localStorage.getItem("X-Auth-Token"))
     ).map(_.responseText)
   }
 
@@ -51,6 +57,14 @@ object CoreApi {
       url = "validateToken",
       headers = Map("X-Auth-Token" -> authToken)
     ).map(_.responseText)
+  }
+
+  def getAllMsg(): Future[String] = {
+    ajaxGet("allMessages")
+  }
+
+  def postMessage(content: String) = {
+    ajaxPost(content,"addMessage")
   }
 
 

@@ -1,5 +1,7 @@
 package client.modules
 
+import java.util.UUID
+
 import client.components.Bootstrap._
 import diode.react.ReactPot._
 import diode.react._
@@ -13,17 +15,20 @@ import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.handler.AddMessage
 import shared.models.{MessagePost, MessagePostContent}
 import client.modals.{NewMessage, ServerErrorModal}
-import client.services.LGCircuit
+import client.services.{CoreApi, LGCircuit}
 import japgolly.scalajs.react
 import org.querki.jquery._
 import org.scalajs.dom.raw.{Event, MessageEvent, WebSocket}
 import org.widok.moment.Moment
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
 import scala.language.existentials
 import scala.scalajs.js.JSON
 import diode.AnyAction._
+
+case class temp(pageOfPosts: String)
 
 object MessagesResults {
 
@@ -37,6 +42,14 @@ object MessagesResults {
 
   class Backend(t: BackendScope[Props, State]) {
     def mounted(props: Props): react.Callback = Callback {
+      CoreApi.getAllMsg().map{
+        msg =>
+          val messages = upickle.default.read[Seq[temp]](msg)
+          messages.foreach{msg =>
+            val msgUid = UUID.randomUUID().toString
+            LGCircuit.dispatch(AddMessage(MessagePost(uid = msgUid, postContent = MessagePostContent(text = msg.pageOfPosts))))
+          }
+      }
       val addTooltip: js.Object = ".DashBoardCSS_Style-btn"
       $(addTooltip).tooltip(PopoverOptions.html(true))
       val chat = new WebSocket("ws://localhost:9000/api/messages/live")
@@ -45,7 +58,8 @@ object MessagesResults {
       }
       chat.onmessage = { (event: MessageEvent) ⇒
         val msg = JSON.parse(event.data.toString)
-        LGCircuit.dispatch(AddMessage(MessagePost(uid = msg.selectDynamic("userId").toString, postContent = MessagePostContent(text = msg.selectDynamic("content").toString))))
+        val msgUid = UUID.randomUUID().toString
+        LGCircuit.dispatch(AddMessage(MessagePost(uid = msgUid, postContent = MessagePostContent(text = msg.selectDynamic("pageOfPosts").toString))))
       }
     }
 

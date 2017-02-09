@@ -1,7 +1,7 @@
 package client.modals
 
 import shared.models.{Label, MessagePostContent}
-import client.services.LGCircuit
+import client.services.{CoreApi, LGCircuit}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.OnUnmount
 import japgolly.scalajs.react.vdom.prefix_<^._
@@ -11,16 +11,19 @@ import client.components._
 import client.css.{DashBoardCSS, ProjectCSS}
 import client.modules.AppModule
 import japgolly.scalajs.react
+
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls
 import org.querki.jquery._
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils, LabelsUtils}
+
 import scala.scalajs.js
 import org.scalajs.dom.FileReader
 import org.scalajs.dom.raw.UIEvent
 import diode.AnyAction._
 
+case class test(pageOfPosts: String)
 object NewMessage {
   @inline private def bss = GlobalStyles.bootstrapStyles
 
@@ -145,8 +148,9 @@ object NewMessageForm {
       if ($(messageID).hasClass("disabled"))
         t.modState(s => s.copy(postNewMessage = false))
       else {
-        val cnxns = ConnectionsUtils.getCnxnForReq(ConnectionsSelectize.getConnectionsFromSelectizeInput(state.cnxsSelectizeParentId), AppModule.MESSAGES_VIEW)
-        ContentUtils.postLabelsAndMsg(getAllLabelsText, AppUtils.getPostData(state.postMessage, cnxns, labelsToPostMsg, AppModule.MESSAGES_VIEW))
+        /*val cnxns = ConnectionsUtils.getCnxnForReq(ConnectionsSelectize.getConnectionsFromSelectizeInput(state.cnxsSelectizeParentId), AppModule.MESSAGES_VIEW)
+        ContentUtils.postLabelsAndMsg(getAllLabelsText, AppUtils.getPostData(state.postMessage, cnxns, labelsToPostMsg, AppModule.MESSAGES_VIEW))*/
+        CoreApi.postMessage(upickle.default.write(test(state.postMessage.text)))
         t.modState(s => s.copy(postNewMessage = true))
       }
 

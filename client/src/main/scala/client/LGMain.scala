@@ -151,12 +151,15 @@ object LGMain extends js.JSApp {
     getToken match {
       case Some(token) => {
         CoreApi.validateToken(token).map{
-          _ => window.location.replace("/app#messages")
+          _ => {
+            window.localStorage.setItem("X-Auth-Token", token)
+            window.location.replace("/app#messages")
+          }
         }.recover{case _=>
-          Future.successful(window.location.href = "/signIn")
+          window.location.href = "/signIn"
       }
       }
-      case None => Future.successful(window.location.href = "/signIn")
+      case None => window.location.href = "/signIn"
     }
   }
 

@@ -4,8 +4,6 @@ import akka.Done
 import com.datastax.driver.core.PreparedStatement
 import com.lightbend.lagom.scaladsl.persistence.ReadSideProcessor
 import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, CassandraSession}
-import com.livelygig.product.content.api.Content
-
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
@@ -52,7 +50,7 @@ private[impl] class ContentEventProcessor(session: CassandraSession, readSide: C
     }
   }
 
-  def insertMessage(message: Content) = {
+  /*def insertMessage(message: PostContent) = {
     Future.successful(List(insertMessageStatement.bind(/*message.userId, message.id, */message.content, message.posttime)))
-  }
+  }*/
 }

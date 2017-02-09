@@ -50,7 +50,7 @@ lazy val clients = Seq(client)
 lazy val webGateway = (project in file("web-gateway"))
   .settings(commonSettings: _*)
   .enablePlugins(PlayScala && LagomPlay)
-  .dependsOn(userProfileApi, contentApi, security, emailnotificationsApi, keeperApi, aliasApi, connectionsApi)
+  .dependsOn(userProfileApi, contentApi, security, emailnotificationsApi, keeperApi, connectionsApi)
   .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
   .dependsOn(sharedJvm)
   .settings(
@@ -91,9 +91,9 @@ lazy val security = (project in file("security"))
 lazy val userProfileApi = (project in file("userProfile-api"))
   .settings(commonSettings: _*)
   .settings(
+    libraryDependencies ++= Settings.apiDependencies.value,
     libraryDependencies ++= Seq(
       lagomScaladslApi,
-      "org.julienrf" %% "play-json-derived-codecs" % "3.3",
       "be.objectify" %% "deadbolt-scala" % "2.5.1"
     )
   )
@@ -110,6 +110,7 @@ lazy val userProfileImpl = (project in file("userProfile-impl"))
 lazy val contentApi = (project in file("content-api"))
   .settings(commonSettings: _*)
   .settings(
+    libraryDependencies ++= Settings.apiDependencies.value,
     libraryDependencies ++= Seq(
       lagomScaladslApi
     )
@@ -129,6 +130,7 @@ lazy val contentImpl = (project in file("content-impl"))
 lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
   .settings(commonSettings: _*)
   .settings(
+    libraryDependencies ++= Settings.apiDependencies.value,
     libraryDependencies ++= Seq(
       lagomScaladslApi
     )
@@ -149,31 +151,10 @@ lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
   )
   .dependsOn(security)
 
-lazy val aliasApi = (project in file("alias-api"))
-  .settings(commonSettings: _*)
-  .settings(
-    libraryDependencies ++= Seq(
-      lagomScaladslApi
-    )
-  )
-  .dependsOn(security)
-
-lazy val aliasImpl = (project in file("alias-impl"))
-  .settings(commonSettings: _*)
-  .enablePlugins(LagomScala && SbtTwirl)
-  .dependsOn(aliasApi, security, keeperApi)
-  .settings(
-    libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslPersistenceCassandra,
-      lagomScaladslKafkaClient
-    )
-
-  )
-
 lazy val connectionsApi = (project in file("connections-api"))
   .settings(commonSettings: _*)
   .settings(
+    libraryDependencies ++= Settings.apiDependencies.value,
     libraryDependencies ++= Seq(
       lagomScaladslApi
     )
@@ -197,9 +178,9 @@ lazy val connectionsImpl = (project in file("connections-impl"))
 lazy val keeperApi = (project in file("keeper-api"))
   .settings(commonSettings: _*)
   .settings(
+    libraryDependencies ++= Settings.apiDependencies.value,
     libraryDependencies ++= Seq(
-      lagomScaladslApi,
-      "org.julienrf" %% "play-json-derived-codecs" % "3.3"
+      lagomScaladslApi
     )
   )
   .dependsOn(security)

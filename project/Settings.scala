@@ -87,10 +87,15 @@ object Settings {
     "org.webjars" % "bootstrap-datepicker" % "1.6.1" / "bootstrap-datepicker.js" minified "bootstrap-datepicker.min.js" dependsOn "bootstrap.js"
   ))
 
+  val apiDependencies = Def.setting(Seq(
+    "org.julienrf" %% "play-json-derived-codecs" % "3.3"
+  ))
+
   /*Dependency common to all api service implementation*/
   val apiImplDependencies = Def.setting(Seq(
     "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided",
     "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test",
     "org.julienrf" %% "play-json-derived-codecs" % "3.3"
   ))
+
 }

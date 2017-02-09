@@ -2,7 +2,7 @@ package com.livelygig.product.content.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence._
-import com.livelygig.product.content.api.Content
+import com.livelygig.product.content.api.models.UserContent
 
 /**
   * Created by shubham.k on 16-12-2016.
@@ -13,13 +13,13 @@ class ContentEntity(msgPubSub: ContentPubSub)  extends PersistentEntity {
 
   override type Event = ContentEvent
 
-  override type State = Option[Content]
+  override type State = Option[UserContent]
 
   override def initialState = None
 
   override def behavior = {
     case None => notCreated
-    case Some(message) => created
+    case Some(_) => created
   }
 
   private val notCreated = {
@@ -33,7 +33,7 @@ class ContentEntity(msgPubSub: ContentPubSub)  extends PersistentEntity {
       }
     }
       .onEvent{
-        case (ContentPosted(msg), state) => state}
+        case (ContentPosted(msg), state) => Some(msg)}
   }
 
   private val created = {
@@ -41,6 +41,11 @@ class ContentEntity(msgPubSub: ContentPubSub)  extends PersistentEntity {
       .onReadOnlyCommand[AddContent, Done] {
       case (AddContent(msg),ctx, _) => {
         ctx.invalidCommand("Error in posting the message.")
+      }
+    }
+      .onReadOnlyCommand[GetContent.type , Option[UserContent]] {
+      case (GetContent, ctx, state) => {
+        ctx.reply(state)
       }
     }
   }

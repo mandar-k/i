@@ -2,7 +2,7 @@ package com.livelygig.product.content.impl
 
 import akka.actor.ActorSystem
 import com.lightbend.lagom.scaladsl.pubsub.{PubSubComponents, TopicId}
-import com.livelygig.product.content.api.Content
+import com.livelygig.product.content.api.models.{ UserContent}
 
 /**
   * Created by shubham.k on 29-12-2016.
@@ -12,7 +12,7 @@ class ContentPubSub(actSys: ActorSystem) extends PubSubComponents {
   override def actorSystem = actSys
 
   def refFor (userId: String) = {
-    pubSubRegistry.refFor(TopicId[Content](topicQualifier(userId)))
+    pubSubRegistry.refFor(TopicId[UserContent](topicQualifier(userId)))
   }
 
   def topicQualifier (userId: String) = {

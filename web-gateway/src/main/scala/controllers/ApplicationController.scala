@@ -23,7 +23,7 @@ class ApplicationController(
                              socialProviderRegistry: SocialProviderRegistry,
                              implicit val webJarAssets: WebJarAssets)
                            (implicit val executionContext: ExecutionContext)
-  extends Controller with I18nSupport {
+  extends AbstractController() with I18nSupport {
 
   /**
     * Handles the index action.

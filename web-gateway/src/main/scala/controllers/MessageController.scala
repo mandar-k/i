@@ -2,32 +2,49 @@ package controllers
 
 import java.util.{Date, UUID}
 
-import com.livelygig.product.content.api.{Content, ContentService}
+import com.livelygig.product.content.api.ContentService
+import com.livelygig.product.content.api.models.UserContent
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.security.resource.ResourceClientSecurity
+import com.mohiva.play.silhouette.api.Silhouette
 import play.api.Environment
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.mvc._
+import utils.auth.DefaultEnv
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by shubham.k on 29-12-2016.
   */
-class MessageController(messageService: ContentService, emailService: EmailNotificationsService)(implicit env: Environment, ec: ExecutionContext) extends Controller{
-  def addMessage = Action.async { implicit rh =>
-        messageService.addMessage
-        //  .handleRequestHeader(ResourceClientSecurity.authenticate())
-          .invoke(rh.body.asJson.get.as[Content])
-          .map {
-            msg => Ok("")
+class MessageController(messageService: ContentService,
+                        emailService: EmailNotificationsService,
+                        silhouette: Silhouette[DefaultEnv]
+                       )(implicit env: Environment, ec: ExecutionContext) extends Controller {
+  def addMessage = silhouette.SecuredAction.async(parse.json) { request =>
+    request.body.validate[UserContent].map { model =>
+      messageService
+        .addMessage()
+        .handleRequestHeader(ResourceClientSecurity.authenticate(request.identity.userUri))
+        .invoke(model).map {
+        _ => Ok("Content posted successfully.")
+      }
+    }.recoverTotal { e =>
+      Future {
+        BadRequest("Detected error: " + JsError.toJson(e))
+      }
     }
   }
 
-  def liveMsg = ???/*WebSocket.acceptOrResult[JsValue, JsValue] {
-    implicit  request =>
-      messageService.getLiveMessages().invoke(LiveMessagesRequest(Seq(userID.toString))).map {
-        e => e.
+  def getAllMessage = silhouette.SecuredAction.async { implicit request =>
+    messageService
+      .getAllMessages()
+      .handleRequestHeader(ResourceClientSecurity.authenticate(request.identity.userUri))
+      .invoke()
+      .map {messages =>
+        Ok(Json.toJson(messages))
       }
-  }*/
+  }
+
+  def liveMsg = ???
 }
