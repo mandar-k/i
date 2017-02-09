@@ -3,9 +3,8 @@ package controllers
 import com.mohiva.play.silhouette.api.{LogoutEvent, Silhouette}
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{Action}
 import utils.auth.DefaultEnv
-
 import scala.concurrent.{ExecutionContext, Future}
 
 
