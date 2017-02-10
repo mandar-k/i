@@ -227,7 +227,7 @@ object LoggedInUser {
             )
           )
         } else {
-          <.div(AgentLoginSignUp(AgentLoginSignUp.Props()))
+          <.div("Sign Out Placeholder")
         }
       )
     })

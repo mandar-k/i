@@ -1,16 +1,18 @@
 package client.modules
 
+import java.util.UUID
 import client.services.LGCircuit
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
 import client.css.{DashBoardCSS, LftcontainerCSS}
-import client.handler.ShowServerError
+import client.handler.{AddMessage, ShowServerError}
 import client.modals.ServerErrorModal
+import client.modules.MessagesResults.LiveMessagesRequest
+import japgolly.scalajs.react
+import org.scalajs.dom.raw.{Event, MessageEvent, WebSocket}
+import shared.models.{MessagePost, MessagePostContent}
+import scala.scalajs.js.JSON
 import org.querki.jquery._
-
-//import client.handlers.{LogoutUser, ShowServerError}
-import org.querki.jquery._
-
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
 import diode.AnyAction._
@@ -72,9 +74,17 @@ object AppModule {
 
 
   case class Backend(t: BackendScope[Props, State]) {
-    def mounted(props: Props) = {
+    def mounted(props: Props) : react.Callback = Callback {
       showSidebar
-      //  LGCircuit.dispatch(ShowServerError(""))
+      val chat = new WebSocket("ws://localhost:9000/api/messages/live")
+      chat.onopen = { (event: Event) ⇒
+        chat.send(upickle.default.write(LiveMessagesRequest(Seq("850433a7-a84e-494a-8ea6-f12cac1c86a7"))))
+      }
+      chat.onmessage = { (event: MessageEvent) ⇒
+        val msg = JSON.parse(event.data.toString)
+        val msgUid = UUID.randomUUID().toString
+        LGCircuit.dispatch(AddMessage(MessagePost(uid = msgUid, postContent = MessagePostContent(text = msg.selectDynamic("pageOfPosts").toString))))
+      }
     }
 
     def serverError(showErrorModal: Boolean = false): Callback = {

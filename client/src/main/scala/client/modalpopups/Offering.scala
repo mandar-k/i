@@ -10,10 +10,7 @@ import client.components.Bootstrap._
 import client.components.GlobalStyles
 import client.components.Icon
 import client.components.Icon._
-import client.components._
-import client.css.{DashBoardCSS, HeaderCSS, ProjectCSS}
-
-import scala.util.{Failure, Success}
+import client.css.{DashBoardCSS}
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls

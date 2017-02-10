@@ -1,27 +1,11 @@
 package client.modalpopups
 
 import client.components.Icon
-import client.css.{DashBoardCSS, FooterCSS, WorkContractCSS}
-import japgolly.scalajs.react.vdom.prefix_<^._
-import client.modules.MainMenu.{Backend, State}
-import diode.react.ModelProxy
 import japgolly.scalajs.react._
-import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.prefix_<^._
-import client.handler.{LoginUser, LogoutUser}
-import client.LGMain._
-import client.components.Bootstrap.CommonStyle
-import client.modals.{AgentLoginSignUp, ConfirmIntroReq, Legal, NewMessage}
 import client.components._
-import client.css.{DashBoardCSS, FooterCSS, HeaderCSS, WorkContractCSS}
-import shared.models.UserModel
-import client.services.LGCircuit
-import shared.dtos._
+import client.css.{DashBoardCSS, FooterCSS, WorkContractCSS}
 import client.components.Bootstrap._
-import client.modals.TermsOfServices.State
-
-import scala.scalajs.js
-import scala.util._
 import scalacss.ScalaCssReact._
 import org.querki.jquery._
 

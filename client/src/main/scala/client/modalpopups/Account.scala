@@ -7,18 +7,15 @@ import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.OnUnmount
 import japgolly.scalajs.react.vdom.prefix_<^._
 import client.components.Bootstrap.{Button, CommonStyle, Modal, _}
-import client.components.{ConnectionsSelectize, GlobalStyles, Icon}
+import client.components.{ GlobalStyles, Icon}
 import client.components.Icon._
-import client.css.{DashBoardCSS, ProjectCSS, WorkContractCSS, _}
-import client.services.{CoreApi, LGCircuit, _}
+import client.css.{DashBoardCSS, WorkContractCSS, _}
 import japgolly.scalajs.react
-
-import scala.util.{Failure, Success}
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls
 import org.querki.jquery._
-import shared.dtos.{EstablishConnection, IntroConnections}
+
 
 // scalastyle:off
 object Account {

@@ -2,15 +2,12 @@ package client.modals
 
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.OnUnmount
-import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.prefix_<^._
-import client.LGMain.Loc
 import client.components.Bootstrap._
 import client.components.Icon
 import client.components.Icon._
 import client.components._
-import client.css.{ DashBoardCSS, HeaderCSS, ProjectCSS }
-import scala.util.{ Failure, Success }
+import client.css.{ DashBoardCSS, ProjectCSS }
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls

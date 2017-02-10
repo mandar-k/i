@@ -18,7 +18,7 @@ class EmailNotificationsImpl( val messagesApi: MessagesApi, mailerClient: Mailer
   override def sendEmail = ServiceCall{ s: String => Future{
     val email = Email(
       "Reset Password",
-      "Livelygig",
+      "Livelygig@mailinator.com",
       Seq("nirvanictest@mailinator.com"),
       bodyText = Some("A text message"),
       bodyHtml = Some(views.html.resetPassword("@livelygig.com").body )

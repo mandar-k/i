@@ -43,7 +43,7 @@ object Settings {
     "org.webjars" %% "webjars-play" % "2.5.0-2",
     "net.codingwell" %% "scala-guice" % "4.0.1",
     "com.iheart" %% "ficus" % "1.4.0",
-    "com.adrianhurt" %% "play-bootstrap" % "1.0-P25-B3",
+    "com.adrianhurt" % "play-bootstrap_2.11" % "1.1-P25-B3",
 
     ws,
     "org.asynchttpclient" % "async-http-client" % "2.0.4" force(),
@@ -84,7 +84,8 @@ object Settings {
     //    "org.webjars" % "chartjs" % Versions.chartjs / "Chart.js" minified "Chart.min.js",
     "org.webjars" % "log4javascript" % Versions.log4js / "js/log4javascript_uncompressed.js" minified "js/log4javascript.js" dependsOn "jquery.js",
     "org.webjars" % "selectize.js" % Versions.selectizejs / "js/standalone/selectize.js" minified "js/standalone/selectize.min.js" dependsOn "jquery.js",
-    "org.webjars" % "bootstrap-datepicker" % "1.6.1" / "bootstrap-datepicker.js" minified "bootstrap-datepicker.min.js" dependsOn "bootstrap.js"
+    "org.webjars" % "bootstrap-datepicker" % "1.6.1" / "bootstrap-datepicker.js" minified "bootstrap-datepicker.min.js" dependsOn "bootstrap.js",
+    "org.webjars.npm" % "validate.js" % Versions.validateJS / "validate.js" commonJSName "ValidateJS" dependsOn "jquery.js"
   ))
 
   val apiDependencies = Def.setting(Seq(

@@ -8,9 +8,8 @@ import client.components.Icon.Icon
 import client.components._
 import client.css.{DashBoardCSS, FooterCSS, HeaderCSS, ProjectCSS}
 import client.modules.AppModule
- import client.services.LGCircuit
+import client.services.LGCircuit
 import japgolly.scalajs.react
-
 import scala.util.{Failure, Success}
 import scalacss.ScalaCssReact._
 import scalacss.StyleA

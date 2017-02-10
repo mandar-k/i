@@ -6,7 +6,6 @@ import client.components.Bootstrap._
 import client.components._
 import client.css.DashBoardCSS
 import client.services.LGCircuit
-
 import scala.language.reflectiveCalls
 import scalacss.ScalaCssReact._
 import org.querki.jquery._

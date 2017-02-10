@@ -11,13 +11,11 @@ import client.components._
 import client.css.{DashBoardCSS, ProjectCSS}
 import client.modules.AppModule
 import japgolly.scalajs.react
-
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls
 import org.querki.jquery._
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils, LabelsUtils}
-
 import scala.scalajs.js
 import org.scalajs.dom.FileReader
 import org.scalajs.dom.raw.UIEvent

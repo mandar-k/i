@@ -3,9 +3,7 @@ package client.modules
 import java.util.UUID
 
 import client.components.Bootstrap._
-import diode.react.ReactPot._
 import diode.react._
-import diode.data.Pot
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB}
 import client.rootmodel.MessagesRootModel
 import japgolly.scalajs.react._
@@ -14,18 +12,14 @@ import client.components._
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.handler.AddMessage
 import shared.models.{MessagePost, MessagePostContent}
-import client.modals.{NewMessage, ServerErrorModal}
+import client.modals.{NewMessage}
 import client.services.{CoreApi, LGCircuit}
 import japgolly.scalajs.react
 import org.querki.jquery._
-import org.scalajs.dom.raw.{Event, MessageEvent, WebSocket}
-import org.widok.moment.Moment
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import scala.scalajs.js
 import scalacss.ScalaCssReact._
 import scala.language.existentials
-import scala.scalajs.js.JSON
 import diode.AnyAction._
 
 case class temp(pageOfPosts: String)
@@ -52,15 +46,6 @@ object MessagesResults {
       }
       val addTooltip: js.Object = ".DashBoardCSS_Style-btn"
       $(addTooltip).tooltip(PopoverOptions.html(true))
-      val chat = new WebSocket("ws://localhost:9000/api/messages/live")
-      chat.onopen = { (event: Event) ⇒
-        chat.send(upickle.default.write(LiveMessagesRequest(Seq("850433a7-a84e-494a-8ea6-f12cac1c86a7"))))
-      }
-      chat.onmessage = { (event: MessageEvent) ⇒
-        val msg = JSON.parse(event.data.toString)
-        val msgUid = UUID.randomUUID().toString
-        LGCircuit.dispatch(AddMessage(MessagePost(uid = msgUid, postContent = MessagePostContent(text = msg.selectDynamic("pageOfPosts").toString))))
-      }
     }
 
     def dropDownSelectAction(event: ReactEventI): Callback = {
@@ -179,14 +164,6 @@ object MessagesResults {
 
   def apply(proxy: ModelProxy[MessagesRootModel]) = component(Props(proxy))
 
-  /*private val component = ReactComponentB[Props]("Connection")
-    .initialState_P(p => State())
-    .renderBackend[Backend]
-    .componentDidMount(scope => scope.backend.mounted(scope.props))
-    .build
-
-
-  def apply(proxy: ModelProxy[ConnectionsRootModel]) = component(Props(proxy))*/
 }
 
 object MessagesList {

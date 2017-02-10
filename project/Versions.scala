@@ -16,6 +16,7 @@ trait ScalaJSVersions {
   val momentJSFacade = "0.1.5" //"0.1.4"//0.4.1
   val jQuery = "2.1.4"  //"1.11.1" //  "3.0.0",2.9.9,"3.1.1-1" not working
   val querkiJsext= "0.8"//0.7
+  val validateJS="0.9.0"
 
 }
 

@@ -166,5 +166,9 @@ height:100vh;
 .homePage{
 overflow:hidden
 }
-
+.terms_conditions{
+float: left;
+ margin-top: -42px;
+ margin-left: 15px;
+ }
 

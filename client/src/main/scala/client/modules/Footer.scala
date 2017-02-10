@@ -84,7 +84,8 @@ object Footer {
                 if (item.idx == 3) {
                   P.ctl.link(item.location)(FooterCSS.Style.footerNavA, " ", Icon.copyright, item.label(P))
                 } else if (item.idx == 2) {
-                  Legal(Legal.Props("Legal", Seq(), "", ""))
+                  /*Legal(Legal.Props("Legal", Seq(), "", ""))*/
+                  <.div("Legal")
                 } else {
                   P.ctl.link(item.location)(FooterCSS.Style.footerNavA, " ", item.label(P))
                 })

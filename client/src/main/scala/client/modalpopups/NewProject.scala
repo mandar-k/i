@@ -12,7 +12,6 @@ import client.css.{DashBoardCSS, HeaderCSS, ProjectCSS}
 import client.modules.AppModule
 import client.services.{CoreApi, LGCircuit}
 import japgolly.scalajs.react
-
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls
@@ -21,7 +20,6 @@ import shared.models.{ProjectPostContent, ProjectsPost}
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils}
 import diode.AnyAction._
 import org.querki.facades.bootstrap.datepicker._
-
 import scala.scalajs.js
 
 object NewProject {
