@@ -3,6 +3,7 @@ package com.livelygig.product.userprofile.impl
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
+import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.userprofile.api.UserService
 //import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.lightbend.lagom.scaladsl.server._
@@ -22,6 +23,8 @@ abstract class UserApplication(context: LagomApplicationContext)
   lazy val userRepository =wire[UserProfileRepository]
   persistentEntityRegistry.register(wire[UserProfileEntity])
   readSide.register(wire[UserProfileEventProcessor])
+  lazy val keeperService = serviceClient.implement[KeeperService]
+  wire[KeeperSubscriberForUserProfiles]
 }
 
 class UserApplicationLoader extends LagomApplicationLoader {

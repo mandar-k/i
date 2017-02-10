@@ -61,7 +61,7 @@ lazy val webGateway = (project in file("web-gateway"))
       Resolver.bintrayRepo("denigma", "denigma-releases")
     ),
 
-//    resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), //add resolver
+    //    resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), //add resolver
     libraryDependencies ++= Settings.jvmDependencies.value,
     libraryDependencies += lagomScaladslServer,
     commands += ReleaseCmd,
@@ -90,6 +90,7 @@ lazy val security = (project in file("security"))
 
 lazy val userProfileApi = (project in file("userProfile-api"))
   .settings(commonSettings: _*)
+  .dependsOn(security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiDependencies.value,
     libraryDependencies ++= Seq(
@@ -104,7 +105,7 @@ lazy val userProfileImpl = (project in file("userProfile-impl"))
   .dependsOn(userProfileApi, security)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies += lagomScaladslPersistenceCassandra/* exclude("io.netty", "netty")*/
+    libraryDependencies += lagomScaladslPersistenceCassandra /* exclude("io.netty", "netty")*/
   )
 
 lazy val contentApi = (project in file("content-api"))
@@ -139,13 +140,13 @@ lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
 
 lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
   .settings(commonSettings: _*)
-  .enablePlugins( LagomScala && SbtTwirl)
+  .enablePlugins(LagomScala && SbtTwirl)
   .dependsOn(emailnotificationsApi, security, keeperApi)
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies ++= Seq(
       "com.typesafe.play" %% "play-mailer" % "5.0.0",
-        lagomScaladslPersistenceCassandra,
+      lagomScaladslPersistenceCassandra,
       lagomScaladslKafkaClient
     )
   )
