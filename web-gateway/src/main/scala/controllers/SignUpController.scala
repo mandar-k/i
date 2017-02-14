@@ -38,6 +38,8 @@ class SignUpController @Inject() (
                                    implicit val webJarAssets: WebJarAssets)
   extends Controller with I18nSupport {
 
+
+
   /**
     * Views the `Sign Up` page.
     *
@@ -47,8 +49,16 @@ class SignUpController @Inject() (
     Future.successful(Ok(views.html.signUp(SignUpForm.form)))
   }
 
+  def termsAndServices=silhouette.UnsecuredAction.async {implicit request =>
+    Future.successful(Ok(views.html.termsAndServices()))
+  }
+  def policyAndPrivacy=silhouette.UnsecuredAction.async {implicit request =>
+    Future.successful(Ok(views.html.privacyAndPolicy()))
+  }
   /**
+    *
     * Handles the submitted form.
+    *
     *
     * @return The result to display.
     */

@@ -167,8 +167,22 @@ height:100vh;
 overflow:hidden
 }
 .terms_conditions{
-float: left;
- margin-top: -42px;
- margin-left: 15px;
+position : relative;
+top :-42px;
+left:20px;
  }
-
+.textAlignment{
+text-align:center;
+}
+div.help-block.with-errors{
+    height: 12px;
+    margin-left: 19px;
+    }
+ p#password-strength-text   {
+    height: 7px;
+    margin-bottom: 22px;
+    margin-top: -9px;
+    }
+    div.checkboxSignUp{
+     height:35px;
+     }

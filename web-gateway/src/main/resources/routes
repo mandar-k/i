@@ -6,6 +6,9 @@
 
 # Home page
 GET         /                                controllers.ApplicationController.index
+GET         /copyrights                      controllers.ApplicationController.copyrights
+GET         /about                           controllers.ApplicationController.aboutLivelyGig
+GET         /legal                           controllers.ApplicationController.legal
 
 GET         /app                             controllers.ApplicationController.app(x_auth_token: Option[String])
 GET         /validateToken                   controllers.ApplicationController.validateToken
@@ -14,6 +17,8 @@ GET         /authenticate/:provider          controllers.SocialAuthController.au
 
 GET         /signUp                          controllers.SignUpController.view
 POST        /signUp                          controllers.SignUpController.submit
+GET         /termsAndServices                controllers.SignUpController.termsAndServices
+GET         /policyAndPrivacy                controllers.SignUpController.policyAndPrivacy
 
 GET         /signIn                          controllers.SignInController.view
 POST        /signIn                          controllers.SignInController.submit

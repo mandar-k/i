@@ -32,7 +32,15 @@ class ApplicationController(
   def index() = Action.async { implicit request =>
     Future.successful(Ok(views.html.home()))
   }
-
+  def aboutLivelyGig() = Action.async { implicit request =>
+    Future.successful(Ok(views.html.aboutLivelyGig()))
+  }
+  def copyrights() = Action.async { implicit request =>
+    Future.successful(Ok(views.html.copyrights() ))
+  }
+  def legal() = Action.async { implicit request =>
+    Future.successful(Ok(views.html.legal()))
+  }
   def app(x_auth_token: Option[String]) = Action.async { implicit request =>
     Future.successful(Ok(views.html.app()))
   }
@@ -48,8 +56,6 @@ class ApplicationController(
   def validateToken = silhouette.SecuredAction.async { implicit request =>
     Future.successful(Ok("Validated"))
   }
-
-
   /**
     * Handles the Sign Out action.
     *

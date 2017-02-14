@@ -15,19 +15,19 @@
     <div  class="help-block with-errors"></div>
     }
     @passwordStrength(signUpForm("password"), '_hiddenLabel -> Messages("password"),'_label->"Password", 'placeholder -> Messages("password"), 'class -> "input-lg")
-    <div >
+    <div class="checkboxSignUp">
         @b3.checkbox( signUpForm("termsAndServices"), 'checked -> false)
-<span class="terms_conditions">
-        <a href="@routes.SignInController.view">@Messages("terms.of.service")</a> and <a href="@routes.SignInController.view">@Messages("privacy.policy")</a>
-</span>
+        <div class="terms_conditions">
+            <a href="@routes.SignUpController.termsAndServices">Terms And Conditions</a> and <a href="@routes.SignUpController.policyAndPrivacy"> Privacy Policy</a>
+        </div>
     </div>
+
     <div class="form-group" >
         <div>
             <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("sign.up")</button>
         </div>
     </div>
     <div class="sign-in-now">
-
         @Messages("already.a.member") <a href="@routes.SignInController.view">@Messages("sign.in.now")</a></input>
     </div>
 

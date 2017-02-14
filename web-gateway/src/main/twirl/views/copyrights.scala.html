@@ -1,0 +1,15 @@
+@()(implicit request: RequestHeader, messages: Messages, webJarAssets: WebJarAssets)
+@import helper._
+@import b3.inline.fieldConstructor
+
+@main(Messages("copyrights")) {
+<fieldset class="col-md-10 col-md-offset-1">
+    <legend>@Messages("copyrights")</legend>
+    <p class="textAlignment">
+        @Messages("copyrights.info")
+    </p>
+    <div >
+        <a class="btn btn-lg btn-primary col-xs-4 col-xs-offset-4 col-md-4 col-md-offset-4" href="@routes.SignUpController.view">OK</a>
+    </div>
+</fieldset>
+}
