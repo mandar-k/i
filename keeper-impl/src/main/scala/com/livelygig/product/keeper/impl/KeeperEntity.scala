@@ -1,18 +1,21 @@
 package com.livelygig.product.keeper.impl
 
+import java.net.URI
+import java.security.SecureRandom
 import java.util.{Date, UUID}
 
 import com.lightbend.lagom.scaladsl.persistence._
 import com.livelygig.product.keeper.api.models._
 import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.livelygig.product.keeper.impl.models.UserLoginInfo
+import com.livelygig.product.utils.TokenGenerator
 import org.joda.time.DateTime
 
 
 /**
   * Created by shubham.k on 10-01-2017.
   */
-class KeeperEntity extends PersistentEntity {
+class KeeperEntity(tokenGenerator: TokenGenerator) extends PersistentEntity {
 
   override type Command = KeeperCommand
 
@@ -37,8 +40,8 @@ class KeeperEntity extends PersistentEntity {
       case (CreateUser(user), ctx, _) =>
         // TODO use srp to secure the user login details
         // TODO create secure activation token
-        val activationToken = UUID.randomUUID().toString
-        ctx.thenPersist(UserCreated(user, activationToken))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse(""))))
+        val activationToken = tokenGenerator.generateMD5Token(user.userAuth.username)
+        ctx.thenPersist(UserCreated(user, activationToken))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse("Waiting for activation."))))
     }.onEvent {
       case (UserCreated(user, token), state) => {
         // TODO send activation email using email and notification service and

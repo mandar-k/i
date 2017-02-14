@@ -15,13 +15,14 @@ import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.livelygig.product.security.resource.ResourceServerSecurity
 import com.lightbend.lagom.scaladsl.broker.TopicProducer
 import com.livelygig.product.keeper.api
+import com.livelygig.product.utils.TokenGenerator
 
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by shubham.k on 09-01-2017.
   */
-class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRepository)(implicit ec: ExecutionContext) extends KeeperService {
+class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRepository, tokenGenerator: TokenGenerator)(implicit ec: ExecutionContext) extends KeeperService {
 
   // TODO read response message from conf file
 
@@ -63,11 +64,8 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
       reply <- userFromUserName match {
         case Some(u) => Future.successful(u)
         case None => {
-          val rand = SecureRandom.getInstanceStrong()
-          val bytes = new Array[Byte](20)
-          // Generate random Agent URI
-          rand.nextBytes(bytes)
-          val uri = new URI("agent://" + bytes.map("%02X" format _).mkString)
+          val agentUriToken = tokenGenerator.generateMD5Token(userModel.userAuth.email)
+          val uri = new URI("agent://" + agentUriToken)
           registry.refFor[KeeperEntity](uri.toString).ask(CreateUser(userModel))
         }
       }
@@ -88,7 +86,7 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     registry.eventStream(tag, offset)
       .filter {
         _.event match {
-          case x@(_: UserCreated) => true
+          case x@(_: UserCreated |_: UserActivated) => true
           case _ => false
         }
       }.mapAsync(1)(convertEvents)
@@ -100,7 +98,11 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     eventStreamElement match {
       case EventStreamElement(userUri, UserCreated(user, activationToken), offset) =>
         Future.successful {
-          (api.UserCreated(userUri, user.userAuth.email, user.userProfile, activationToken), offset)
+          (api.UserCreated(userUri, user.userAuth.email, user.userProfile, activationToken, user.userAuth.username), offset)
+        }
+      case EventStreamElement(userUri, UserActivated(_), offset) =>
+        Future.successful {
+          (api.UserActivated(userUri), offset)
         }
     }
   }

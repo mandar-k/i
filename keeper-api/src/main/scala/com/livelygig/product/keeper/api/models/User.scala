@@ -25,7 +25,7 @@ object UserAuth {
   implicit val format: Format[UserAuth] = Json.format
 }
 
-case class UserProfile(name: String, profilePic: String)
+case class UserProfile(name: String, avatar: String)
 
 object UserProfile {
   implicit val format: Format[UserProfile] = Json.format

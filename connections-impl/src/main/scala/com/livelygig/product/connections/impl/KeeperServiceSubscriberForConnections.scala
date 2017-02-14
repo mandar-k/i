@@ -12,8 +12,7 @@ import scala.concurrent.Future
 class KeeperServiceSubscriberForConnections(keeperService: KeeperService) {
   keeperService.keeperTopicProducer.subscribe.atLeastOnce(Flow[KeeperEventsForTopics].mapAsync(1) {
     case uc:api.UserCreated =>
-      // TODO create a default alias alias
-
+      // TODO create an entity for the connection
       Future.successful(Done)
     case _ =>
       Future.successful(Done)

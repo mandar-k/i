@@ -17,9 +17,7 @@ import com.livelygig.product.security.resource.ResourceServerSecurity
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContentServiceImpl(registry: PersistentEntityRegistry,
-                         cassandraSession: CassandraSession,
                          msgPubSub: ContentPubSub,
-                         msgRepo: ContentRepository,
                          handler: ContentAuthHandler,
                          analyser: ConstraintAnalyser,
                          system: ActorSystem)

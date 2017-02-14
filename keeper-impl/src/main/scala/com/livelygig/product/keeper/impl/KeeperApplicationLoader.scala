@@ -7,6 +7,7 @@ import com.lightbend.lagom.scaladsl.server._
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
 import com.livelygig.product.keeper.api.KeeperService
+import com.livelygig.product.utils.TokenGenerator
 import com.softwaremill.macwire._
 
 
@@ -23,7 +24,7 @@ abstract class KeeperApplication(context: LagomApplicationContext)
     bindService[KeeperService].to(wire[KeeperServiceImpl])
   )
   override lazy val jsonSerializerRegistry = KeeperJsonSerializerRegistry
-
+  lazy val tokenGenerator = wire[TokenGenerator]
   lazy val keeperRepo = wire[KeeperRepository]
   persistentEntityRegistry.register(wire[KeeperEntity])
   readSide.register(wire[KeeperEventProcessor])

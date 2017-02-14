@@ -17,7 +17,7 @@ trait ContentService extends Service {
       namedCall("/api/messages/add", addMessage _),
       namedCall("/api/messages/live", getLiveMessages _),
       namedCall("/api/messages/getAll", getAllMessages)
-    ).withAutoAcl(true)
+    ).withAutoAcl(true) // remove auto access control list
   }
 }
 

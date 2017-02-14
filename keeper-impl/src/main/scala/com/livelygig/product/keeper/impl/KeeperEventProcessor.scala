@@ -150,7 +150,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
   }
 
   private def insertUserAuthDetails(userUri: String, user: User, activationToken: String) = {
-    Future.successful(
+    Future(
       List(
         insertUserRoles.bind(userUri, "USER"),
         insertUserPermissions.bind(userUri, "message.add"),
@@ -161,12 +161,12 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
   }
 
   private def removeToken(tokenToRemove: String) = {
-    Future.successful(List(deleteActivationToken.bind(tokenToRemove)))
+    Future(List(deleteActivationToken.bind(tokenToRemove)))
   }
 
   private def insertAuthToken(userUri: String, userLoginInfo: UserLoginInfo) = {
     // FIXME type conversion from long to integer
-    Future.successful(List(insertAuthKeyStatement.bind(userUri, userLoginInfo.authKeyGenerated, accessTokenExpire.toInt.asInstanceOf[java.lang.Integer])))
+    Future(List(insertAuthKeyStatement.bind(userUri, userLoginInfo.authKeyGenerated, accessTokenExpire.toInt.asInstanceOf[java.lang.Integer])))
   }
 
   private def removeUser = ???

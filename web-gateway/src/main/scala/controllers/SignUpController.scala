@@ -61,7 +61,8 @@ class SignUpController @Inject() (
 //        val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
         val userName = data.email.split("@"){0}
         val userAuth = new UserAuth(userName, data.email, data.password)
-        val userProfile = new UserProfile("name","profilePic")
+        // TODO user profile required here?? I Guess not
+        val userProfile = UserProfile("","")
         val user = new User(userAuth, userProfile)
         keeperService.createUser.invoke(user).map {
           userAuthRes =>

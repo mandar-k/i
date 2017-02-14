@@ -11,10 +11,16 @@ sealed trait KeeperEventsForTopics {
   val userUri:String
 }
 
-case class UserCreated (userUri: String,email:String, userProfile: UserProfile, authToken: String) extends KeeperEventsForTopics
+case class UserCreated (userUri: String,email:String, userProfile: UserProfile, authToken: String, userName:String) extends KeeperEventsForTopics
 
 object UserCreated {
   implicit val format: Format[UserCreated] = Json.format
+}
+
+case class UserActivated (userUri: String) extends KeeperEventsForTopics
+
+object UserActivated {
+  implicit val format: Format[UserActivated] = Json.format
 }
 
 object KeeperEventsForTopics {

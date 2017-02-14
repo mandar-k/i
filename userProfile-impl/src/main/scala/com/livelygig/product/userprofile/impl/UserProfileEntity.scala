@@ -2,52 +2,71 @@ package com.livelygig.product.userprofile.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence._
-import com.livelygig.product.userprofile.api.User
+import com.livelygig.product.userprofile.api.models.UserProfileResponse
 
 /**
   * Created by shubham.k on 16-12-2016.
   */
-class UserProfileEntity extends PersistentEntity{
-  override type Command = UserCommand
+class UserProfileEntity extends PersistentEntity {
 
-  override type Event = UserEvent
+  override type Command = UserProfileCommand
 
-  override type State = Option[User]
+  override type Event = UserProfileEvent
 
-  override def initialState = None
+  override type State = UserProfileState
+
+  override def initialState = UserProfileState.initialState
 
   override def behavior = {
-    case None => noUser
-    case Some(user) => userFound
+    case UserProfileState(_, UserProfileStatus.DoesNotExist) => doesNotExists
+    case UserProfileState(Some(_), UserProfileStatus.Activated) => userActivated
+    case UserProfileState(Some(_), UserProfileStatus.NotActivated) => userNotActivated
+    case UserProfileState(Some(_), UserProfileStatus.Disabled) => userDisabled
+    case UserProfileState(Some(_), UserProfileStatus.Deleted) => userDeleted
+
   }
 
-  private val noUser = {
+  def doesNotExists = {
     Actions()
-      .onReadOnlyCommand[LoginUser, Option[User]] {
-      case (LoginUser(user), ctx, state) => ctx.invalidCommand("User Does not exist.")
-    }
-      .onCommand[CreateUser, Done] {
-      case (CreateUser(user), ctx, state) =>{
-        ctx.thenPersist(UserCreated(user))(_ => ctx.reply(Done))
+      .onCommand[CreateProfile, Done] {
+      case (CreateProfile(user), ctx, _) =>
+        ctx.thenPersist(UserProfileCreated(user))(_ => ctx.reply(Done))
+    }.onEvent {
+      case (UserProfileCreated(user), state) => {
+        state.copy(state = Some(user)).changeStatus(UserProfileStatus.NotActivated)
       }
     }
-      .onEvent{
-        case (UserCreated(user), state) => Some(user)
+  }
+
+  def userActivated = {
+    Actions()
+      .onCommand[CreateProfile, Done] {
+      case (CreateProfile(user), ctx, _) =>
+        ctx.thenPersist(UserProfileCreated(user))(_ => ctx.reply(Done))
+    }
+      .onReadOnlyCommand[GetProfile.type, UserProfileResponse] {
+      case (GetProfile,ctx, state) => {
+        ctx.reply(UserProfileResponse("userProfileResponse",state.state.get))
+      }
+    }
+      .onEvent {
+        case (UserProfileCreated(user), state) => {
+          state.copy(state = Some(user)).changeStatus(UserProfileStatus.NotActivated)
+        }
       }
   }
 
-  private val userFound = {
+  def userNotActivated = {
     Actions()
-      .onReadOnlyCommand[CreateUser, Done] {
-      case (_, ctx, _) => ctx.invalidCommand("This email is already registered.")
+      .onCommand[ActivateUserProfile.type, Done] {
+      case (ActivateUserProfile, ctx, _) => ctx.thenPersist(UserProfileActivated)(_ => ctx.reply(Done))
     }
-      .onReadOnlyCommand[LoginUser , Option[User]] {
-      case (LoginUser(user), ctx, state) =>
-        if (state.get.password == user.password)
-          ctx.reply(state)
-
-        else
-          ctx.invalidCommand("Authorization failed.")
-    }
+      .onEvent {
+        case (UserProfileActivated, state) => state.copy(userStatus = UserProfileStatus.Activated)
+      }
   }
+
+  def userDisabled = ???
+
+  def userDeleted = ???
 }
