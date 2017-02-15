@@ -1,15 +1,12 @@
 package controllers
 
-import java.util.{Date, UUID}
-
 import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.content.api.models.UserContent
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.security.resource.ResourceClientSecurity
 import com.mohiva.play.silhouette.api.Silhouette
 import play.api.Environment
-import play.api.libs.json.{JsError, JsValue, Json}
-import play.api.mvc._
+import play.api.libs.json.{JsError, Json}
 import utils.auth.DefaultEnv
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -20,7 +17,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class MessageController(messageService: ContentService,
                         emailService: EmailNotificationsService,
                         silhouette: Silhouette[DefaultEnv]
-                       )(implicit env: Environment, ec: ExecutionContext) extends Controller {
+                       )(implicit ec: ExecutionContext) extends AbstractController() {
   def addMessage = silhouette.SecuredAction.async(parse.json) { request =>
     request.body.validate[UserContent].map { model =>
       messageService
@@ -41,7 +38,7 @@ class MessageController(messageService: ContentService,
       .getAllMessages()
       .handleRequestHeader(ResourceClientSecurity.authenticate(request.identity.userUri))
       .invoke()
-      .map {messages =>
+      .map { messages =>
         Ok(Json.toJson(messages))
       }
   }

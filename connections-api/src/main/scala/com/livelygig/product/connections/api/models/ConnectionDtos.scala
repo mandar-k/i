@@ -14,7 +14,7 @@ object ErrorResponse {
   implicit val format: Format[ErrorResponse] = Json.format
 }
 
-case  class Connections(connections:Seq[Connection] ) extends Content
+case  class UserAliasConnectionsList(connections:Seq[Connection] ) extends Content
 
 object ConnectionResponse {
   implicit val format: Format[ConnectionResponse] = Json.format
@@ -28,10 +28,16 @@ object NewConnectionResponse {
   implicit val format: Format[NewConnectionResponse] = Json.format
 }
 
-case class NewConnectionRequest(connectionAUri: String, connectionBUri: String)
+case class NewConnectionRequest(aliasUriConnectionA: String, aliasUriConnectionB: String)
 
 object NewConnectionRequest {
   implicit val format: Format[NewConnectionRequest] = Json.format
+}
+
+case class GetConnectionsRequest(aliasName: String)
+
+object GetConnectionsRequest {
+  implicit val format: Format[GetConnectionsRequest] = Json.format
 }
 
 sealed trait Content {}

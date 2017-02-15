@@ -1,12 +1,14 @@
+
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.api.{ServiceAcl, ServiceInfo}
 import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
+import com.livelygig.product.connections.api.ConnectionsService
 import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.keeper.api.KeeperService
+import com.livelygig.product.userprofile.api.UserProfileService
 import models.services.SilhouetteIdentityServiceImpl
-//import com.livelygig.product.keeper.api.KeeperService
 import com.mohiva.play.silhouette.api.{Silhouette, SilhouetteProvider}
 import play.api.i18n.I18nComponents
 import controllers.ActivateAccountController
@@ -24,6 +26,7 @@ import controllers.MessageController
 import controllers.SignInController
 import controllers.SignUpController
 import controllers.SocialAuthController
+import controllers.UserController
 import controllers.WebJarAssets
 import modules.SilhouetteModule
 import play.api.ApplicationLoader.Context
@@ -59,15 +62,23 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   }
   implicit val env = context.environment
 
+  // services
   lazy val messageServiceImpl = serviceClient.implement[ContentService]
   lazy val emailNotificationImpl = serviceClient.implement[EmailNotificationsService]
   lazy val keeperService = serviceClient.implement[KeeperService]
+  lazy val userProfileService = serviceClient.implement[UserProfileService]
+  lazy val connectionService = serviceClient.implement[ConnectionsService]
+
+  // controllers
   lazy val signupController: SignUpController = wire[SignUpController]
   lazy val signinController: SignInController = wire[SignInController]
   lazy val messageController = wire[MessageController]
   lazy val emailNotificationController = wire[EmailNotificationController]
   lazy val activateAccountController: ActivateAccountController = wire[ActivateAccountController]
   lazy val applicationController: ApplicationController = wire[ApplicationController]
+  lazy val userController: UserController = wire[UserController]
+
+  // silhouette service
   lazy val silhouetteIdentityService = wire[SilhouetteIdentityServiceImpl]
 
 }

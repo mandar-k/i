@@ -27,6 +27,17 @@ object UserProfile {
   implicit val format: Format[UserProfile] = Json.format
 }
 
+case class UserConnectionProfile(aliasUri: String, name: Option[String], avatar: Option[String])
+
+object UserConnectionProfile{
+  implicit val format: Format[UserConnectionProfile] = Json.format
+}
+case class ProfileListResponse(profileList: Seq[UserConnectionProfile]) extends Content
+
+object ProfileListResponse {
+  implicit val format: Format[ProfileListResponse] = Json.format
+}
+
 case class UserAlias (name:String, isDefault: Boolean)
 
 object UserAlias {

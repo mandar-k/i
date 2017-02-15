@@ -2,7 +2,7 @@ package com.livelygig.product.connections.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence._
-import com.livelygig.product.connections.api.models.{Connection, ConnectionResponse, ConnectionStatus, NewConnectionResponse}
+import com.livelygig.product.connections.api.models._
 
 /**
   * Created by shubham.k on 16-12-2016.
@@ -28,7 +28,12 @@ class ConnectionsEntity extends PersistentEntity {
         // TODO had to be replaced according to the introduction protocol
         val newConnection = Connection(newConnectionUri,ConnectionStatus.Connected)
         ctx.thenPersist(ConnectionAdded(newConnection))(_ => ctx.reply(Done))
-    }.onEvent{
+    }
+        .onReadOnlyCommand[GetConnections.type , ConnectionResponse] {
+      case (GetConnections, ctx, state) =>
+        ctx.reply(ConnectionResponse("connectionResponse", UserAliasConnectionsList(state.connectionsAliasUri)))
+    }
+      .onEvent{
       case (ConnectionAdded(newConnection), state) => {
         val connectionList = state.connectionsAliasUri :+ newConnection
         state.copy(connectionsAliasUri = connectionList)
