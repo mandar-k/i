@@ -10,7 +10,7 @@ import client.modals.ServerErrorModal
 import client.modules.MessagesResults.LiveMessagesRequest
 import japgolly.scalajs.react
 import org.scalajs.dom.raw.{Event, MessageEvent, WebSocket}
-import shared.models.{MessagePost, MessagePostContent}
+import com.livelygig.product.shared.models.{MessagePost, MessagePostContent}
 import scala.scalajs.js.JSON
 import org.querki.jquery._
 import scala.scalajs.js

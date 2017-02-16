@@ -3,8 +3,8 @@ package client.utils
 import client.UnitTest
 import client.mockdata.MockData
 import client.services.LGCircuit
-import shared.dtos._
-import shared.models.MessagePost
+import com.livelygig.product.shared.dtos._
+import com.livelygig.product.shared.models.MessagePost
 
 /**
   * Created by shubham.k on 14-09-2016.

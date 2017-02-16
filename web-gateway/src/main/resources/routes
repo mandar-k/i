@@ -11,7 +11,6 @@ GET         /about                           controllers.ApplicationController.a
 GET         /legal                           controllers.ApplicationController.legal
 
 GET         /app                             controllers.ApplicationController.app(x_auth_token: Option[String])
-GET         /validateToken                   controllers.ApplicationController.validateToken
 GET         /signOut                         controllers.ApplicationController.signOut
 GET         /authenticate/:provider          controllers.SocialAuthController.authenticate(provider)
 

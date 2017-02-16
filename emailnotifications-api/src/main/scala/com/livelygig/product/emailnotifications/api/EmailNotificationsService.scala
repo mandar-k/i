@@ -14,7 +14,6 @@ trait EmailNotificationsService extends Service {
     import Service._
     named("emailnotifications").withCalls(
       namedCall("/api/emails/send", sendEmail _)
-//      namedCall("/api/notifications/send", sendNotifications _)
-    ).withAutoAcl(true)
+    )
   }
 }

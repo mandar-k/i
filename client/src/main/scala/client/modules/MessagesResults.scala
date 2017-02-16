@@ -11,7 +11,7 @@ import japgolly.scalajs.react.vdom.prefix_<^._
 import client.components._
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.handler.AddMessage
-import shared.models.{MessagePost, MessagePostContent}
+import com.livelygig.product.shared.models.{MessagePost, MessagePostContent}
 import client.modals.{NewMessage}
 import client.services.{CoreApi, LGCircuit}
 import japgolly.scalajs.react

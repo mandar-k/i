@@ -1,7 +1,7 @@
 package client.rootmodel
 
-import shared.dtos.Connection
-import shared.models.ConnectionsModel
+import com.livelygig.product.shared.dtos.Connection
+import com.livelygig.product.shared.models.ConnectionsModel
 
 // scalastyle:off
 case class ConnectionsRootModel(connectionsResponse: Seq[ConnectionsModel]) {

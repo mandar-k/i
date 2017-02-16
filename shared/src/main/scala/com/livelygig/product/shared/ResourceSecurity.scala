@@ -1,11 +1,7 @@
-package com.livelygig.product.security.resource
+package com.livelygig.product.shared
 
 import java.security.Principal
 import javax.security.auth.Subject
-
-import com.lightbend.lagom.scaladsl.api.security.ServicePrincipal
-import com.lightbend.lagom.scaladsl.api.transport._
-import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 
 sealed trait UserPrincipal extends Principal {
   val userUri: String
@@ -77,12 +73,3 @@ object ResourceClientSecurity {
     SecurityHeaderFilter.transformClientRequest(requestWithPrincipal)
   }
 }
-
-object AuthClientSecurity {
-  /**
-    * Authenticate a request from the resource service
-    */
-}
-
-
-

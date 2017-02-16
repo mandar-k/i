@@ -8,7 +8,7 @@ import japgolly.scalajs.react.vdom.prefix_<^._
 import org.denigma.selectize._
 import org.querki.jquery._
 import org.scalajs.dom._
-import shared.dtos.Connection
+import com.livelygig.product.shared.dtos.Connection
 
 import scala.language.existentials
 import scala.collection.mutable.ListBuffer

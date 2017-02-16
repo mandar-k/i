@@ -1,6 +1,6 @@
-package shared
+package com.livelygig.product.shared
 
-import shared.dtos.ServerModel
+import com.livelygig.product.shared.dtos.ServerModel
 
 /**
   * Created by shubham.k on 27-09-2016.

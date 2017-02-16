@@ -2,7 +2,7 @@ package client.handler
 
 import diode.data.{Empty, Pot, PotActionRetriable}
 import client.rootmodel.ProfilesRootModel
-import shared.models.{MessagePost, ProfilesPost}
+import com.livelygig.product.shared.models.{MessagePost, ProfilesPost}
 import client.modules.AppModule
 import diode.{ActionHandler, ActionResult, ModelRW}
 import org.scalajs.dom.window

@@ -15,7 +15,7 @@ import scalacss.ScalaCssReact._
 import scalacss.StyleA
 import scala.language.reflectiveCalls
 import org.querki.jquery._
-import shared.models.ProfilePostContent
+import com.livelygig.product.shared.models.ProfilePostContent
 import client.sessionitems.SessionItems
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils, LabelsUtils}
 import diode.AnyAction._

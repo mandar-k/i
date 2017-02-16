@@ -1,6 +1,6 @@
 package client.rootmodel
 
-import shared.dtos.Introduction
+import com.livelygig.product.shared.dtos.Introduction
 
 /**
   * Created by mandar.k on 7/19/2016.

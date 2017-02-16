@@ -1,7 +1,7 @@
 package client.rootmodel
 
-import shared.dtos.Connection
-import shared.models.Label
+import com.livelygig.product.shared.dtos.Connection
+import com.livelygig.product.shared.models.Label
 
 // scalastyle:off
 case class SearchesRootModel(searchesModel: Seq[Label],

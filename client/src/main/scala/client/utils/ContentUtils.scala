@@ -6,8 +6,8 @@ import client.modules.AppModule
 import client.services.{CoreApi,CoreApiOld, LGCircuit}
 import diode.AnyAction._
 import org.widok.moment.Moment
-import shared.dtos._
-import shared.models._
+import com.livelygig.product.shared.dtos._
+import com.livelygig.product.shared.models._
 
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.util.{Failure, Success, Try}

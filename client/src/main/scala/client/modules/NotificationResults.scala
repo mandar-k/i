@@ -8,10 +8,10 @@ import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB}
 import client.components.Icon
 import client.css.{DashBoardCSS}
 import client.handler.UpdateIntroductionsModel
-import shared.models.ConnectionsModel
+import com.livelygig.product.shared.models.ConnectionsModel
 import client.services.LGCircuit
 import org.querki.jquery._
-import shared.dtos.{IntroConfirmReq, Introduction}
+import com.livelygig.product.shared.dtos.{IntroConfirmReq, Introduction}
 import diode.AnyAction._
 import scala.scalajs.js
 import scala.scalajs.js.JSON

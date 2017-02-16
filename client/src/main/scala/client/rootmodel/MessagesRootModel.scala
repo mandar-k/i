@@ -1,6 +1,6 @@
 package client.rootmodel
 
-import shared.models.MessagePost
+import com.livelygig.product.shared.models.MessagePost
 
 case class MessagesRootModel(messagesModelList: Seq[MessagePost]) {
   def updated(newMessagesResponse: MessagePost): MessagesRootModel = {

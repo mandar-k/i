@@ -1,6 +1,6 @@
 package client.modals
 
-import shared.models.{Label, MessagePostContent}
+import com.livelygig.product.shared.models.{Label, MessagePostContent}
 import client.services.{CoreApi, LGCircuit}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.OnUnmount

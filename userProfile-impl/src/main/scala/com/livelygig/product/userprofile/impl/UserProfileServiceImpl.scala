@@ -2,7 +2,7 @@ package com.livelygig.product.userprofile.impl
 
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
-import com.livelygig.product.security.resource.ResourceServerSecurity
+import com.livelygig.product.shared.ResourceServerSecurity
 import com.livelygig.product.userprofile.api.UserProfileService
 import com.livelygig.product.userprofile.api.models.{ProfileListResponse, UserConnectionProfile, UserProfile, UserProfileResponse}
 

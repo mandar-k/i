@@ -2,7 +2,7 @@ package client.modules
 
 import client.rootmodel.ProjectsRootModel
 import client.css._
-import shared.models.ProjectsPost
+import com.livelygig.product.shared.models.ProjectsPost
 import client.components.Bootstrap._
 import diode.react.ReactPot._
 import diode.react._

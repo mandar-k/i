@@ -3,7 +3,7 @@ package client.modules
 import client.components.Bootstrap._
 import japgolly.scalajs.react.{BackendScope, Callback, ReactComponentB}
 import client.rootmodel.ConnectionsRootModel
-import shared.models.{ConnectionsModel}
+import com.livelygig.product.shared.models.{ConnectionsModel}
 import client.components.Icon
 import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.modals.{NewConnection, NewMessage, NewRecommendation}

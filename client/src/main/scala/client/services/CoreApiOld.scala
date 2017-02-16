@@ -2,7 +2,7 @@ package client.services
 
 import client.dtos.{SignUpModel, UserModel}
 import client.facades.SRPClient
-import shared.dtos._
+import com.livelygig.product.shared.dtos._
 import org.scalajs.dom._
 import upickle.default._
 
@@ -12,10 +12,11 @@ import scala.scalajs.js.{Date, JSON}
 import scala.util.{Failure, Success, Try}
 import scala.language.postfixOps
 import org.scalajs.dom.ext.Ajax
-import shared.models.EmailValidationModel
+import com.livelygig.product.shared.models.EmailValidationModel
 import client.sessionitems.SessionItems
 import client.modules.ConnectionList
 import client.utils.{ConnectionsUtils, LabelsUtils}
+import com.livelygig.product.shared.{ApiDto, Content, EstablishConnection, SessionPing}
 
 case class ApiError(response: String) extends Exception
 
@@ -43,14 +44,14 @@ object CoreApiOld {
 
   def createUser(signUpModel: SignUpModel): Future[String] = {
     val srpc = new SRPClient(signUpModel.email, signUpModel.password)
-    val requestContent1 = upickle.default.write(ApiRequest(ApiTypes.requestTypes.CREATE_USER_STEP1_REQUEST,
+    val requestContent1 = upickle.default.write(ApiDto(ApiTypes.requestTypes.CREATE_USER_STEP1_REQUEST,
       CreateUserStep1(signUpModel.email)))
     val futureResponse = for {
       requestContent2 <- ajaxPost(requestContent1).map {
         response =>
           Try(upickle.default.read[ApiResponse[CreateUserStep1Response]](response)) toOption match {
             case None => throw new ApiError(response)
-            case Some(rsp) => upickle.default.write(ApiRequest(ApiTypes.requestTypes.CREATE_USER_STEP2_REQUEST,
+            case Some(rsp) => upickle.default.write(ApiDto(ApiTypes.requestTypes.CREATE_USER_STEP2_REQUEST,
               CreateUserStep2(signUpModel.email, Map("name" -> signUpModel.name),
                 true, rsp.content.salt, srpc.getVerifierHex(rsp.content.salt))))
           }
@@ -60,12 +61,12 @@ object CoreApiOld {
 
     futureResponse.recover {
       case ae: ApiError => ae.response
-      case e: Throwable => upickle.default.write(ApiRequest(ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR, ErrorResponse(e.getMessage)))
+      case e: Throwable => upickle.default.write(ApiDto(ApiTypes.responseTypes.API_HOST_UNREACHABLE_ERROR, ErrorResponse(e.getMessage)))
     }
   }
 
   def emailValidation(emailValidationModel: EmailValidationModel): Future[String] = {
-    val requestContent = upickle.default.write(ApiRequest(ApiTypes.requestTypes.CONFIRM_EMAIL, ConfirmEmail(emailValidationModel.token)))
+    val requestContent = upickle.default.write(ApiDto(ApiTypes.requestTypes.CONFIRM_EMAIL, ConfirmEmail(emailValidationModel.token)))
     ajaxPost(requestContent)
   }
 
@@ -109,19 +110,19 @@ object CoreApiOld {
 //  }
 
   def sessionPing(uri: String): Future[String] = {
-    val requestContent = upickle.default.write(ApiRequest(ApiTypes.requestTypes.SESSION_PING, SessionPing(uri)))
+    val requestContent = upickle.default.write(ApiDto(ApiTypes.requestTypes.SESSION_PING, SessionPing(uri)))
     ajaxPost(requestContent)
   }
 
 
   def evalSubscribeRequest(subscribeRequest: SubscribeRequest): Future[String] = {
-    val requestContent = upickle.default.write(ApiRequest(ApiTypes.requestTypes.EVAL_SUBS_REQUEST, subscribeRequest))
+    val requestContent = upickle.default.write(ApiDto(ApiTypes.requestTypes.EVAL_SUBS_REQUEST, subscribeRequest))
     ajaxPost(requestContent)
   }
 
 
   def cancelSubscriptionRequest(cancelSubscribeRequest: CancelSubscribeRequest): Future[String] = {
-    val requestContent = upickle.default.write(ApiRequest(ApiTypes.requestTypes.EVAL_SUBS_CANCEL_REQUEST, cancelSubscribeRequest))
+    val requestContent = upickle.default.write(ApiDto(ApiTypes.requestTypes.EVAL_SUBS_CANCEL_REQUEST, cancelSubscribeRequest))
     ajaxPost(requestContent)
   }
 
@@ -132,17 +133,17 @@ object CoreApiOld {
       case _: EstablishConnection => ApiTypes.requestTypes.ESTABLISH_CONNECTION_REQ
       case _: IntroConfirmReq => ApiTypes.requestTypes.INTRODUCTION_CONFIRMATION_REQUEST
     }
-    ajaxPost(upickle.default.write(ApiRequest(msg, introductionModel)))
+    ajaxPost(upickle.default.write(ApiDto(msg, introductionModel)))
   }
 
 
   def postLabel(labelPost: LabelPost): Future[String] = {
-    val requestContent = upickle.default.write(ApiRequest(ApiTypes.requestTypes.UPDATE_ALIAS_LABEL_REQ, labelPost))
+    val requestContent = upickle.default.write(ApiDto(ApiTypes.requestTypes.UPDATE_ALIAS_LABEL_REQ, labelPost))
     ajaxPost(requestContent)
   }
 
   def updateUserRequest(updateUserRequest: UpdateUserRequest): Future[String] = {
-    val requestContent = upickle.default.write(ApiRequest(ApiTypes.requestTypes.UPDATE_USER_REQUEST, updateUserRequest))
+    val requestContent = upickle.default.write(ApiDto(ApiTypes.requestTypes.UPDATE_USER_REQUEST, updateUserRequest))
     ajaxPost(requestContent)
   }
 

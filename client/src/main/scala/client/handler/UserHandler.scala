@@ -3,7 +3,7 @@ package client.handler
 import client.services.{CoreApi, CoreApiOld, LGCircuit}
 import diode.{ActionHandler, ActionResult, ModelRW}
 import org.scalajs.dom.window
-import shared.dtos.UpdateUserRequest
+import com.livelygig.product.shared.dtos.UpdateUserRequest
 import client.dtos.UserModel
 import client.logger
 import diode.AnyAction._

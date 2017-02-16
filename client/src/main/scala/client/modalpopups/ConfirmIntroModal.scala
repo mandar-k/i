@@ -7,7 +7,7 @@ package client.modules
 
 import client.components.Bootstrap.{Button, CommonStyle, Modal}
 import client.components.{GlobalStyles, Icon}
-import shared.dtos.{IntroConfirmReq, Introduction}
+import com.livelygig.product.shared.dtos.{IntroConfirmReq, Introduction}
 import scala.language.reflectiveCalls
 import client.services.{CoreApi, LGCircuit}
 import japgolly.scalajs.react._
@@ -23,7 +23,7 @@ import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls
 import org.querki.jquery._
 import client.handler.UpdateIntroductionsModel
-import shared.dtos.{IntroConfirmReq, Introduction}
+import com.livelygig.product.shared.dtos.{IntroConfirmReq, Introduction}
 import client.utils.{AppUtils, ConnectionsUtils}
 import scala.scalajs.js.JSON
 import scala.util.{Failure, Success}

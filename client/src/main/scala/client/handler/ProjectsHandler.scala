@@ -3,7 +3,7 @@ package client.handler
 import client.modules.AppModule
 import diode.{ActionHandler, ActionResult, Effect, ModelRW}
 import diode.data._
-import shared.models.{ProfilesPost, ProjectsPost}
+import com.livelygig.product.shared.models.{ProfilesPost, ProjectsPost}
 import org.scalajs.dom.window
 import client.rootmodel.ProjectsRootModel
 import client.services.{CoreApi, CoreApiOld, LGCircuit}

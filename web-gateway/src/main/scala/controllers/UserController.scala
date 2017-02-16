@@ -1,6 +1,6 @@
 package controllers
 
-import com.livelygig.product.security.resource.ResourceClientSecurity
+import com.livelygig.product.shared.ResourceClientSecurity
 import com.livelygig.product.userprofile.api.UserProfileService
 import com.mohiva.play.silhouette.api.Silhouette
 import play.api.libs.json.Json

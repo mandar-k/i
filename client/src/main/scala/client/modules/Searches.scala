@@ -7,7 +7,7 @@ import japgolly.scalajs.react.vdom.prefix_<^._
 import client.handler._
 import client.rootmodel.SearchesRootModel
 import client.css._
-import shared.models.{Label, UserModel}
+import com.livelygig.product.shared.models.{Label, UserModel}
 import client.services.LGCircuit
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils, LabelsUtils}
 
@@ -19,7 +19,7 @@ import org.querki.jquery._
 import org.denigma.selectize._
 import diode.AnyAction._
 import japgolly.scalajs.react
-import shared.dtos.{Expression, ExpressionContent, SubscribeRequest}
+import com.livelygig.product.shared.dtos.{Expression, ExpressionContent, SubscribeRequest}
 
 
 object Searches {

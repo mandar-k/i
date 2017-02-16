@@ -57,10 +57,6 @@ class ApplicationController(
       Ok("")
   }
 
-  def validateToken = silhouette.SecuredAction.async { implicit request =>
-    Future.successful(Ok("Validated"))
-  }
-
   /**
     * Handles the Sign Out action.
     *

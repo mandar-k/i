@@ -3,7 +3,7 @@ package controllers
 import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.content.api.models.UserContent
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
-import com.livelygig.product.security.resource.ResourceClientSecurity
+import com.livelygig.product.shared.ResourceClientSecurity
 import com.mohiva.play.silhouette.api.Silhouette
 import play.api.Environment
 import play.api.libs.json.{JsError, Json}

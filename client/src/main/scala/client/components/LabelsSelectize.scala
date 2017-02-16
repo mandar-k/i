@@ -8,7 +8,7 @@ import org.denigma.selectize._
 import org.querki.jquery._
 import org.scalajs.dom._
 import client.rootmodel.SearchesRootModel
-import shared.models.Label
+import com.livelygig.product.shared.models.Label
 import client.sessionitems.SessionItems
 
 import scala.collection.mutable.ListBuffer

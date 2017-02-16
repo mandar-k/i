@@ -1,12 +1,20 @@
+import sbt.Keys.libraryDependencies
+
 organization in ThisBuild := "com.livelygig"
 
 // the Scala version that will be used for cross-compiled libraries
 scalaVersion in ThisBuild := "2.11.8"
 
-// a special crossProject for configuring a JS/JVM/shared structure
-lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
+// a special crossProject for configuring a JS/JVM/com.livelygig.product.shared structure
+lazy val shared = (crossProject.crossType(CrossType.Pure) in file("com.livelygig.product.shared"))
   .settings(
-    //    libraryDependencies ++= Settings.sharedDependencies.value
+    libraryDependencies ++= Settings.sharedDependencies.value,
+    libraryDependencies ++= Seq(
+      lagomScaladslApi,
+      lagomScaladslServer % Optional,
+      "org.julienrf" %% "play-json-derived-codecs" % "3.3",
+      "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test"
+    )
   )
   // set up settings specific to the JS project
   .jsConfigure(_ enablePlugins ScalaJSWeb)

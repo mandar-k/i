@@ -7,11 +7,12 @@ import diode.{ActionHandler, ActionResult, ModelRW}
 import client.rootmodel.IntroRootModel
 import client.logger
 import client.services.{CoreApiOld, LGCircuit}
-import shared.dtos._
+import com.livelygig.product.shared.dtos._
 
 import concurrent._
 import ExecutionContext.Implicits._
 import diode.AnyAction._
+import com.livelygig.product.shared.Content
 
 import scala.scalajs.js.JSON
 import scala.util.{Failure, Success}

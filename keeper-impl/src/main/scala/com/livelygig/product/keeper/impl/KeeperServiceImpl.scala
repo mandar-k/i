@@ -12,9 +12,9 @@ import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.livelygig.product.keeper.api.{KeeperEventsForTopics, KeeperService}
 import com.livelygig.product.keeper.api.models.{ErrorResponse, InitializeSessionResponse, UserAuthRes, UserFound}
 import com.livelygig.product.keeper.impl.models.MsgTypes
-import com.livelygig.product.security.resource.ResourceServerSecurity
 import com.lightbend.lagom.scaladsl.broker.TopicProducer
 import com.livelygig.product.keeper.api
+import com.livelygig.product.shared.ResourceServerSecurity
 import com.livelygig.product.utils.TokenGenerator
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -65,8 +65,8 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
         case Some(u) => Future.successful(u)
         case None => {
           val agentUriToken = tokenGenerator.generateMD5Token(userModel.userAuth.email)
-          val uri = new URI("agent://" + agentUriToken)
-          registry.refFor[KeeperEntity](uri.toString).ask(CreateUser(userModel))
+          val uri = "agent://" + agentUriToken
+          registry.refFor[KeeperEntity](uri).ask(CreateUser(userModel))
         }
       }
     } yield reply

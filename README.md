@@ -8,7 +8,7 @@
 Application is broadly divided into three parts:
 * `server` Used as proxy to GloseVal backend server - this will go away once the front end is fully implemented
 * `client` Scala.js application (client side, after compliation etc. runs on browser)
-* `shared` Shared scala code between the server and the client
+* `com.livelygig.product.shared` Shared scala code between the server and the client
 
 ## Building
 The build process requires several pieces of software to be installed on the host system:

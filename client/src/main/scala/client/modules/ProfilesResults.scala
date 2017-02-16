@@ -8,7 +8,7 @@ import client.css.{DashBoardCSS, HeaderCSS, PresetsCSS}
 import client.modals.{NewMessage, NewProfile, NewRecommendation, ServerErrorModal}
 import client.rootmodel.ProfilesRootModel
 import client.services.LGCircuit
-import shared.models.ProfilesPost
+import com.livelygig.product.shared.models.ProfilesPost
 import diode.react.ReactPot._
 import diode.react._
 import diode.data.Pot

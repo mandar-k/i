@@ -8,7 +8,7 @@ import diode.react.ModelProxy
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.prefix_<^._
 import client.rootmodel.SearchesRootModel
-import shared.models.Label
+import com.livelygig.product.shared.models.Label
 import client.components.Bootstrap._
 import client.css._
 import client.handler.CreateLabels
@@ -20,7 +20,7 @@ import scalacss.ScalaCssReact._
 import scala.scalajs.js
 import org.querki.jquery._
 import org.scalajs.dom
-import shared.dtos.{ApiRequest, LabelPost}
+import com.livelygig.product.shared.dtos.LabelPost
 import client.sessionitems.SessionItems
 import client.utils.ContentUtils
 

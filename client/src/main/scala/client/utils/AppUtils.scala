@@ -6,12 +6,12 @@ import client.handler.AcceptNotification
 import client.logger
 import client.modules.AppModule
 import client.services.{ApiTypes, LGCircuit}
-import shared.dtos.{Connection, Expression, ExpressionContent, SubscribeRequest}
-import shared.models._
+import com.livelygig.product.shared.dtos.{Connection, Expression, ExpressionContent, SubscribeRequest}
+import com.livelygig.product.shared.models._
 
 import scala.scalajs.js.Date
-import shared.dtos.{ApiResponse, ConnectionProfileResponse, Introduction}
-import shared.models.ConnectionsModel
+import com.livelygig.product.shared.dtos.{ApiResponse, ConnectionProfileResponse, Introduction}
+import com.livelygig.product.shared.models.ConnectionsModel
 import client.handler._
 import client.logger._
 import client.services.LGCircuit

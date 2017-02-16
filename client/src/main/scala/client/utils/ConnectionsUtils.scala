@@ -2,8 +2,8 @@ package client.utils
 
 import client.modules.AppModule
 import client.services.LGCircuit
-import shared.dtos._
-import shared.models._
+import com.livelygig.product.shared.dtos._
+import com.livelygig.product.shared.models._
 import scala.scalajs.js.JSON
 
 //scalastyle:off

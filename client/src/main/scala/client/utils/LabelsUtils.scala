@@ -1,7 +1,7 @@
 package client.utils
 
 import client.modules.AppModule
-import shared.models.Label
+import com.livelygig.product.shared.models.Label
 
 
 /**

@@ -8,7 +8,7 @@ package client.services
 import client.dtos.UserModel
 import client.dtos.SignUpModel
 import client.facades.SRPClient
-import shared.dtos._
+import com.livelygig.product.shared.dtos._
 import org.scalajs.dom._
 import upickle.default._
 
@@ -18,7 +18,7 @@ import scala.scalajs.js.{Date, JSON}
 import scala.util.{Failure, Success, Try}
 import scala.language.postfixOps
 import org.scalajs.dom.ext.Ajax
-import shared.models.{EmailValidationModel}
+import com.livelygig.product.shared.models.{EmailValidationModel}
 import client.sessionitems.SessionItems
 import client.modules.ConnectionList
 import client.utils.{ConnectionsUtils, LabelsUtils}

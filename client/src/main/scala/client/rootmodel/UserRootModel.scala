@@ -1,5 +1,5 @@
 package client.rootmodel
 
-import shared.models.UserModel
+import com.livelygig.product.shared.models.UserModel
 
 case class UserRootModel(userModel: UserModel)

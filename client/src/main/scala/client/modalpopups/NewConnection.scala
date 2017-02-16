@@ -11,18 +11,21 @@ import client.components.Icon
 import client.components.Icon._
 import client.components._
 import client.css._
-import client.services.{ApiTypes, CoreApi,CoreApiOld, LGCircuit, RootModel}
+import client.services.{ApiTypes, CoreApi, CoreApiOld, LGCircuit, RootModel}
 import japgolly.scalajs.react
 import client.components.Bootstrap._
 import client.utils.ConnectionsUtils
+
 import scala.util.{Failure, Success}
 import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls
 import org.querki.jquery._
 import org.scalajs.dom._
-import shared.dtos.{EstablishConnection, IntroConnections}
-import shared.models.ConnectionsModel
+import com.livelygig.product.shared.EstablishConnection
+import com.livelygig.product.shared.dtos.IntroConnections
+import com.livelygig.product.shared.models.ConnectionsModel
+
 import scala.scalajs.js
 
 // scalastyle:off

@@ -1,7 +1,7 @@
 package client.rootmodel
 
-import shared.models.ProjectsPost
-import shared.dtos._
+import com.livelygig.product.shared.models.ProjectsPost
+import com.livelygig.product.shared.dtos._
 
 case class ProjectsRootModel(projectsModelList: Seq[ProjectsPost]) {
   def updated(newProject: ProjectsPost): ProjectsRootModel = {

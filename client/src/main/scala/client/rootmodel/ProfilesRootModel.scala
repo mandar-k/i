@@ -1,6 +1,6 @@
 package client.rootmodel
 
-import shared.models.ProfilesPost
+import com.livelygig.product.shared.models.ProfilesPost
 
 /**
   * Created by shubham.k on 26-05-2016.

@@ -6,8 +6,8 @@ import client.rootmodel.MessagesRootModel
 import diode.ActionResult.ModelUpdate
 import diode.RootModelRW
 import diode.data.{Pot, Ready}
-import shared.dtos.{Connection, Expression, ExpressionContent, SubscribeRequest}
-import shared.models.{MessagePost, MessagePostContent}
+import com.livelygig.product.shared.dtos.{Connection, Expression, ExpressionContent, SubscribeRequest}
+import com.livelygig.product.shared.models.{MessagePost, MessagePostContent}
 
 /**
   * Created by shubham.k on 14-09-2016.

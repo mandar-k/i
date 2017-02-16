@@ -16,7 +16,7 @@ import scalacss.Defaults._
 import scalacss.ScalaCssReact._
 import scala.language.reflectiveCalls
 import org.querki.jquery._
-import shared.models.{ProjectPostContent, ProjectsPost}
+import com.livelygig.product.shared.models.{ProjectPostContent, ProjectsPost}
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils}
 import diode.AnyAction._
 import org.querki.facades.bootstrap.datepicker._

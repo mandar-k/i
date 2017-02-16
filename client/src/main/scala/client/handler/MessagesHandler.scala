@@ -3,14 +3,14 @@ package client.handler
 import client.modules.AppModule
 import diode._
 import diode.data._
-import shared.models.MessagePost
+import com.livelygig.product.shared.models.MessagePost
 import client.rootmodel._
 import client.logger
 import client.services.{CoreApi, CoreApiOld, LGCircuit}
 import diode.util.{Retry, RetryPolicy}
 import client.utils.{AppUtils, ConnectionsUtils, ContentUtils}
 import org.widok.moment.Moment
-import shared.dtos.{CancelSubscribeRequest, Expression, ExpressionContent, SubscribeRequest}
+import com.livelygig.product.shared.dtos.{CancelSubscribeRequest, Expression, ExpressionContent, SubscribeRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success, Try}

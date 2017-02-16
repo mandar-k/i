@@ -1,9 +1,9 @@
 package client.handler
 
 import diode.{ActionHandler, ActionResult, ModelRW}
-import shared.models.ConnectionsModel
+import com.livelygig.product.shared.models.ConnectionsModel
 import client.rootmodel.ConnectionsRootModel
-import shared.dtos._
+import com.livelygig.product.shared.dtos._
 
 // Actions
 //scalastyle:off

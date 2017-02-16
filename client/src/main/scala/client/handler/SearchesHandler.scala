@@ -5,13 +5,13 @@ import client.modules.AppModule
 import client.services.{CoreApi, LGCircuit}
 import client.utils.PrologParser
 import diode.{ActionHandler, ActionResult, ModelRW}
-import shared.models.Label
+import com.livelygig.product.shared.models.Label
 
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.JSON
 import scala.util.{Failure, Success}
 import diode.AnyAction._
-import shared.dtos.{Connection, LabelPost, SubscribeRequest}
+import com.livelygig.product.shared.dtos.{Connection, LabelPost, SubscribeRequest}
 
 object SearchesModelHandler {
   def getSearchesModel(listOfLabels: Seq[String]): SearchesRootModel = {

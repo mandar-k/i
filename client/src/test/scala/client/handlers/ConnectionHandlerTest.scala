@@ -4,8 +4,8 @@ import client.UnitTest
 import client.handler.ConnectionHandler
 import client.rootmodel.ConnectionsRootModel
 import diode.RootModelRW
-import shared.dtos.Connection
-import shared.models.ConnectionsModel
+import com.livelygig.product.shared.dtos.Connection
+import com.livelygig.product.shared.models.ConnectionsModel
 
 /**
   * Created by shubham.k on 14-09-2016.

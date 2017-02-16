@@ -7,7 +7,7 @@ import diode._
 import diode.data._
 import diode.react.ReactConnector
 import client.dtos.UserModel
-import shared.models.MessagePost
+import com.livelygig.product.shared.models.MessagePost
 
 case class RootModel(connections: ConnectionsRootModel, user: UserModel, messages: MessagesRootModel/*Pot[MessagesRootModel]*/,
                      jobPosts: Pot[ProjectsRootModel], searches: SearchesRootModel, profiles : Pot[ProfilesRootModel],
