@@ -15,7 +15,7 @@ object UserAuthRes {
 
 sealed trait Content{}
 
-case class UserContent(pageOfPosts: String)
+case class UserContent(content: String)
 
 object UserContent {
   implicit val format: Format[UserContent] = Json.format

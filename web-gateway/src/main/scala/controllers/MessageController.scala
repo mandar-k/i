@@ -19,17 +19,14 @@ class MessageController(messageService: ContentService,
                         silhouette: Silhouette[DefaultEnv]
                        )(implicit ec: ExecutionContext) extends AbstractController() {
   def addMessage = silhouette.SecuredAction.async(parse.json) { request =>
-    request.body.validate[UserContent].map { model =>
+    unmarshalJsValue[UserContent](request) { model =>
       messageService
         .addMessage()
         .handleRequestHeader(ResourceClientSecurity.authenticate(request.identity.userUri))
-        .invoke(model).map {
-        _ => Ok("Content posted successfully.")
-      }
-    }.recoverTotal { e =>
-      Future {
-        BadRequest("Detected error: " + JsError.toJson(e))
-      }
+        .invoke(model)
+        .map {
+          _ => Ok("Content posted successfully.")
+        }
     }
   }
 
