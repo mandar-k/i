@@ -4,8 +4,8 @@ import java.util.UUID
 
 import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.keeper.api.models.{AuthorizationInfo, UserPermission, UserRole}
-import com.livelygig.product.security.keeper.KeeperClientSecurity
 import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, RequestHeader}
+import com.livelygig.product.KeeperClientSecurity
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

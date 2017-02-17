@@ -3,8 +3,8 @@ package com.livelygig.product.keeper.api
 import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.broker.Topic
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
+import com.livelygig.product.SecurityHeaderFilter
 import com.livelygig.product.keeper.api.models._
-import com.livelygig.product.security.keeper.SecurityHeaderFilter
 
 /**
   * Created by shubham.k on 09-01-2017.

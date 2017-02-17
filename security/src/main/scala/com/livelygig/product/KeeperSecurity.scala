@@ -1,4 +1,4 @@
-package com.livelygig.product.security.keeper
+package com.livelygig.product
 
 import java.security.Principal
 import java.util.UUID

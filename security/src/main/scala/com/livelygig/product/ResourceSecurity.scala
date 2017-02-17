@@ -1,7 +1,11 @@
-package com.livelygig.product.shared
+package com.livelygig.product
 
 import java.security.Principal
 import javax.security.auth.Subject
+
+import com.lightbend.lagom.scaladsl.api.security._
+import com.lightbend.lagom.scaladsl.api.transport._
+import com.lightbend.lagom.scaladsl.server._
 
 sealed trait UserPrincipal extends Principal {
   val userUri: String
