@@ -1,4 +1,4 @@
-package com.livelygig.product.utils
+package com.livelygig.product
 
 /**
   * Created by shubham.k on 13-02-2017.

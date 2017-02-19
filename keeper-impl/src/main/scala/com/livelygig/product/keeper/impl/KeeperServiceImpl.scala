@@ -13,9 +13,9 @@ import com.livelygig.product.keeper.api.{KeeperEventsForTopics, KeeperService}
 import com.livelygig.product.keeper.api.models.{ErrorResponse, InitializeSessionResponse, UserAuthRes, UserFound}
 import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.lightbend.lagom.scaladsl.broker.TopicProducer
+import com.livelygig.product.TokenGenerator
 import com.livelygig.product.keeper.api
 import com.livelygig.product.shared.ResourceServerSecurity
-import com.livelygig.product.utils.TokenGenerator
 
 import scala.concurrent.{ExecutionContext, Future}
 

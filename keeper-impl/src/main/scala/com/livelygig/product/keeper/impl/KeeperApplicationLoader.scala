@@ -6,8 +6,8 @@ import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.server._
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
+import com.livelygig.product.TokenGenerator
 import com.livelygig.product.keeper.api.KeeperService
-import com.livelygig.product.utils.TokenGenerator
 import com.softwaremill.macwire._
 
 

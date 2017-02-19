@@ -5,10 +5,10 @@ import java.security.SecureRandom
 import java.util.{Date, UUID}
 
 import com.lightbend.lagom.scaladsl.persistence._
+import com.livelygig.product.TokenGenerator
 import com.livelygig.product.keeper.api.models._
 import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.livelygig.product.keeper.impl.models.UserLoginInfo
-import com.livelygig.product.utils.TokenGenerator
 import org.joda.time.DateTime
 
 
