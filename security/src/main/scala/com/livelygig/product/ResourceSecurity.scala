@@ -29,7 +29,7 @@ object UserPrincipal {
   }
 }
 
-object SecurityHeaderFilter extends HeaderFilter {
+object ResourceSecurityHeaderFilter extends HeaderFilter {
   override def transformClientRequest(request: RequestHeader) = {
     request.principal match {
       case Some(userPrincipal: UserPrincipal) => request.withHeader("userUri", userPrincipal.userUri)
@@ -49,7 +49,7 @@ object SecurityHeaderFilter extends HeaderFilter {
 
   override def transformClientResponse(response: ResponseHeader, request: RequestHeader) = response
 
-  lazy val Composed = HeaderFilter.composite(SecurityHeaderFilter, UserAgentHeaderFilter)
+  lazy val Composed = HeaderFilter.composite(ResourceSecurityHeaderFilter, UserAgentHeaderFilter)
 }
 
 object ResourceServerSecurity {
@@ -57,7 +57,7 @@ object ResourceServerSecurity {
   def authenticated[Req, Response](serviceCall: (String, RequestHeader) => ServerServiceCall[Req, Response]) =
 
     ServerServiceCall.compose { requestHeader =>
-      val request = SecurityHeaderFilter.transformServerRequest(requestHeader)
+      val request = ResourceSecurityHeaderFilter.transformServerRequest(requestHeader)
       request.principal match {
         case Some(userPrincipal: UserPrincipal) =>
           serviceCall(userPrincipal.userUri, requestHeader)
@@ -74,6 +74,6 @@ object ResourceClientSecurity {
     */
   def authenticate(userUri: String): RequestHeader => RequestHeader = { requestHeader =>
     val requestWithPrincipal = requestHeader.withPrincipal(UserPrincipal.of(userUri, requestHeader.principal))
-    SecurityHeaderFilter.transformClientRequest(requestWithPrincipal)
+    ResourceSecurityHeaderFilter.transformClientRequest(requestWithPrincipal)
   }
 }

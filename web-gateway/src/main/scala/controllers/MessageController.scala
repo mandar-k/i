@@ -1,15 +1,14 @@
 package controllers
 
+import com.livelygig.product.ResourceClientSecurity
 import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.content.api.models.UserContent
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
-import com.livelygig.product.shared.ResourceClientSecurity
 import com.mohiva.play.silhouette.api.Silhouette
-import play.api.Environment
-import play.api.libs.json.{JsError, Json}
+import play.api.libs.json.Json
 import utils.auth.DefaultEnv
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext}
 
 /**
   * Created by shubham.k on 29-12-2016.

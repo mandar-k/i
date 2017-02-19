@@ -11,8 +11,8 @@ import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
+import com.livelygig.product.ResourceServerSecurity
 import com.livelygig.product.content.api.ContentService
-import com.livelygig.product.shared.ResourceServerSecurity
 
 import scala.concurrent.{ExecutionContext, Future}
 

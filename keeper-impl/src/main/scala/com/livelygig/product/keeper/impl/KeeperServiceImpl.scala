@@ -1,22 +1,14 @@
 package com.livelygig.product.keeper.impl
 
-import java.net.URI
-import java.security.SecureRandom
-import java.util.UUID
-
 import akka.persistence.query.Offset
 import com.lightbend.lagom.scaladsl.api.ServiceCall
-import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, NotFound}
 import com.lightbend.lagom.scaladsl.persistence.{EventStreamElement, PersistentEntityRegistry}
-import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.livelygig.product.keeper.api.{KeeperEventsForTopics, KeeperService}
 import com.livelygig.product.keeper.api.models.{ErrorResponse, InitializeSessionResponse, UserAuthRes, UserFound}
 import com.livelygig.product.keeper.impl.models.MsgTypes
 import com.lightbend.lagom.scaladsl.broker.TopicProducer
 import com.livelygig.product.TokenGenerator
 import com.livelygig.product.keeper.api
-import com.livelygig.product.shared.ResourceServerSecurity
-
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
