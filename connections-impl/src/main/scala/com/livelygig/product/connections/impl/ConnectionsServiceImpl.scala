@@ -2,9 +2,9 @@ package com.livelygig.product.connections.impl
 
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
+import com.livelygig.product.ResourceServerSecurity
 import com.livelygig.product.connections.api.ConnectionsService
 import com.livelygig.product.connections.api.models.{ConnectionResponse, IntroductionRequestSent}
-import com.livelygig.product.shared.ResourceServerSecurity
 
 import scala.concurrent.ExecutionContext
 /**

@@ -6,15 +6,9 @@ organization in ThisBuild := "com.livelygig"
 scalaVersion in ThisBuild := "2.11.8"
 
 // a special crossProject for configuring a JS/JVM/com.livelygig.product.shared structure
-lazy val shared = (crossProject.crossType(CrossType.Pure) in file("com.livelygig.product.shared"))
+lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
   .settings(
-    libraryDependencies ++= Settings.sharedDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslApi,
-      lagomScaladslServer % Optional,
-      "org.julienrf" %% "play-json-derived-codecs" % "3.3",
-      "org.scalatest" %%% "scalatest" % Versions.scalaTest % "test"
-    )
+    libraryDependencies ++= Settings.sharedDependencies.value
   )
   // set up settings specific to the JS project
   .jsConfigure(_ enablePlugins ScalaJSWeb)
@@ -100,11 +94,7 @@ lazy val userProfileApi = (project in file("userProfile-api"))
   .settings(commonSettings: _*)
   .dependsOn(security, keeperApi)
   .settings(
-    libraryDependencies ++= Settings.apiDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslApi,
-      "be.objectify" %% "deadbolt-scala" % "2.5.1"
-    )
+    libraryDependencies ++= Settings.apiDependencies.value
   )
 
 lazy val userProfileImpl = (project in file("userProfile-impl"))
@@ -112,17 +102,13 @@ lazy val userProfileImpl = (project in file("userProfile-impl"))
   .enablePlugins(LagomScala)
   .dependsOn(userProfileApi, security)
   .settings(
-    libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies += lagomScaladslPersistenceCassandra /* exclude("io.netty", "netty")*/
+    libraryDependencies ++= Settings.apiImplDependencies.value
   )
 
 lazy val contentApi = (project in file("content-api"))
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies ++= Settings.apiDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslApi
-    )
+    libraryDependencies ++= Settings.apiDependencies.value
   )
 
 lazy val contentImpl = (project in file("content-impl"))
@@ -130,19 +116,13 @@ lazy val contentImpl = (project in file("content-impl"))
   .enablePlugins(LagomScala)
   .dependsOn(contentApi, security, keeperApi)
   .settings(
-    libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslPersistenceCassandra,
-      lagomScaladslPubSub)
+    libraryDependencies ++= Settings.apiImplDependencies.value
   )
 
 lazy val emailnotificationsApi = (project in file("emailnotifications-api"))
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies ++= Settings.apiDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslApi
-    )
+    libraryDependencies ++= Settings.apiDependencies.value
   )
   .dependsOn(security)
 
@@ -153,9 +133,7 @@ lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
   .settings(
     libraryDependencies ++= Settings.apiImplDependencies.value,
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play-mailer" % "5.0.0",
-      lagomScaladslPersistenceCassandra,
-      lagomScaladslKafkaClient
+      "com.typesafe.play" %% "play-mailer" % "5.0.0"
     )
   )
   .dependsOn(security)
@@ -163,10 +141,7 @@ lazy val emailnotificationsImpl = (project in file("emailnotifications-impl"))
 lazy val connectionsApi = (project in file("connections-api"))
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies ++= Settings.apiDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslApi
-    )
+    libraryDependencies ++= Settings.apiDependencies.value
   )
   .dependsOn(security)
 
@@ -175,22 +150,14 @@ lazy val connectionsImpl = (project in file("connections-impl"))
   .enablePlugins(LagomScala && SbtTwirl)
   .dependsOn(connectionsApi, security, keeperApi)
   .settings(
-    libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslPersistenceCassandra,
-      lagomScaladslKafkaClient
-    )
-
+    libraryDependencies ++= Settings.apiImplDependencies.value
   )
 
 
 lazy val keeperApi = (project in file("keeper-api"))
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies ++= Settings.apiDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslApi
-    )
+    libraryDependencies ++= Settings.apiDependencies.value
   )
   .dependsOn(security)
 
@@ -198,11 +165,7 @@ lazy val keeperImpl = (project in file("keeper-impl"))
   .settings(commonSettings: _ *)
   .enablePlugins(LagomScala)
   .settings(
-    libraryDependencies ++= Settings.apiImplDependencies.value,
-    libraryDependencies ++= Seq(
-      lagomScaladslPersistenceCassandra,
-      lagomScaladslKafkaBroker
-    )
+    libraryDependencies ++= Settings.apiImplDependencies.value
   )
   .enablePlugins(LagomScala)
   .dependsOn(keeperApi, security)
