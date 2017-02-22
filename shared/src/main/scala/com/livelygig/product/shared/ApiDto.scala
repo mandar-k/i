@@ -9,10 +9,10 @@ import play.api.libs.json.{Format, Json, __}
   * and the scala.js client. Which is Awesome :) However that would mean
   * every microservice would need to have a dependency for this shared package
   * which kind of defeats the purpose of domain driven architecture
-  * However till architecture is stabel enough we will continue with this shared structure.
+  * However till architecture is stable enough we will continue with this shared structure.
   */
 
-case class ApiDto(msgType: String , content: Content)
+case class ApiDto(msgType: String,content: Content)
 
 object ApiDto {
   implicit val format: Format[ApiDto] = Json.format
@@ -27,15 +27,13 @@ sealed trait Content {}
 
 // request content
 case class CreateUser(username: String, email: String, password: String)                                 extends Content
-case class GetConnectionProfiles(sessionURI: String)                                                     extends Content
-case class SessionPing(reqNumber: Int)                                                                   extends Content
 case class InitializeSession(usernameOrEmail: String, password: String)                                  extends Content
 case object CloseSession                                                                                 extends Content
 case class EstablishConnection(aAliasURI: String, bAliasURI: String)                                     extends Content
 case object GetProfile                                                                                   extends Content
 case object GetConnections
 case class GetConnectionsProfiles(aliasUriList: Seq[String])                                             extends Content
-
+case class InsertContent(cnxnxAliasUri: Seq[String], value:String)
 
 
 // response content
@@ -44,9 +42,8 @@ case object InitialiseSessionResponse                                           
 case class UserProfileResponse(profile: UserProfile)                                                     extends Content
 case class ConnectionsResponse(aliasUriList: Seq[String])                                                extends Content
 case class ConnectionsProfileResponse (profile: Seq[ConnectionsProfileResponse])                         extends Content
-case class SessionPong(responseTo: Int)                                                                  extends Content
 
 object Content {
   implicit val format: Format[Content] =
-    derived.flat.oformat((__ \ "type").format[String])
+    derived.flat.oformat((__ \ "contentType").format[String])
 }
