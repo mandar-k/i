@@ -4,8 +4,8 @@ import com.lightbend.lagom.scaladsl.playjson.{JsonSerializer, JsonSerializerRegi
 import com.livelygig.product.keeper.api.models.{User, UserAuth, UserProfile}
 
 /**
-  * Created by shubham.k on 13-01-2017.
-  */
+ * Created by shubham.k on 13-01-2017.
+ */
 object KeeperJsonSerializerRegistry extends JsonSerializerRegistry {
   override def serializers = List(
 

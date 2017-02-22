@@ -10,19 +10,18 @@ import com.livelygig.product.userprofile.api.models.{UserAlias, UserProfile}
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 10-02-2017.
-  */
+ * Created by shubham.k on 10-02-2017.
+ */
 class KeeperSubscriberForUserProfiles(keeperService: KeeperService) {
 
 }
 
-
 class KeeperServiceSubscriberForEmailNotification(keeperService: KeeperService, registry: PersistentEntityRegistry)(implicit ec: ExecutionContext) {
   keeperService.keeperTopicProducer.subscribe.atLeastOnce(Flow[KeeperEventsForTopics].mapAsync(1) {
-    case uc:api.UserCreated =>
-      val userProfile = UserProfile(None,None, Seq(UserAlias(uc.userName,true)))
+    case uc: api.UserCreated =>
+      val userProfile = UserProfile(None, None, Seq(UserAlias(uc.userName, true)))
       registry.refFor[UserProfileEntity](uc.userUri).ask(CreateProfile(userProfile))
-    case uc:api.UserActivated =>
+    case uc: api.UserActivated =>
       registry.refFor[UserProfileEntity](uc.userUri).ask(ActivateUserProfile)
     case _ =>
       Future.successful(Done)

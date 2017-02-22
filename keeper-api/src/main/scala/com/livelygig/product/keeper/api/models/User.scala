@@ -5,15 +5,15 @@ import java.util.UUID
 import play.api.libs.json.{Format, Json}
 
 /**
-  * Created by shubham.k on 11-01-2017.
-  */
+ * Created by shubham.k on 11-01-2017.
+ */
 
 case class User(userAuth: UserAuth, userProfile: UserProfile)
 
 object User {
-  implicit  val format:Format[User] = Json.format
+  implicit val format: Format[User] = Json.format
 }
-case class UserAuth( username: String,email: String, password: String)
+case class UserAuth(username: String, email: String, password: String)
 
 case class UserLoginModel(usernameOrEmail: String, password: String)
 
@@ -43,7 +43,7 @@ object UserPermission {
   implicit val format: Format[UserPermission] = Json.format
 }
 
-case class AuthorizationInfo (roles: Seq[UserRole], permissions: Seq[UserPermission])
+case class AuthorizationInfo(roles: Seq[UserRole], permissions: Seq[UserPermission])
 
 object AuthorizationInfo {
   implicit val format: Format[AuthorizationInfo] = Json.format

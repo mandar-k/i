@@ -42,10 +42,10 @@ import utils.auth.DefaultEnv
 import router.Routes
 
 abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext(context)
-  with I18nComponents
-  with WebAppComponents
+    with I18nComponents
+    with WebAppComponents
 
-  with LagomServiceClientComponents {
+    with LagomServiceClientComponents {
 
   override lazy val serviceInfo: ServiceInfo = ServiceInfo(
     "web-gateway",
@@ -95,16 +95,15 @@ class WebGatewayLoader extends ApplicationLoader {
 }
 
 trait WebAppComponents extends BuiltInComponents
-  with SilhouetteModule
-  with I18nComponents
-  with OpenIDComponents
-  with EhCacheComponents
-  with WebAppModule
-  with SecurityHeadersComponents {
+    with SilhouetteModule
+    with I18nComponents
+    with OpenIDComponents
+    with EhCacheComponents
+    with WebAppModule
+    with SecurityHeadersComponents {
   lazy val silhouette: Silhouette[DefaultEnv] = wire[SilhouetteProvider[DefaultEnv]]
   lazy val assets: Assets = wire[Assets]
   lazy val socialAuthController: SocialAuthController = wire[SocialAuthController]
-
 
   lazy val webjarAssets: WebJarAssets = wire[WebJarAssets]
   lazy val forgotPasswordController: ForgotPasswordController = wire[ForgotPasswordController]

@@ -31,8 +31,8 @@ import com.mohiva.play.silhouette.impl.providers.openid.YahooProvider
 import com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService
 import com.mohiva.play.silhouette.impl.services._
 /**
-  * The Guice module which wires all Silhouette dependencies.
-  */
+ * The Guice module which wires all Silhouette dependencies.
+ */
 
 trait SilhouetteModule {
   def configuration: Configuration
@@ -80,21 +80,20 @@ trait SilhouetteModule {
   val config = configuration.underlying.as[JcaCrypterSettings]("silhouette.oauth1TokenSecretProvider.crypter")
 
   object SilhouetteAuthenticatorService {
-    def apply(fingerprintGenerator: FingerprintGenerator,cookieSigner: JcaCookieSigner,
-               idGenerator: IDGenerator, authenticatorEncoder: AuthenticatorEncoder,
-               clock: Clock, configuration: Configuration
-             ): AuthenticatorService[JWTAuthenticator] = {
+    def apply(fingerprintGenerator: FingerprintGenerator, cookieSigner: JcaCookieSigner,
+      idGenerator: IDGenerator, authenticatorEncoder: AuthenticatorEncoder,
+      clock: Clock, configuration: Configuration): AuthenticatorService[JWTAuthenticator] = {
       val config = configuration.underlying.as[JWTAuthenticatorSettings]("silhouette.jwt.authenticator")
-      new JWTAuthenticatorService(config, None,authenticatorEncoder, idGenerator, clock)
+      new JWTAuthenticatorService(config, None, authenticatorEncoder, idGenerator, clock)
     }
   }
 
   object SilhouetteEnvironment {
     def apply(
-               userService: SilhouetteIdentityService,
-               authenticatorService: AuthenticatorService[JWTAuthenticator],
-               eventBus: EventBus
-             ): Environment[DefaultEnv] = {
+      userService: SilhouetteIdentityService,
+      authenticatorService: AuthenticatorService[JWTAuthenticator],
+      eventBus: EventBus
+    ): Environment[DefaultEnv] = {
       Environment[DefaultEnv](userService, authenticatorService, Seq(), eventBus)
     }
   }
@@ -108,8 +107,8 @@ trait SilhouetteModule {
 
   object SilhouetteOAuth2StateProvider {
     def apply(
-               idGenerator: IDGenerator, clock: Clock, cookieSigner: JcaCookieSigner, configuration: Configuration
-             ): OAuth2StateProvider = {
+      idGenerator: IDGenerator, clock: Clock, cookieSigner: JcaCookieSigner, configuration: Configuration
+    ): OAuth2StateProvider = {
       val settings = configuration.underlying.as[CookieStateSettings]("silhouette.oauth2StateProvider")
       new CookieStateProvider(settings, idGenerator, cookieSigner, clock)
     }
@@ -117,8 +116,8 @@ trait SilhouetteModule {
 
   object SilhouetteFacebookProvider {
     def apply(
-               httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, configuration: Configuration
-             ): FacebookProvider = {
+      httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, configuration: Configuration
+    ): FacebookProvider = {
       val settings = configuration.underlying.as[OAuth2Settings]("silhouette.facebook")
       new FacebookProvider(httpLayer, stateProvider, settings)
     }
@@ -126,8 +125,8 @@ trait SilhouetteModule {
 
   object SilhouetteGoogleProvider {
     def apply(
-               httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, configuration: Configuration
-             ): GoogleProvider = {
+      httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, configuration: Configuration
+    ): GoogleProvider = {
       val settings = configuration.underlying.as[OAuth2Settings]("silhouette.google")
       new GoogleProvider(httpLayer, stateProvider, settings)
     }
@@ -135,8 +134,8 @@ trait SilhouetteModule {
 
   object SilhouetteVKProvider {
     def apply(
-               httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, configuration: Configuration
-             ): VKProvider = {
+      httpLayer: HTTPLayer, stateProvider: OAuth2StateProvider, configuration: Configuration
+    ): VKProvider = {
       val settings = configuration.underlying.as[OAuth2Settings]("silhouette.vk")
       new VKProvider(httpLayer, stateProvider, settings)
     }
@@ -144,8 +143,8 @@ trait SilhouetteModule {
 
   object SilhouetteTwitterProvider {
     def apply(
-               httpLayer: HTTPLayer, tokenSecretProvider: OAuth1TokenSecretProvider, configuration: Configuration
-             ): TwitterProvider = {
+      httpLayer: HTTPLayer, tokenSecretProvider: OAuth1TokenSecretProvider, configuration: Configuration
+    ): TwitterProvider = {
       val settings = configuration.underlying.as[OAuth1Settings]("silhouette.twitter")
       new TwitterProvider(httpLayer, new PlayOAuth1Service(settings), tokenSecretProvider, settings)
     }
@@ -153,8 +152,8 @@ trait SilhouetteModule {
 
   object SilhouetteXingProvider {
     def apply(
-               httpLayer: HTTPLayer, tokenSecretProvider: OAuth1TokenSecretProvider, configuration: Configuration
-             ): XingProvider = {
+      httpLayer: HTTPLayer, tokenSecretProvider: OAuth1TokenSecretProvider, configuration: Configuration
+    ): XingProvider = {
       val settings = configuration.underlying.as[OAuth1Settings]("silhouette.xing")
       new XingProvider(httpLayer, new PlayOAuth1Service(settings), tokenSecretProvider, settings)
     }
@@ -162,8 +161,8 @@ trait SilhouetteModule {
 
   object SilhouetteYahooProvider {
     def apply(
-               cacheLayer: CacheLayer, httpLayer: HTTPLayer, client: OpenIdClient, configuration: Configuration
-             ): YahooProvider = {
+      cacheLayer: CacheLayer, httpLayer: HTTPLayer, client: OpenIdClient, configuration: Configuration
+    ): YahooProvider = {
       val settings = configuration.underlying.as[OpenIDSettings]("silhouette.yahoo")
       new YahooProvider(httpLayer, new PlayOpenIDService(client, settings), settings)
     }
@@ -178,14 +177,14 @@ trait SilhouetteModule {
 
   object SilhouetteSocialProviderRegistry {
     def apply(
-               facebookProvider: FacebookProvider,
-               googleProvider: GoogleProvider,
-               vkProvider: VKProvider,
-               clefProvider: ClefProvider,
-               twitterProvider: TwitterProvider,
-               xingProvider: XingProvider,
-               yahooProvider: YahooProvider
-             ): SocialProviderRegistry = {
+      facebookProvider: FacebookProvider,
+      googleProvider: GoogleProvider,
+      vkProvider: VKProvider,
+      clefProvider: ClefProvider,
+      twitterProvider: TwitterProvider,
+      xingProvider: XingProvider,
+      yahooProvider: YahooProvider
+    ): SocialProviderRegistry = {
       SocialProviderRegistry(
         Seq(
           googleProvider, facebookProvider, twitterProvider,
@@ -197,11 +196,11 @@ trait SilhouetteModule {
 
   object SilhouetteAuthInfoRepository {
     def apply(
-               passwordInfoDAO: DelegableAuthInfoDAO[PasswordInfo],
-               oauth1InfoDAO: DelegableAuthInfoDAO[OAuth1Info],
-               oauth2InfoDAO: DelegableAuthInfoDAO[OAuth2Info],
-               openIDInfoDAO: DelegableAuthInfoDAO[OpenIDInfo]
-             ): AuthInfoRepository = {
+      passwordInfoDAO: DelegableAuthInfoDAO[PasswordInfo],
+      oauth1InfoDAO: DelegableAuthInfoDAO[OAuth1Info],
+      oauth2InfoDAO: DelegableAuthInfoDAO[OAuth2Info],
+      openIDInfoDAO: DelegableAuthInfoDAO[OpenIDInfo]
+    ): AuthInfoRepository = {
       new DelegableAuthInfoRepository(
         passwordInfoDAO, oauth1InfoDAO, oauth2InfoDAO, openIDInfoDAO
       )
@@ -210,10 +209,10 @@ trait SilhouetteModule {
 
   object SilhouetteCredentialsProvider {
     def apply(
-               authInfoRepository: AuthInfoRepository,
-               passwordHasher: PasswordHasher,
-               passwordHasherRegistry: PasswordHasherRegistry
-             ): CredentialsProvider = {
+      authInfoRepository: AuthInfoRepository,
+      passwordHasher: PasswordHasher,
+      passwordHasherRegistry: PasswordHasherRegistry
+    ): CredentialsProvider = {
 
       new CredentialsProvider(authInfoRepository, passwordHasherRegistry)
     }

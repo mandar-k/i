@@ -4,11 +4,11 @@ import com.livelygig.product.userprofile.api.models.{UserAlias, UserProfile}
 import play.api.libs.json.{Format, Json}
 import com.livelygig.product.utils.JsonFormats._
 /**
-  * Created by shubham.k on 10-01-2017.
-  */
-case class UserProfileState(state: Option[UserProfile], userStatus:UserProfileStatus.Status)  {
-  def withStatus (status: UserProfileStatus.Status) = copy(userStatus = status)
-  def changeStatus (newStatus: UserProfileStatus.Status) = copy(userStatus = newStatus)
+ * Created by shubham.k on 10-01-2017.
+ */
+case class UserProfileState(state: Option[UserProfile], userStatus: UserProfileStatus.Status) {
+  def withStatus(status: UserProfileStatus.Status) = copy(userStatus = status)
+  def changeStatus(newStatus: UserProfileStatus.Status) = copy(userStatus = newStatus)
   def addAlias(userAlias: UserAlias): UserProfileState = state match {
     case None => throw new IllegalStateException("User Not found. Alias can't be added.")
     case Some(user) =>
@@ -26,5 +26,5 @@ object UserProfileState {
 object UserProfileStatus extends Enumeration {
   type Status = Value
   val Activated, NotActivated, Deleted, Disabled, DoesNotExist = Value
-  implicit val format:Format[Status] = enumFormat(UserProfileStatus)
+  implicit val format: Format[Status] = enumFormat(UserProfileStatus)
 }

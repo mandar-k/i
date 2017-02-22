@@ -9,10 +9,9 @@ import utils.auth.DefaultEnv
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 15-02-2017.
-  */
-class UserController(silhouette: Silhouette[DefaultEnv], userProfileService: UserProfileService
-                    )(implicit ec: ExecutionContext) extends AbstractController() {
+ * Created by shubham.k on 15-02-2017.
+ */
+class UserController(silhouette: Silhouette[DefaultEnv], userProfileService: UserProfileService)(implicit ec: ExecutionContext) extends AbstractController() {
 
   def getUserProfile = silhouette.SecuredAction.async { implicit request =>
     userProfileService.getUserProfile

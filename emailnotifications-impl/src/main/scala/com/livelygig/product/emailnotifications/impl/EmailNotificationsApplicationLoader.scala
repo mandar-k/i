@@ -12,15 +12,15 @@ import com.softwaremill.macwire._
 import play.api.libs.mailer._
 import play.api.i18n.{I18nComponents, MessagesApi}
 /**
-  * Created by shubham.k on 09-01-2017.
-  */
+ * Created by shubham.k on 09-01-2017.
+ */
 
 abstract class EmailNotificationsApplication(context: LagomApplicationContext)
-  extends LagomApplication(context)
+    extends LagomApplication(context)
     with AhcWSComponents
     with MailerComponents
     with I18nComponents
-    with LagomKafkaClientComponents{
+    with LagomKafkaClientComponents {
   override lazy val lagomServer = LagomServer.forServices(
     bindService[EmailNotificationsService].to(wire[EmailNotificationsImpl])
   )

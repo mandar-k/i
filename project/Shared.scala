@@ -1,5 +1,5 @@
 import Dependencies._
-import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
+//import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 import com.typesafe.sbt.SbtScalariform.{ScalariformKeys, scalariformSettings}
 import net.virtualvoid.sbt.graph.DependencyGraphSettings.graphSettings
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
@@ -30,8 +30,8 @@ object Shared {
     sources in(Compile, doc) := Seq.empty,
 
     // Code Quality
-    scapegoatVersion := Utils.scapegoatVersion,
-    scapegoatDisabledInspections := Seq("MethodNames", "MethodReturningAny", "DuplicateImport"),
+//    scapegoatVersion := Utils.scapegoatVersion,
+//    scapegoatDisabledInspections := Seq("MethodNames", "MethodReturningAny", "DuplicateImport"),
     //    scapegoatIgnoredFiles := Seq(".*/JsonSerializers.scala"),
     ScalariformKeys.preferences := ScalariformKeys.preferences.value
   ) ++ graphSettings ++ scalariformSettings
@@ -45,22 +45,23 @@ object Shared {
     proj.aggregate(inc).dependsOn(inc)
   }
 
-  lazy val sharedJs = (crossProject.crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).settings(
+  lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).settings(
     libraryDependencies ++= Seq(
       "com.chuusai" %%% "shapeless" % SharedDependencies.shapelessVersion,
       "com.typesafe.play" %%% "play-json" % SharedDependencies.playJsonVersion,
       SharedDependencies.macwire
     )
   )
-    .enablePlugins(ScalaJSWeb)
-    .settings(scalaJSStage in Global := FastOptStage).js
+      .jvmSettings(
+        libraryDependencies ++= Seq(
+          SharedDependencies.derivedCodecs,
+          SharedDependencies.ficus
+        )
+      )
+    .jsConfigure(_ enablePlugins ScalaJSWeb)
 
-  lazy val sharedJvm = (project in file("shared")).settings(commonSettings: _*).settings(
-    libraryDependencies ++= Seq(
-      SharedDependencies.derivedCodecs,
-      SharedDependencies.shapeless,
-      SharedDependencies.macwire,
-      SharedDependencies.scalaTest
-    )
-  )
+
+  lazy val sharedJs = shared.js
+  lazy val sharedJvm = shared.jvm
+
 }

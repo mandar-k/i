@@ -14,7 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
  *
  * @param messagesApi The Play messages API.
  */
-class CustomSecuredErrorHandler @Inject() (val messagesApi: MessagesApi  ) extends SecuredErrorHandler with I18nSupport {
+class CustomSecuredErrorHandler @Inject() (val messagesApi: MessagesApi) extends SecuredErrorHandler with I18nSupport {
 
   /**
    * Called when a user is not authenticated.
@@ -36,7 +36,7 @@ class CustomSecuredErrorHandler @Inject() (val messagesApi: MessagesApi  ) exten
    * @param request The request header.
    * @return The result to send to the client.
    */
-  override def onNotAuthorized(implicit request: RequestHeader ) = {
+  override def onNotAuthorized(implicit request: RequestHeader) = {
     Future.successful(Forbidden(Messages("access.denied")))
 
   }

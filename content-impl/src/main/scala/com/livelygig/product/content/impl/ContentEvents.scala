@@ -5,9 +5,9 @@ import com.livelygig.product.content.api.models.{UserContent}
 import play.api.libs.json.Json
 
 /**
-  * Created by shubham.k on 23-12-2016.
-  */
-sealed trait ContentEvent extends AggregateEvent[ContentEvent]   {
+ * Created by shubham.k on 23-12-2016.
+ */
+sealed trait ContentEvent extends AggregateEvent[ContentEvent] {
   override def aggregateTag: AggregateEventTagger[ContentEvent] = ContentEvent.Tag
 }
 

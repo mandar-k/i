@@ -9,17 +9,17 @@ import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, Ca
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 28-12-2016.
-  */
+ * Created by shubham.k on 28-12-2016.
+ */
 private[impl] class UserProfileEventProcessor(session: CassandraSession, readSide: CassandraReadSide)(implicit ec: ExecutionContext)
-  extends ReadSideProcessor[UserProfileEvent] {
+    extends ReadSideProcessor[UserProfileEvent] {
   private var insertUserAliasStatement: PreparedStatement = null
 
   override def buildHandler() = {
     readSide.builder[UserProfileEvent]("UserEventOffset")
-            .setGlobalPrepare(createTables)
-            .setPrepare(_ => preparedStatements())
-//            .setEventHandler[UserProfileCreated](e => insertDefaultUserAlias(e.entityId, e.event.userProfile.username))
+      .setGlobalPrepare(createTables)
+      .setPrepare(_ => preparedStatements())
+      //            .setEventHandler[UserProfileCreated](e => insertDefaultUserAlias(e.entityId, e.event.userProfile.username))
       .build
   }
 
@@ -35,7 +35,8 @@ private[impl] class UserProfileEventProcessor(session: CassandraSession, readSid
           aliasLabel text,
           isDefault boolean
         )
-      """)
+      """
+      )
     } yield {
       Done
     }
@@ -52,14 +53,15 @@ private[impl] class UserProfileEventProcessor(session: CassandraSession, readSid
           aliasLabel,
           isDefault
         ) VALUES (?, ?, ?, ?)
-        """)
+        """
+      )
     } yield {
       insertUserAliasStatement = insertUserAlias
       Done
     }
   }
 
-  private def insertDefaultUserAlias(agentUri:String,userName: String) = {
+  private def insertDefaultUserAlias(agentUri: String, userName: String) = {
     val defaultAliasUri = agentUri + s"/$userName"
     Future(List(insertUserAliasStatement.bind(agentUri, defaultAliasUri, userName, true.asInstanceOf[java.lang.Boolean])))
   }

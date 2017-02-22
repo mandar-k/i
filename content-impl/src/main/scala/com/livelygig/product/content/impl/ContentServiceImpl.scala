@@ -16,13 +16,13 @@ import com.livelygig.product.content.api.ContentService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContentServiceImpl(registry: PersistentEntityRegistry,
-                         msgPubSub: ContentPubSub,
-                         handler: ContentAuthHandler,
-                         analyser: ConstraintAnalyser,
-                         system: ActorSystem)
-                        (implicit ec: ExecutionContext, mat: Materializer) extends ContentService {
-
+class ContentServiceImpl(
+  registry: PersistentEntityRegistry,
+    msgPubSub: ContentPubSub,
+    handler: ContentAuthHandler,
+    analyser: ConstraintAnalyser,
+    system: ActorSystem
+)(implicit ec: ExecutionContext, mat: Materializer) extends ContentService {
 
   override def addMessage() = ResourceServerSecurity.authenticated((userUri, rh) => ServerServiceCall { content =>
     val msgUid = UUID.randomUUID()
@@ -45,8 +45,8 @@ class ContentServiceImpl(registry: PersistentEntityRegistry,
           .ask(GetContent)
           .map(_.map(e => e))
       }.collect {
-      case Some(content) => content
-    }
+        case Some(content) => content
+      }
       .runWith(Sink.seq)
   })
 

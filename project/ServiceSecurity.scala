@@ -2,7 +2,7 @@ import com.lightbend.lagom.sbt.LagomImport.{lagomScaladslApi, lagomScaladslServe
 import sbt.Keys.libraryDependencies
 import sbt._
 
-object Security {
+object ServiceSecurity {
   private[this] val dependencies = {
     import Dependencies._
     Seq(

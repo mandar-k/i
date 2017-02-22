@@ -7,11 +7,11 @@ import com.livelygig.product.utils.JsonFormats.singletonFormat
 import play.api.libs.json.{Format, Json}
 
 /**
-  * Created by shubham.k on 23-12-2016.
-  */
+ * Created by shubham.k on 23-12-2016.
+ */
 sealed trait UserProfileCommand
 
-case class CreateProfile(userProfile:UserProfile) extends UserProfileCommand with ReplyType[Done]
+case class CreateProfile(userProfile: UserProfile) extends UserProfileCommand with ReplyType[Done]
 object CreateProfile {
   implicit val format: Format[CreateProfile] = Json.format
 }
@@ -21,5 +21,5 @@ case object ActivateUserProfile extends UserProfileCommand with ReplyType[Done] 
 }
 
 case object GetProfile extends UserProfileCommand with ReplyType[UserProfileResponse] {
-  implicit val format: Format[GetProfile.type ] = singletonFormat(GetProfile)
+  implicit val format: Format[GetProfile.type] = singletonFormat(GetProfile)
 }

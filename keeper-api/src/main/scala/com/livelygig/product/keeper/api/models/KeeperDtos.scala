@@ -8,8 +8,8 @@ import play.api.libs.functional.syntax._
 import scala.util.Try
 
 /**
-  * Created by shubham.k on 30-01-2017.
-  */
+ * Created by shubham.k on 30-01-2017.
+ */
 
 case class UserAuthRes(msgType: String, content: Content)
 
@@ -19,13 +19,13 @@ object UserAuthRes {
 
 sealed trait Content {}
 
-case class ErrorResponse (reason: String ) extends Content
+case class ErrorResponse(reason: String) extends Content
 
 object ErrorResponse {
   implicit val format: Format[ErrorResponse] = Json.format
 }
 
-case  class InitializeSessionResponse(agentUri: String, email: String, username: String) extends Content
+case class InitializeSessionResponse(agentUri: String, email: String, username: String) extends Content
 
 object InitializeSessionResponse {
   implicit val format: Format[InitializeSessionResponse] = Json.format
@@ -34,16 +34,16 @@ object InitializeSessionResponse {
 case class CreateUserResponse(msg: String) extends Content
 
 object CreateUserResponse {
-  implicit val format:Format[CreateUserResponse] = Json.format
+  implicit val format: Format[CreateUserResponse] = Json.format
 }
 
-case class ActivateUserResponse (msg: String) extends Content
+case class ActivateUserResponse(msg: String) extends Content
 
 object ActivateUserResponse {
   implicit val format: Format[ActivateUserResponse] = Json.format
 }
 
-case class UserFound (userUri: String, username: String, email: String) extends Content
+case class UserFound(userUri: String, username: String, email: String) extends Content
 
 object UserFound {
   implicit val format: Format[UserFound] = Json.format

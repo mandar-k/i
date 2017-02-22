@@ -11,5 +11,5 @@ object KeeperImpl {
   lazy val keeperImpl = (project in file("keeper-impl"))
     .settings(keeperImplSettings: _*)
     .enablePlugins(LagomScala)
-    .dependsOn(Security.security, Shared.sharedJvm)
+    .dependsOn(ServiceSecurity.security, Shared.sharedJvm, KeeperApi.keeperApi)
 }

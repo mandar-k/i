@@ -10,16 +10,16 @@ trait UserProfileService extends Service {
   def updateProfile: ServiceCall[UserProfile, UserProfileResponse]
 
   /**
-    * get current logged in user profile
-    * @return
-    */
+   * get current logged in user profile
+   * @return
+   */
   def getUserProfile: ServiceCall[NotUsed, UserProfileResponse]
 
   /**
-    * Accepts the Seq alias uri of the user connection and return
-    * their condensed profiles
-    * @return
-    */
+   * Accepts the Seq alias uri of the user connection and return
+   * their condensed profiles
+   * @return
+   */
   def getUserConnectionsProfile: ServiceCall[Seq[String], UserProfileResponse]
 
   def descriptor = {
@@ -30,5 +30,4 @@ trait UserProfileService extends Service {
     )
   }
 }
-
 

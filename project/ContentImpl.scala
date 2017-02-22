@@ -11,5 +11,5 @@ object ContentImpl {
   lazy val contentImpl = (project in file("content-impl"))
     .settings(contentImplSettings: _*)
     .enablePlugins(LagomScala)
-    .dependsOn(Security.security, Shared.sharedJvm)
+    .dependsOn(ServiceSecurity.security, Shared.sharedJvm, ContentApi.contentApi)
 }

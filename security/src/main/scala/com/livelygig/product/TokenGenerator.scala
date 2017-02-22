@@ -1,8 +1,8 @@
 package com.livelygig.product
 
 /**
-  * Created by shubham.k on 13-02-2017.
-  */
+ * Created by shubham.k on 13-02-2017.
+ */
 
 import java.security.{MessageDigest, SecureRandom}
 
@@ -21,7 +21,7 @@ import java.security.{MessageDigest, SecureRandom}
  */
 class TokenGenerator {
 
-  private val TOKEN_LENGTH = 45	// TOKEN_LENGTH is not the return size from a hash,
+  private val TOKEN_LENGTH = 45 // TOKEN_LENGTH is not the return size from a hash,
   // but the total characters used as random token prior to hash
   // 45 was selected because System.nanoTime().toString returns
   // 19 characters.  45 + 19 = 64.  Therefore we are guaranteed
@@ -29,7 +29,7 @@ class TokenGenerator {
   private val TOKEN_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_.-"
   private val secureRandom = SecureRandom.getInstanceStrong()
 
-  private def toHex(bytes: Array[Byte]): String = bytes.map( "%02x".format(_) ).mkString("")
+  private def toHex(bytes: Array[Byte]): String = bytes.map("%02x".format(_)).mkString("")
 
   private def sha(s: String): String = {
     toHex(MessageDigest.getInstance("SHA-256").digest(s.getBytes("UTF-8")))
@@ -39,9 +39,9 @@ class TokenGenerator {
   }
 
   // use tail recursion, functional style to build string.
-  private def generateToken(tokenLength: Int) : String = {
+  private def generateToken(tokenLength: Int): String = {
     val charLen = TOKEN_CHARS.length()
-    def generateTokenAccumulator(accumulator: String, number: Int) : String = {
+    def generateTokenAccumulator(accumulator: String, number: Int): String = {
       if (number == 0) return accumulator
       else
         generateTokenAccumulator(accumulator + TOKEN_CHARS(secureRandom.nextInt(charLen)).toString, number - 1)
@@ -60,10 +60,10 @@ class TokenGenerator {
      * or
      *  SHA-256 hash of (username + current time + random token generator) as token, 256 bits, 64 characters
      */
-  def generateMD5Token(tokenprefix: String): String =  {
+  def generateMD5Token(tokenprefix: String): String = {
     md5(tokenprefix + System.nanoTime() + generateToken(TOKEN_LENGTH))
   }
-  def generateSHAToken(tokenprefix: String): String =  {
+  def generateSHAToken(tokenprefix: String): String = {
     sha(tokenprefix + System.nanoTime() + generateToken(TOKEN_LENGTH))
   }
 }

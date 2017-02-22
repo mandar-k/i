@@ -11,7 +11,6 @@ import utils.auth.DefaultEnv
 
 import scala.language.postfixOps
 
-
 /**
  * The `Activate Account` controller.
  *
@@ -20,14 +19,14 @@ import scala.language.postfixOps
  * @param userService      The user service implementation.
  * @param webJarAssets     The WebJar assets locator.
  */
-class ActivateAccountController (
-                                  val messagesApi: MessagesApi,
-                                  keeperService: KeeperService,
-                                  silhouette: Silhouette[DefaultEnv],
-                                  userService: SilhouetteIdentityService,
-                                  implicit val webJarAssets: WebJarAssets)
-  extends Controller with I18nSupport {
-
+class ActivateAccountController(
+  val messagesApi: MessagesApi,
+  keeperService: KeeperService,
+  silhouette: Silhouette[DefaultEnv],
+  userService: SilhouetteIdentityService,
+  implicit val webJarAssets: WebJarAssets
+)
+    extends Controller with I18nSupport {
 
   /**
    * Activates an account.
@@ -36,7 +35,7 @@ class ActivateAccountController (
    * @return The result to display.
    */
   def activate(token: String) = silhouette.UnsecuredAction.async { implicit request =>
-    keeperService.activateAccount().invoke(token).map{
+    keeperService.activateAccount().invoke(token).map {
       userAuthResponse =>
         userAuthResponse match {
           case UserAuthRes(_, ErrorResponse(msg)) => Redirect(routes.SignInController.view()).flashing("error" -> msg)

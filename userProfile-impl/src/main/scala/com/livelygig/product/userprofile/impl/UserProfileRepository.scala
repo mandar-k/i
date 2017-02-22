@@ -5,8 +5,8 @@ import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, Ca
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 21-12-2016.
-  */
+ * Created by shubham.k on 21-12-2016.
+ */
 private[impl] class UserProfileRepository(session: CassandraSession)(implicit ec: ExecutionContext) {
   /*def getUser(user: api.User) = {
     session.selectOne("SELECT * from users WHERE email = ? AND password = ?", user.email, user.password)

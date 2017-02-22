@@ -5,9 +5,9 @@ import com.livelygig.product.userprofile.api.models.UserProfile
 import play.api.libs.json.{Format, Json}
 import com.livelygig.product.utils.JsonFormats._
 /**
-  * Created by shubham.k on 23-12-2016.
-  */
-sealed trait UserProfileEvent extends AggregateEvent[UserProfileEvent]   {
+ * Created by shubham.k on 23-12-2016.
+ */
+sealed trait UserProfileEvent extends AggregateEvent[UserProfileEvent] {
   override def aggregateTag: AggregateEventTagger[UserProfileEvent] = UserProfileEvent.Tag
 }
 
@@ -16,7 +16,7 @@ object UserProfileEvent {
   val Tag = AggregateEventTag.sharded[UserProfileEvent](NumShards)
 }
 
-case class UserProfileCreated(userProfile:UserProfile) extends UserProfileEvent
+case class UserProfileCreated(userProfile: UserProfile) extends UserProfileEvent
 
 object UserProfileCreated {
   implicit val format: Format[UserProfileCreated] = Json.format

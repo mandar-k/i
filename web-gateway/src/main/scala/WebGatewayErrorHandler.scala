@@ -13,15 +13,14 @@ import play.core.SourceMapper
 import scala.concurrent.Future
 
 /**
-  * Created by shubham.k on 03-01-2017.
-  */
-class WebGatewayErrorHandler @Inject()(
-                                        env: play.api.Environment, config: Configuration,
-                                        sourceMapper: Option[SourceMapper], router: Option[Router]
-                                      ) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) {
+ * Created by shubham.k on 03-01-2017.
+ */
+class WebGatewayErrorHandler @Inject() (
+    env: play.api.Environment, config: Configuration,
+    sourceMapper: Option[SourceMapper], router: Option[Router]
+) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) {
 
   private val log = LoggerFactory.getLogger(classOf[WebGatewayErrorHandler])
-
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String) = {
     Future.successful(

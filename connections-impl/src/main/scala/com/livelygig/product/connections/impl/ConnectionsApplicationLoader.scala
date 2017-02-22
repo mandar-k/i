@@ -11,11 +11,11 @@ import com.softwaremill.macwire._
 import play.api.libs.ws.ahc.AhcWSComponents
 
 /**
-  * Created by shubham.k on 09-01-2017.
-  */
+ * Created by shubham.k on 09-01-2017.
+ */
 
 abstract class ConnectionsApplication(context: LagomApplicationContext)
-  extends LagomApplication(context)
+    extends LagomApplication(context)
     with AhcWSComponents
     with CassandraPersistenceComponents
     with LagomKafkaClientComponents {

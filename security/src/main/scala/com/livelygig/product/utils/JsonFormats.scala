@@ -29,8 +29,8 @@ object JsonFormats {
     (__ \ "value").read[String].collect(
       ValidationError(s"Expected a JSON object with a single field with key 'value' and value '${singleton.getClass.getSimpleName}'")
     ) {
-      case s if s == singleton.getClass.getSimpleName => singleton
-    }
+        case s if s == singleton.getClass.getSimpleName => singleton
+      }
   }
   def singletonWrites[O]: Writes[O] = Writes { singleton =>
     Json.obj("value" -> singleton.getClass.getSimpleName)
@@ -48,13 +48,12 @@ object JsonFormats {
   }
 
   implicit val durationReads: Reads[Duration] = implicitly[Reads[String]]
-      .collect(ValidationError("Invalid duration"))(Function.unlift { str =>
-        Try(Duration.parse(str)).toOption
-      })
+    .collect(ValidationError("Invalid duration"))(Function.unlift { str =>
+      Try(Duration.parse(str)).toOption
+    })
   implicit val durationWrites: Writes[Duration] = Writes { duration =>
     JsString(duration.toString)
   }
-
 
 }
 

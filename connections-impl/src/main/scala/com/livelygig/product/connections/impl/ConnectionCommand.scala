@@ -7,10 +7,9 @@ import com.livelygig.product.utils.JsonFormats.singletonFormat
 import play.api.libs.json.{Format, Json}
 
 /**
-  * Created by shubham.k on 13-02-2017.
-  */
+ * Created by shubham.k on 13-02-2017.
+ */
 trait ConnectionCommand
-
 
 case class AddConnection(connectionAliasUri: String) extends ConnectionCommand with ReplyType[Done]
 
@@ -24,7 +23,7 @@ object DeleteConnection {
   implicit val format: Format[AddConnection] = Json.format
 }
 
-case object GetConnections extends ConnectionCommand with ReplyType[ConnectionResponse]{
-  implicit val format: Format[GetConnections.type ] = singletonFormat(GetConnections)
+case object GetConnections extends ConnectionCommand with ReplyType[ConnectionResponse] {
+  implicit val format: Format[GetConnections.type] = singletonFormat(GetConnections)
 }
 

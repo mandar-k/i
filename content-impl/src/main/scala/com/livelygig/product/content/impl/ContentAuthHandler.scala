@@ -11,8 +11,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
-  * Created by shubham.k on 1/17/2017.
-  */
+ * Created by shubham.k on 1/17/2017.
+ */
 
 class Subject(authInfo: AuthorizationInfo) {
   def identifier: String = ""
@@ -28,10 +28,14 @@ class ConstraintAnalyser {
   type RoleGroups = List[RoleGroup]
   type Permission = UserPermission
 
-  def hasAllRoles(subject: Subject,
-                  requiredRoleNames: RoleGroup): Boolean = {
-    def roleMatch(requiredRoleName: UserRole,
-                  subjectRoles: UserRole) = {
+  def hasAllRoles(
+    subject: Subject,
+    requiredRoleNames: RoleGroup
+  ): Boolean = {
+    def roleMatch(
+      requiredRoleName: UserRole,
+      subjectRoles: UserRole
+    ) = {
       requiredRoleName.equals(subjectRoles)
     }
     subject.roles
@@ -39,10 +43,12 @@ class ConstraintAnalyser {
       .exists(wasMatched => wasMatched.foldLeft(if (requiredRoleNames.isEmpty) false else true)(_ && _))
   }
 
-  def hasRolesAndPermissions(roleGroups: RoleGroups,
-                             permissions: Permission,
-                             handler: ContentAuthHandler,
-                             rh: RequestHeader): Future[Boolean] = {
+  def hasRolesAndPermissions(
+    roleGroups: RoleGroups,
+    permissions: Permission,
+    handler: ContentAuthHandler,
+    rh: RequestHeader
+  ): Future[Boolean] = {
     def checkRoles(subject: Subject, current: RoleGroup, remaining: RoleGroups): Boolean = {
       if (hasAllRoles(subject, current)) true
       else if (remaining.isEmpty) false
@@ -63,7 +69,6 @@ class ConstraintAnalyser {
     }
   }
 }
-
 
 class ContentAuthHandler(keeperService: KeeperService) {
   def getSubject[A](requestHeader: RequestHeader): Future[Subject] = {

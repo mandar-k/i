@@ -9,8 +9,8 @@ import com.livelygig.product.keeper.api.models.{UserAuth, UserLoginModel}
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 11-01-2017.
-  */
+ * Created by shubham.k on 11-01-2017.
+ */
 private[impl] class KeeperRepository(session: CassandraSession)(implicit ec: ExecutionContext) {
 
   def searchForUsernameOrEmail(userLoginModel: UserLoginModel) = {
@@ -24,30 +24,33 @@ private[impl] class KeeperRepository(session: CassandraSession)(implicit ec: Exe
     session.selectOne(
       """
         SELECT * FROM userUriByUsername WHERE userName = ?
-      """, username).map {
-      case Some(row) => Some(row.getString("userUri"))
-      case None => None
-    }
+      """, username
+    ).map {
+        case Some(row) => Some(row.getString("userUri"))
+        case None => None
+      }
   }
 
   def searchForEmail(email: String): Future[Option[String]] = {
     session.selectOne(
       """
         SELECT * FROM userUriByEmail WHERE email = ?
-      """, email).map {
-      case Some(row) => Some(row.getString("userUri"))
-      case None => None
-    }
+      """, email
+    ).map {
+        case Some(row) => Some(row.getString("userUri"))
+        case None => None
+      }
   }
 
   def searchForActivationToken(activationToken: String): Future[Option[String]] = {
     session.selectOne(
       """
         SELECT * FROM userActivationToken WHERE activationToken = ?
-      """, activationToken).map {
-      case Some(row) => Some(row.getString("userUri"))
-      case None => None
-    }
+      """, activationToken
+    ).map {
+        case Some(row) => Some(row.getString("userUri"))
+        case None => None
+      }
   }
 
 }

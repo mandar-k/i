@@ -1,12 +1,12 @@
 package i18n
 
 /**
-  * Created by a4tech on 9/28/2016.
-  */
+ * Created by a4tech on 9/28/2016.
+ */
 object I18NLoc {
   val projectRoot = "server/src/main/scala/i18n/"
-  val en_us = projectRoot+"en_us.json"
-  val fr = projectRoot+"fr.json"
+  val en_us = projectRoot + "en_us.json"
+  val fr = projectRoot + "fr.json"
 }
 /*
 trait I18N {

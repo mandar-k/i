@@ -10,10 +10,9 @@ import com.softwaremill.macwire._
 import com.livelygig.product.keeper.api.KeeperService
 
 abstract class ContentApplication(context: LagomApplicationContext)
-  extends LagomApplication(context)
+    extends LagomApplication(context)
     with AhcWSComponents
-    with CassandraPersistenceComponents
-    /*with PubSubComponents*/ {
+    with CassandraPersistenceComponents /*with PubSubComponents*/ {
 
   override lazy val lagomServer = LagomServer.forServices(
     bindService[ContentService].to(wire[ContentServiceImpl])
@@ -28,7 +27,7 @@ abstract class ContentApplication(context: LagomApplicationContext)
   lazy val handler = wire[ContentAuthHandler]
   lazy val analyser = wire[ConstraintAnalyser]
   lazy val keeperService = serviceClient.implement[KeeperService]
-//  lazy val msgPubSubRegistry = wire[pubSubRegistry]
+  //  lazy val msgPubSubRegistry = wire[pubSubRegistry]
   persistentEntityRegistry.register(wire[ContentEntity])
   readSide.register(wire[ContentEventProcessor])
 }

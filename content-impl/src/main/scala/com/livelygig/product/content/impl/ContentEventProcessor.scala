@@ -7,17 +7,17 @@ import com.lightbend.lagom.scaladsl.persistence.cassandra.{CassandraReadSide, Ca
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 28-12-2016.
-  */
+ * Created by shubham.k on 28-12-2016.
+ */
 private[impl] class ContentEventProcessor(session: CassandraSession, readSide: CassandraReadSide)(implicit ec: ExecutionContext)
-  extends ReadSideProcessor[ContentEvent] {
+    extends ReadSideProcessor[ContentEvent] {
   private var insertMessageStatement: PreparedStatement = null
 
   override def buildHandler() = {
     readSide.builder[ContentEvent]("MessageEventOffset")
-//      .setGlobalPrepare(createTables)
-//      .setPrepare(_ => preparedStatements())
-//      .setEventHandler[ContentPosted](e => insertMessage(e.event.message))
+      //      .setGlobalPrepare(createTables)
+      //      .setPrepare(_ => preparedStatements())
+      //      .setEventHandler[ContentPosted](e => insertMessage(e.event.message))
       .build
   }
 

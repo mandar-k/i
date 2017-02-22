@@ -14,10 +14,10 @@ import play.api.Configuration
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 11-01-2017.
-  */
+ * Created by shubham.k on 11-01-2017.
+ */
 private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: CassandraReadSide, config: Configuration)(implicit ec: ExecutionContext)
-  extends ReadSideProcessor[KeeperEvent] {
+    extends ReadSideProcessor[KeeperEvent] {
   private val accessTokenExpire = config.getMilliseconds("authentication.tokenExpire").getOrElse(60 * 60L * 24 * 1000) / 1000
   private val activationTokenExpire = config.getMilliseconds("activation.tokenExpire").getOrElse(60 * 60L * 24 * 1000) / 1000
   private var insertAuthKeyStatement: PreparedStatement = _
@@ -36,7 +36,7 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
       .setGlobalPrepare(createTables)
       .setPrepare(tag => preparedStatements)
       // TODO generate and add auth key to db
-//      .setEventHandler[UserLogin](e => insertAuthToken(e.entityId, e.event.userLoginInfo))
+      //      .setEventHandler[UserLogin](e => insertAuthToken(e.entityId, e.event.userLoginInfo))
       .setEventHandler[UserCreated](e => insertUserAuthDetails(e.entityId, e.event.user, e.event.activationToken))
       .setEventHandler[UserActivated](e => removeToken(e.event.tokenToDelete))
       //      .setEventHandler[TokenCreated](e => )
@@ -55,7 +55,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
           roles text,
           PRIMARY KEY (userUri)
           )
-        """)
+        """
+      )
       _ <- session.executeCreateTable(
         """
           CREATE TABLE IF NOT EXISTS userPermissions (
@@ -72,7 +73,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
             authToken text,
             PRIMARY KEY (userUri)
             )
-          """)
+          """
+      )
       _ <- session.executeCreateTable(
         """
           CREATE TABLE IF NOT EXISTS userUriByUsername (
@@ -80,7 +82,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
           userUri text,
           PRIMARY KEY (username)
           )
-        """)
+        """
+      )
       _ <- session.executeCreateTable(
         """
           CREATE TABLE IF NOT EXISTS userUriByEmail (
@@ -104,24 +107,28 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
   }
 
   private def preparedStatements() = {
-//    session.
+    //    session.
     for {
       insertRoles <- session.prepare(
         """
           INSERT INTO userRoles(userUri, roles) VALUES (?,?)
-        """)
+        """
+      )
       insertPermissions <- session.prepare(
         """
           INSERT INTO userPermissions (userUri, permissions) VALUES (?,?)
-        """)
+        """
+      )
       insertAuthToken <- session.prepare(
         """
           INSERT INTO userAuthToken (userUri, authToken) VALUES (?,?) USING TTL ?
-        """)
+        """
+      )
       insertActivationToken <- session.prepare(
         """
           INSERT INTO userActivationToken (userUri, activationToken) VALUES (?,?) USING TTL ?
-        """)
+        """
+      )
       insertUsernameAndUserUri <- session.prepare(
         """
            INSERT INTO userUriByUsername (username, userUri) VALUES (?,?)
@@ -157,7 +164,8 @@ private[impl] class KeeperEventProcessor(session: CassandraSession, readSide: Ca
         insertEmailUserUri.bind(user.userAuth.email, userUri),
         insertUsernameUserUri.bind(user.userAuth.username, userUri),
         insertActivationTokenStatement.bind(userUri, activationToken, activationTokenExpire.toInt.asInstanceOf[java.lang.Integer])
-      ))
+      )
+    )
   }
 
   private def removeToken(tokenToRemove: String) = {

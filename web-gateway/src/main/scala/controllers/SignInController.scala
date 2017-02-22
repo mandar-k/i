@@ -21,43 +21,44 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 
 /**
-  * The `Sign In` controller.
-  *
-  * @param messagesApi            The Play messages API.
-  * @param silhouette             The Silhouette stack.
-  * @param authInfoRepository     The auth info repository implementation.
-  * @param credentialsProvider    The credentials provider.
-  * @param socialProviderRegistry The social provider registry.
-  * @param configuration          The Play configuration.
-  * @param clock                  The clock instance.
-  * @param webJarAssets           The webjar assets implementation.
-  */
+ * The `Sign In` controller.
+ *
+ * @param messagesApi            The Play messages API.
+ * @param silhouette             The Silhouette stack.
+ * @param authInfoRepository     The auth info repository implementation.
+ * @param credentialsProvider    The credentials provider.
+ * @param socialProviderRegistry The social provider registry.
+ * @param configuration          The Play configuration.
+ * @param clock                  The clock instance.
+ * @param webJarAssets           The webjar assets implementation.
+ */
 class SignInController(
-                        val messagesApi: MessagesApi,
-                        silhouette: Silhouette[DefaultEnv],
-                        authInfoRepository: AuthInfoRepository,
-                        credentialsProvider: CredentialsProvider,
-                        socialProviderRegistry: SocialProviderRegistry,
-                        configuration: Configuration,
-                        clock: Clock,
-                        keeperService: KeeperService,
-                        implicit val webJarAssets: WebJarAssets)
-  extends Controller with I18nSupport {
+  val messagesApi: MessagesApi,
+  silhouette: Silhouette[DefaultEnv],
+  authInfoRepository: AuthInfoRepository,
+  credentialsProvider: CredentialsProvider,
+  socialProviderRegistry: SocialProviderRegistry,
+  configuration: Configuration,
+  clock: Clock,
+  keeperService: KeeperService,
+  implicit val webJarAssets: WebJarAssets
+)
+    extends Controller with I18nSupport {
 
   /**
-    * Views the `Sign In` page.
-    *
-    * @return The result to display.
-    */
+   * Views the `Sign In` page.
+   *
+   * @return The result to display.
+   */
   def view = silhouette.UnsecuredAction.async { implicit request =>
     Future.successful(Ok(views.html.signIn(SignInForm.form, socialProviderRegistry)))
   }
 
   /**
-    * Handles the submitted form.
-    *
-    * @return The result to display.
-    */
+   * Handles the submitted form.
+   *
+   * @return The result to display.
+   */
   def submit = silhouette.UnsecuredAction.async { implicit request =>
     SignInForm.form.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.signIn(form, socialProviderRegistry))),

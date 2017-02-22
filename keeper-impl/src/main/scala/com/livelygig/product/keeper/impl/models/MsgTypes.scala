@@ -1,8 +1,8 @@
 package com.livelygig.product.keeper.impl.models
 
 /**
-  * Created by shubham.k on 30-01-2017.
-  */
+ * Created by shubham.k on 30-01-2017.
+ */
 object MsgTypes {
   // user is awaiting confirmation
   val CREATE_USER_WAITING = "createUserWaiting"

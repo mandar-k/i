@@ -7,11 +7,11 @@ import com.livelygig.product.keeper.api.{KeeperEventsForTopics, KeeperService}
 import scala.concurrent.Future
 
 /**
-  * Created by shubham.k on 02-02-2017.
-  */
+ * Created by shubham.k on 02-02-2017.
+ */
 class KeeperServiceSubscriberForConnections(keeperService: KeeperService) {
   keeperService.keeperTopicProducer.subscribe.atLeastOnce(Flow[KeeperEventsForTopics].mapAsync(1) {
-    case uc:api.UserCreated =>
+    case uc: api.UserCreated =>
       // TODO create an entity for the connection
       Future.successful(Done)
     case _ =>

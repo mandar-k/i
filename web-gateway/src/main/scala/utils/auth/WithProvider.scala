@@ -1,6 +1,6 @@
 package utils.auth
 
-import com.mohiva.play.silhouette.api.{ Authenticator, Authorization }
+import com.mohiva.play.silhouette.api.{Authenticator, Authorization}
 import models.UserIdentity
 import play.api.mvc.Request
 
@@ -25,7 +25,8 @@ case class WithProvider[A <: Authenticator](provider: String) extends Authorizat
    */
   override def isAuthorized[B](user: UserIdentity, authenticator: A)(
     implicit
-    request: Request[B]): Future[Boolean] = {
+    request: Request[B]
+  ): Future[Boolean] = {
 
     Future.successful(user.loginInfo.providerID == provider)
   }

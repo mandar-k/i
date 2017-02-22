@@ -11,5 +11,5 @@ object ConnectionsApi {
 
   lazy val connectionsApi = (project in file("connections-api"))
     .settings(connectionsSettings: _*)
-    .dependsOn(Security.security)
+    .dependsOn(ServiceSecurity.security, KeeperApi.keeperApi)
 }

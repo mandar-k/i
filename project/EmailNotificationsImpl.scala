@@ -3,13 +3,13 @@ import sbt.Keys._
 import sbt._
 
 object EmailNotificationsImpl {
-  private[this] val emailNotificationImplSettings = Shared.commonSettings ++ Seq(
-    name := "emailNotificationImpl"
+  private[this] val emailNotificationsImplSettings = Shared.commonSettings ++ Seq(
+    name := "emailNotificationsImpl"
     //    scapegoatIgnoredFiles := Seq(".*/JsonUtils.scala", ".*/JsonSerializers.scala")
   )
 
-  lazy val emailNotificationImpl = (project in file("emailnotification-impl"))
-    .settings(emailNotificationImplSettings: _*)
+  lazy val emailNotificationsImpl = (project in file("emailnotifications-impl"))
+    .settings(emailNotificationsImplSettings: _*)
     .enablePlugins(LagomScala)
-    .dependsOn(Security.security, Shared.sharedJvm)
+    .dependsOn(ServiceSecurity.security, Shared.sharedJvm, EmailNotificationsApi.emailNotificationsApi)
 }

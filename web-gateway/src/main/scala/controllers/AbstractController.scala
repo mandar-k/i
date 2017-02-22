@@ -7,8 +7,8 @@ import play.api.mvc.{Controller, Request, Result}
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 08-02-2017.
-  */
+ * Created by shubham.k on 08-02-2017.
+ */
 abstract class AbstractController()(implicit val executionContext: ExecutionContext) extends Controller {
   private val log = LoggerFactory.getLogger(classOf[AbstractController])
 
@@ -16,9 +16,9 @@ abstract class AbstractController()(implicit val executionContext: ExecutionCont
     request.body.validate[R](rds).fold(
       valid = block,
       invalid = e => {
-        val error = e.mkString
-        log.error(error)
-        Future.successful(BadRequest(error))
-      }
+      val error = e.mkString
+      log.error(error)
+      Future.successful(BadRequest(error))
+    }
     )
 }

@@ -8,8 +8,8 @@ import com.livelygig.product.keeper.api.models.{User, UserAuth, UserAuthRes}
 import play.api.libs.json.{Format, Json}
 
 /**
-  * Created by shubham.k on 11-01-2017.
-  */
+ * Created by shubham.k on 11-01-2017.
+ */
 trait KeeperCommand
 
 case class LoginUser(password: String) extends KeeperCommand with ReplyType[UserAuthRes]

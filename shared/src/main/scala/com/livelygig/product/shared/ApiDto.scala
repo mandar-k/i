@@ -23,6 +23,39 @@ object ApiDto {
   }
 }
 
+case class ApiResponse(content: Content)
+
+object ApiResponse {
+  implicit val format: Format[ApiResponse] = Json.format
+}
+
+sealed trait Content {}
+
+case class InsertContentRequest(cnxnsAliasUri: Seq[String], value: Content)
+
+case class Message(body: String, date: String) extends Content
+
+case class Project(name: String, startDate: String) extends Content
+case class CreateUser(username: String, email: String, password: String)                                 extends Content
+
+
+
+object Content {
+  implicit val format: Format[Content] =
+    derived.flat.oformat((__ \ "type").format[String])
+}
+
+/*case class ApiDto(msgType: String,content: Content)
+
+object ApiDto {
+  implicit val format: Format[ApiDto] = Json.format
+  def apply(content: Content): ApiDto = {
+    val nm: String  = content.getClass.getSimpleName
+    val tnm: String = Character.toLowerCase(nm.charAt(0)) + nm.substring(1)
+    ApiDto(tnm, content)
+  }
+}
+
 sealed trait Content {}
 
 // request content
@@ -45,5 +78,5 @@ case class ConnectionsProfileResponse (profile: Seq[ConnectionsProfileResponse])
 
 object Content {
   implicit val format: Format[Content] =
-    derived.flat.oformat((__ \ "contentType").format[String])
-}
+    derived.flat.oformat((__ \ "type").format[String])
+}*/

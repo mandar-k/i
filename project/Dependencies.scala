@@ -49,6 +49,7 @@ object Dependencies {
     val shapeless = "com.chuusai" %% "shapeless" % shapelessVersion
     val macwire = "com.softwaremill.macwire" %% "macros" % macwireVersion
     val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
+    val ficus = "com.iheart" %% "ficus" % "1.4.0"
   }
 
   object WebJars {

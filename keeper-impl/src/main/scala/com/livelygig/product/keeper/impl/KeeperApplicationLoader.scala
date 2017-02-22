@@ -10,16 +10,15 @@ import com.livelygig.product.TokenGenerator
 import com.livelygig.product.keeper.api.KeeperService
 import com.softwaremill.macwire._
 
-
 /**
-  * Created by shubham.k on 09-01-2017.
-  */
+ * Created by shubham.k on 09-01-2017.
+ */
 
 abstract class KeeperApplication(context: LagomApplicationContext)
-  extends LagomApplication(context)
+    extends LagomApplication(context)
     with AhcWSComponents
     with CassandraPersistenceComponents
-    with LagomKafkaComponents{
+    with LagomKafkaComponents {
   override lazy val lagomServer = LagomServer.forServices(
     bindService[KeeperService].to(wire[KeeperServiceImpl])
   )

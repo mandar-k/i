@@ -25,14 +25,15 @@ import scala.concurrent.Future
  * @param socialProviderRegistry The social provider registry.
  * @param webJarAssets The webjar assets implementation.
  */
-class SocialAuthController (
-                             val messagesApi: MessagesApi,
-                             silhouette: Silhouette[DefaultEnv],
-                             userService: SilhouetteIdentityService,
-                             authInfoRepository: AuthInfoRepository,
-                             socialProviderRegistry: SocialProviderRegistry,
-                             implicit val webJarAssets: WebJarAssets)
-  extends Controller with I18nSupport with Logger {
+class SocialAuthController(
+  val messagesApi: MessagesApi,
+  silhouette: Silhouette[DefaultEnv],
+  userService: SilhouetteIdentityService,
+  authInfoRepository: AuthInfoRepository,
+  socialProviderRegistry: SocialProviderRegistry,
+  implicit val webJarAssets: WebJarAssets
+)
+    extends Controller with I18nSupport with Logger {
 
   /**
    * Authenticates a user against a social provider.
@@ -47,7 +48,7 @@ class SocialAuthController (
           case Left(result) => Future.successful(result)
           case Right(authInfo) => for {
             profile <- p.retrieveProfile(authInfo)
-            user <- Future.successful(UserIdentity("", LoginInfo("",""), ""))
+            user <- Future.successful(UserIdentity("", LoginInfo("", ""), ""))
             authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
             authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
             value <- silhouette.env.authenticatorService.init(authenticator)

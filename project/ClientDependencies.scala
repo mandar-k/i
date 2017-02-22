@@ -27,7 +27,6 @@ object ClientDependencies {
     "org.webjars" % "jquery" % "2.2.4" / "jquery.js" minified "jquery.min.js",
     "org.webjars" % "bootstrap" % "3.3.7" / "bootstrap.js" minified "bootstrap.min.js" dependsOn "jquery.js",
     "org.webjars" % "log4javascript" % "1.4.13-1" / "js/log4javascript_uncompressed.js" minified "js/log4javascript.js" dependsOn "jquery.js",
-    "org.webjars" % "selectize.js" % "0.12.4" / "js/standalone/selectize.js" minified "js/standalone/selectize.min.js" dependsOn "jquery.js",
     "org.webjars" % "bootstrap-datepicker" % "1.6.4" / "bootstrap-datepicker.js" minified "bootstrap-datepicker.min.js" dependsOn "bootstrap.js"
   ))
 

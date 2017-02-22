@@ -16,13 +16,9 @@ object SignUpForm {
       "userName" -> nonEmptyText,
       "email" -> email,
       "password" -> nonEmptyText,
-      "termsAndServices"-> boolean
+      "termsAndServices" -> boolean
     )(Data.apply)(Data.unapply)
   )
-
-
-
-
 
   /**
    * The form data.
@@ -32,22 +28,10 @@ object SignUpForm {
    */
   case class Data(
 
-                   userName: String,
+    userName: String,
     email: String,
     password: String,
-      termsAndServices:Boolean
-                 )
+    termsAndServices: Boolean
+  )
 }
-
-
-
-
-
-
-
-
-
-
-
-
 

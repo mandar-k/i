@@ -8,10 +8,10 @@ import com.livelygig.product.keeper.impl.models.UserLoginInfo
 import play.api.libs.json.{Format, Json}
 
 /**
-  * Created by shubham.k on 11-01-2017.
-  */
+ * Created by shubham.k on 11-01-2017.
+ */
 class KeeperEvent extends AggregateEvent[KeeperEvent] {
-  override def aggregateTag :AggregateEventTagger[KeeperEvent] = KeeperEvent.Tag
+  override def aggregateTag: AggregateEventTagger[KeeperEvent] = KeeperEvent.Tag
 }
 
 object KeeperEvent {
@@ -19,19 +19,19 @@ object KeeperEvent {
   val Tag = AggregateEventTag.sharded[KeeperEvent](NumShards)
 }
 
-case class UserCreated(user:User, activationToken: String) extends KeeperEvent
+case class UserCreated(user: User, activationToken: String) extends KeeperEvent
 
 object UserCreated {
   implicit val format: Format[UserCreated] = Json.format
 }
 
-case class UserLogin (userLoginInfo: UserLoginInfo) extends KeeperEvent
+case class UserLogin(userLoginInfo: UserLoginInfo) extends KeeperEvent
 
 object UserLogin {
   implicit val format: Format[UserLogin] = Json.format
 }
 
-case class UserLoginFailed(email:String,reason: String) extends KeeperEvent
+case class UserLoginFailed(email: String, reason: String) extends KeeperEvent
 
 object UserLoginFailed {
   implicit val format: Format[UserLoginFailed] = Json.format
@@ -43,13 +43,13 @@ object LoginFailed {
   implicit val format: Format[LoginFailed] = Json.format
 }
 
-case class UserDisabled (userAuth: UserAuth) extends KeeperEvent
+case class UserDisabled(userAuth: UserAuth) extends KeeperEvent
 
 object UserDisabled {
   implicit val format: Format[UserDisabled] = Json.format
 }
 
-case class UserDeleted (userAuth: UserAuth) extends KeeperEvent
+case class UserDeleted(userAuth: UserAuth) extends KeeperEvent
 
 object UserDeleted {
   implicit val format: Format[UserDeleted] = Json.format
@@ -57,7 +57,7 @@ object UserDeleted {
 
 case class TokenCreated(userAuth: UserAuth) extends KeeperEvent
 
-object TokenCreated{
+object TokenCreated {
   implicit val format: Format[TokenCreated] = Json.format
 }
 
@@ -67,8 +67,8 @@ object TokenDeleted {
   implicit val format: Format[TokenDeleted] = Json.format
 }
 
-case class UserActivated (tokenToDelete: String) extends KeeperEvent
+case class UserActivated(tokenToDelete: String) extends KeeperEvent
 
 object UserActivated {
-  implicit val format: Format[UserActivated] =Json.format
+  implicit val format: Format[UserActivated] = Json.format
 }

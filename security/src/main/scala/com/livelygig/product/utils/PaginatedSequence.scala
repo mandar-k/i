@@ -4,10 +4,10 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
 case class PaginatedSequence[T](
-  items: Seq[T],
-  page: Int,
-  pageSize: Int,
-  count: Int
+    items: Seq[T],
+    page: Int,
+    pageSize: Int,
+    count: Int
 ) {
 
   def isEmpty: Boolean = items.isEmpty

@@ -9,12 +9,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.ExecutionContext
 
 /**
-  *
-  */
-class EmailNotificationController(val messagesApi: MessagesApi,emailNotificationsService: EmailNotificationsService )(implicit env: Environment, ec: ExecutionContext) extends Controller with I18nSupport{
- def  sendEmail= Action.async {
-   emailNotificationsService.sendEmail.invoke("testing data").map {
-     msg => Ok("")
-   }
- }
+ *
+ */
+class EmailNotificationController(val messagesApi: MessagesApi, emailNotificationsService: EmailNotificationsService)(implicit env: Environment, ec: ExecutionContext) extends Controller with I18nSupport {
+  def sendEmail = Action.async {
+    emailNotificationsService.sendEmail.invoke("testing data").map {
+      msg => Ok("")
+    }
+  }
 }

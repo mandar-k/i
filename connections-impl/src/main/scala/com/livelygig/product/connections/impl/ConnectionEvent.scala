@@ -5,9 +5,9 @@ import com.livelygig.product.connections.api.models.Connection
 import play.api.libs.json.{Format, Json}
 
 /**
-  * Created by shubham.k on 14-02-2017.
-  */
-sealed trait ConnectionEvent extends AggregateEvent[ConnectionEvent]   {
+ * Created by shubham.k on 14-02-2017.
+ */
+sealed trait ConnectionEvent extends AggregateEvent[ConnectionEvent] {
   override def aggregateTag: AggregateEventTagger[ConnectionEvent] = ConnectionEvent.Tag
 }
 

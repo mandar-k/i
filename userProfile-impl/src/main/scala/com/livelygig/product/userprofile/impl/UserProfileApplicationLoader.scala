@@ -11,16 +11,16 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
 
 abstract class UserProfileApplication(context: LagomApplicationContext)
-  extends LagomApplication(context)
-  with AhcWSComponents
-  with CassandraPersistenceComponents {
+    extends LagomApplication(context)
+    with AhcWSComponents
+    with CassandraPersistenceComponents {
 
   override lazy val lagomServer = LagomServer.forServices(
     bindService[UserProfileService].to(wire[UserProfileServiceImpl])
   )
   override lazy val jsonSerializerRegistry = UserProfileJsonSerializerRegistry
   lazy val tokenGenerator = wire[TokenGenerator]
-  lazy val userRepository =wire[UserProfileRepository]
+  lazy val userRepository = wire[UserProfileRepository]
   persistentEntityRegistry.register(wire[UserProfileEntity])
   readSide.register(wire[UserProfileEventProcessor])
   lazy val keeperService = serviceClient.implement[KeeperService]

@@ -10,10 +10,10 @@ object LGMain extends js.JSApp {
     println("client started")
     println("X-AUTH-TOKEN")
     println("CSRF Token")
-//    navigate()
+    //    navigate()
   }
 
-/*
+  /*
   def navigate() = {
     getToken match {
       case Some(token) => {

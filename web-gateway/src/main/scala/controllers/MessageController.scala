@@ -11,12 +11,13 @@ import utils.auth.DefaultEnv
 import scala.concurrent.{ExecutionContext}
 
 /**
-  * Created by shubham.k on 29-12-2016.
-  */
-class MessageController(messageService: ContentService,
-                        emailService: EmailNotificationsService,
-                        silhouette: Silhouette[DefaultEnv]
-                       )(implicit ec: ExecutionContext) extends AbstractController() {
+ * Created by shubham.k on 29-12-2016.
+ */
+class MessageController(
+  messageService: ContentService,
+    emailService: EmailNotificationsService,
+    silhouette: Silhouette[DefaultEnv]
+)(implicit ec: ExecutionContext) extends AbstractController() {
   def addMessage = silhouette.SecuredAction.async(parse.json) { request =>
     unmarshalJsValue[UserContent](request) { model =>
       messageService

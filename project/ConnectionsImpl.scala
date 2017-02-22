@@ -11,5 +11,5 @@ object ConnectionsImpl {
   lazy val connectionsImpl = (project in file("connections-impl"))
     .settings(connectionsImplSettings: _*)
     .enablePlugins(LagomScala)
-    .dependsOn(Security.security, Shared.sharedJvm)
+    .dependsOn(ServiceSecurity.security, Shared.sharedJvm, ConnectionsApi.connectionsApi)
 }

@@ -26,15 +26,16 @@ import scala.concurrent.Future
  * @param passwordHasherRegistry The password hasher registry.
  * @param webJarAssets           The WebJar assets locator.
  */
-class ResetPasswordController  (
-                                 val messagesApi: MessagesApi,
-                                 silhouette: Silhouette[DefaultEnv],
-                                 userService: SilhouetteIdentityService,
-                                 authInfoRepository: AuthInfoRepository,
-                                 passwordHasherRegistry: PasswordHasherRegistry,
-                                 passwordHasher: PasswordHasher,
-                                 implicit val webJarAssets: WebJarAssets)
-  extends Controller with I18nSupport {
+class ResetPasswordController(
+  val messagesApi: MessagesApi,
+  silhouette: Silhouette[DefaultEnv],
+  userService: SilhouetteIdentityService,
+  authInfoRepository: AuthInfoRepository,
+  passwordHasherRegistry: PasswordHasherRegistry,
+  passwordHasher: PasswordHasher,
+  implicit val webJarAssets: WebJarAssets
+)
+    extends Controller with I18nSupport {
 
   /**
    * Views the `Reset Password` page.
@@ -42,7 +43,7 @@ class ResetPasswordController  (
    * @param token The token to identify a user.
    * @return The result to display.
    */
-  def view(token: UUID) = ???/*silhouette.UnsecuredAction.async { implicit request =>
+  def view(token: UUID) = ??? /*silhouette.UnsecuredAction.async { implicit request =>
     authTokenService.validate(token).map {
       case Some(authToken) => Ok(views.html.resetPassword(ResetPasswordForm.form, token))
       case None => Redirect(routes.SignInController.view()).flashing("error" -> Messages("invalid.reset.link"))

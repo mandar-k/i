@@ -70,8 +70,8 @@ object ResourceServerSecurity {
 object ResourceClientSecurity {
 
   /**
-    * Authenticate a resource client request.
-    */
+   * Authenticate a resource client request.
+   */
   def authenticate(userUri: String): RequestHeader => RequestHeader = { requestHeader =>
     val requestWithPrincipal = requestHeader.withPrincipal(UserPrincipal.of(userUri, requestHeader.principal))
     ResourceSecurityHeaderFilter.transformClientRequest(requestWithPrincipal)

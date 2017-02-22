@@ -9,7 +9,7 @@ object UserProfileApi {
     //    scapegoatIgnoredFiles := Seq(".*/JsonUtils.scala", ".*/JsonSerializers.scala")
   )
 
-  lazy val userprofileApi = (project in file("userprofile-api"))
+  lazy val userProfileApi = (project in file("userprofile-api"))
     .settings(userProfileSettings: _*)
-    .dependsOn(Security.security)
+    .dependsOn(ServiceSecurity.security, KeeperApi.keeperApi)
 }

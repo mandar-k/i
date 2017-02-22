@@ -5,8 +5,8 @@ import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import scala.concurrent.ExecutionContext
 
 /**
-  * Created by shubham.k on 27-12-2016.
-  */
+ * Created by shubham.k on 27-12-2016.
+ */
 private[impl] class ContentRepository(session: CassandraSession)(implicit ec: ExecutionContext) {
   /*def getMessages(userId: String): Seq[Message] = {
     for {

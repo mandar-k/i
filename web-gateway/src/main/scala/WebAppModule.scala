@@ -8,7 +8,6 @@ import utils.auth.{CustomSecuredErrorHandler, CustomUnsecuredErrorHandler, Defau
 import play.api.Configuration
 import com.softwaremill.macwire._
 
-
 trait WebAppModule {
 
   def messagesApi: MessagesApi

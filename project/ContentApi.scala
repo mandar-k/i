@@ -11,5 +11,5 @@ object ContentApi {
 
   lazy val contentApi = (project in file("content-api"))
     .settings(contentSettings: _*)
-    .dependsOn(Security.security)
+    .dependsOn(ServiceSecurity.security)
 }

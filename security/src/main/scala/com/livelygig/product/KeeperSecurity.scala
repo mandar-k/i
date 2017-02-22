@@ -41,7 +41,7 @@ object SecurityHeaderFilter extends HeaderFilter {
   override def transformServerRequest(request: RequestHeader) = {
     request.getHeader("ServiceId") match {
       case Some(serviceId) =>
-        request.withPrincipal(ResourcePrincipal.of( UUID.fromString(serviceId), request.principal))
+        request.withPrincipal(ResourcePrincipal.of(UUID.fromString(serviceId), request.principal))
       case None => request
     }
   }
@@ -71,12 +71,10 @@ object KeeperServerSecurity {
 object KeeperClientSecurity {
 
   /**
-    * Authenticate a resource client request.
-    */
+   * Authenticate a resource client request.
+   */
   def authenticate(serviceId: UUID): RequestHeader => RequestHeader = { request =>
     request.withPrincipal(ResourcePrincipal.of(serviceId, request.principal))
   }
 }
-
-
 

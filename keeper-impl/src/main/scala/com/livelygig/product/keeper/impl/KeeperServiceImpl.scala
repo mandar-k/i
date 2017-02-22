@@ -12,8 +12,8 @@ import com.livelygig.product.keeper.api
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by shubham.k on 09-01-2017.
-  */
+ * Created by shubham.k on 09-01-2017.
+ */
 class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRepository, tokenGenerator: TokenGenerator)(implicit ec: ExecutionContext) extends KeeperService {
 
   // TODO read response message from conf file
@@ -33,8 +33,8 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
   }
 
   // TODO think of better way to retreive auth info
-  override def getUriFromEmail() = ServiceCall{email =>
-    keeperRepo.searchForEmail(email).flatMap{
+  override def getUriFromEmail() = ServiceCall { email =>
+    keeperRepo.searchForEmail(email).flatMap {
       case Some(uri) => registry.refFor[KeeperEntity](uri).ask(FindUser(uri))
       case None => Future.successful(UserAuthRes("error", ErrorResponse("Not found")))
     }
@@ -78,13 +78,12 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
     registry.eventStream(tag, offset)
       .filter {
         _.event match {
-          case x@(_: UserCreated |_: UserActivated) => true
+          case x @ (_: UserCreated | _: UserActivated) => true
           case _ => false
         }
       }.mapAsync(1)(convertEvents)
 
   }
-
 
   private def convertEvents(eventStreamElement: EventStreamElement[KeeperEvent]): Future[(KeeperEventsForTopics, Offset)] = {
     eventStreamElement match {
@@ -98,7 +97,6 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
         }
     }
   }
-
 
   //  private
 }

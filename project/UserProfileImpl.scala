@@ -11,5 +11,5 @@ object UserProfileImpl {
   lazy val userProfileImpl = (project in file("userProfile-impl"))
     .settings(userProfileImplSettings: _*)
     .enablePlugins(LagomScala)
-    .dependsOn(Security.security,Shared.sharedJvm)
+    .dependsOn(ServiceSecurity.security,Shared.sharedJvm, UserProfileApi.userProfileApi)
 }

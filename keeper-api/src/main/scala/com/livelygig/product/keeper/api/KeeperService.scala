@@ -7,51 +7,49 @@ import com.livelygig.product.SecurityHeaderFilter
 import com.livelygig.product.keeper.api.models._
 
 /**
-  * Created by shubham.k on 09-01-2017.
-  */
+ * Created by shubham.k on 09-01-2017.
+ */
 
 /**
-  * The keeper service
-  *
-  * It serves as a module to provide role based access control
-  * to the resource services
-  */
+ * The keeper service
+ *
+ * It serves as a module to provide role based access control
+ * to the resource services
+ */
 trait KeeperService extends Service {
 
   /**
-    * Take the auth token and returns the authorization information
-    *
-    * @return
-    */
+   * Take the auth token and returns the authorization information
+   *
+   * @return
+   */
   def authorize(): ServiceCall[String, AuthorizationInfo]
 
-
   /**
-    * Take the UserAuth with email and password and return the Auth token
-    *
-    * @return
-    */
+   * Take the UserAuth with email and password and return the Auth token
+   *
+   * @return
+   */
   def login(): ServiceCall[UserLoginModel, UserAuthRes]
 
   /**
-    * Take the user object with auth info and profile info
-    * and returns success or failure
-    *
-    * @return
-    */
+   * Take the user object with auth info and profile info
+   * and returns success or failure
+   *
+   * @return
+   */
   def createUser(): ServiceCall[User, UserAuthRes]
 
   /**
-    * Take the activation token and activate the user
-    * @return activation success response
-    */
+   * Take the activation token and activate the user
+   * @return activation success response
+   */
   def activateAccount(): ServiceCall[String, UserAuthRes]
 
   // TODO think of better way to retreive auth info
   def getUriFromEmail(): ServiceCall[String, UserAuthRes]
 
   def keeperTopicProducer: Topic[KeeperEventsForTopics]
-
 
   def descriptor = {
     import Service._

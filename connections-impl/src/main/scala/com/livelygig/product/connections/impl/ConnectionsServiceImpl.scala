@@ -8,8 +8,8 @@ import com.livelygig.product.connections.api.models.{ConnectionResponse, Introdu
 
 import scala.concurrent.ExecutionContext
 /**
-  * Created by shubham.k on 25-01-2017.
-  */
+ * Created by shubham.k on 25-01-2017.
+ */
 class ConnectionsServiceImpl(registry: PersistentEntityRegistry)(implicit ec: ExecutionContext) extends ConnectionsService {
   override def addConnections() = ResourceServerSecurity.authenticated((userUri, rh) => ServerServiceCall { newConnectionReq =>
     for {

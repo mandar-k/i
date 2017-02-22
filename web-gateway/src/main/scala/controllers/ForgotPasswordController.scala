@@ -17,12 +17,13 @@ import scala.concurrent.Future
  * @param userService      The user service implementation.
  * @param webJarAssets     The WebJar assets locator.
  */
-class ForgotPasswordController  (
-                                  val messagesApi: MessagesApi,
-                                  silhouette: Silhouette[DefaultEnv],
-                                  userService: SilhouetteIdentityService,
-                                  implicit val webJarAssets: WebJarAssets)
-  extends Controller with I18nSupport {
+class ForgotPasswordController(
+  val messagesApi: MessagesApi,
+  silhouette: Silhouette[DefaultEnv],
+  userService: SilhouetteIdentityService,
+  implicit val webJarAssets: WebJarAssets
+)
+    extends Controller with I18nSupport {
 
   /**
    * Views the `Forgot Password` page.
