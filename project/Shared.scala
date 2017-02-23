@@ -16,7 +16,7 @@ object Shared {
     scalaVersion := Shared.Versions.scala,
     organization := "Livelygig",
     scalacOptions ++= Seq(
-      "-encoding", "UTF-8", "-feature", "-deprecation", "-unchecked", "–Xcheck-null", "-Xfatal-warnings", "-Xlint",
+      "-encoding", "UTF-8", "-feature", "-deprecation", "-unchecked", "–Xcheck-null"/*, "-Xfatal-warnings"*/, "-Xlint",
       "-Ywarn-adapted-args", "-Ywarn-dead-code", "-Ywarn-inaccessible", "-Ywarn-nullary-override", "-Ywarn-numeric-widen", "-language:higherKinds",
       "-language:implicitConversions"
     ),
@@ -48,7 +48,6 @@ object Shared {
   lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared")).settings(commonSettings: _*).settings(
     libraryDependencies ++= Seq(
       "com.chuusai" %%% "shapeless" % SharedDependencies.shapelessVersion,
-      "com.typesafe.play" %%% "play-json" % SharedDependencies.playJsonVersion,
       SharedDependencies.macwire
     )
   )
@@ -56,6 +55,11 @@ object Shared {
         libraryDependencies ++= Seq(
           SharedDependencies.derivedCodecs,
           SharedDependencies.ficus
+        )
+      )
+      .jsSettings(
+        libraryDependencies ++= Seq(
+          "com.typesafe.play" %%% "play-json" % SharedDependencies.playJsonVersion
         )
       )
     .jsConfigure(_ enablePlugins ScalaJSWeb)

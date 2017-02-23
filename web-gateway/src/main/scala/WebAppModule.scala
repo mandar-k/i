@@ -1,10 +1,10 @@
 import com.mohiva.play.silhouette.api.actions._
-import com.mohiva.play.silhouette.api.services.{AuthenticatorService, AvatarService}
+import com.mohiva.play.silhouette.api.services.{AvatarService}
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.{Clock, PasswordHasher, PlayHTTPLayer}
+import com.mohiva.play.silhouette.api.util.{Clock, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers.{CredentialsProvider, SocialProviderRegistry}
-import play.api.i18n.{Langs, MessagesApi}
-import utils.auth.{CustomSecuredErrorHandler, CustomUnsecuredErrorHandler, DefaultEnv}
+import play.api.i18n.{MessagesApi}
+import utils.auth.{CustomSecuredErrorHandler, CustomUnsecuredErrorHandler}
 import play.api.Configuration
 import com.softwaremill.macwire._
 

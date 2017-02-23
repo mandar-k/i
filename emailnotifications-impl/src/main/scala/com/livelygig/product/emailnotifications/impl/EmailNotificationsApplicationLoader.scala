@@ -41,4 +41,8 @@ class EmailNotificationsApplicationLoader extends LagomApplicationLoader {
   override def loadDevMode(context: LagomApplicationContext) =
     new EmailNotificationsApplication(context) with LagomDevModeComponents
 
+  override def describeServices = List(
+    readDescriptor[EmailNotificationsService]
+  )
+
 }

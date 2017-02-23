@@ -35,4 +35,8 @@ class ConnectionsApplicationLoader extends LagomApplicationLoader {
   override def loadDevMode(context: LagomApplicationContext) =
     new ConnectionsApplication(context) with LagomDevModeComponents
 
+  override def describeServices = List(
+    readDescriptor[ConnectionsService]
+  )
+
 }

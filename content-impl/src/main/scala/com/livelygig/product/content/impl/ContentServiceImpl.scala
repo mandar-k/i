@@ -10,15 +10,17 @@ import akka.stream.scaladsl.Sink
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
+import com.lightbend.lagom.scaladsl.pubsub.{PubSubRegistry, TopicId}
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.livelygig.product.ResourceServerSecurity
 import com.livelygig.product.content.api.ContentService
+import com.livelygig.product.content.api.models.UserContent
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContentServiceImpl(
-  registry: PersistentEntityRegistry,
-    msgPubSub: ContentPubSub,
+    registry: PersistentEntityRegistry,
+    pubSubRegistry: PubSubRegistry,
     handler: ContentAuthHandler,
     analyser: ConstraintAnalyser,
     system: ActorSystem
@@ -30,7 +32,7 @@ class ContentServiceImpl(
   })
 
   override def getLiveMessages() = /*ServerSecurity.authenticated( userId => ServerServiceCall {*/ ServiceCall {
-    live => Future(msgPubSub.refFor("MESSAGE").subscriber)
+    live => Future(pubSubRegistry.refFor(TopicId[UserContent]("MESSAGE")).subscriber)
   }
 
   //)

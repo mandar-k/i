@@ -36,7 +36,6 @@ case class InsertContentRequest(cnxnsAliasUri: Seq[String], value: Content)
 case class Message(body: String, date: String) extends Content
 
 case class Project(name: String, startDate: String) extends Content
-case class CreateUser(username: String, email: String, password: String)                                 extends Content
 
 
 

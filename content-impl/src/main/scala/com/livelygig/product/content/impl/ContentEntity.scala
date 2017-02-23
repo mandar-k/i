@@ -2,12 +2,13 @@ package com.livelygig.product.content.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence._
+import com.lightbend.lagom.scaladsl.pubsub.{PubSubRegistry, TopicId}
 import com.livelygig.product.content.api.models.UserContent
 
 /**
  * Created by shubham.k on 16-12-2016.
  */
-class ContentEntity(msgPubSub: ContentPubSub) extends PersistentEntity {
+class ContentEntity(pubSubRegistry: PubSubRegistry) extends PersistentEntity {
 
   override type Command = ContentCommand
 
@@ -28,7 +29,7 @@ class ContentEntity(msgPubSub: ContentPubSub) extends PersistentEntity {
         case (AddContent(msg), ctx, state) => {
           ctx.thenPersist(ContentPosted(msg))(evt => {
             ctx.reply(Done)
-            msgPubSub.refFor("MESSAGE").publish(msg)
+            pubSubRegistry.refFor(TopicId[UserContent]("MESSAGE")).publish(msg)
           })
         }
       }

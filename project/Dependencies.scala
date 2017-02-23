@@ -18,6 +18,8 @@ object Dependencies {
     val playTest = "com.typesafe.play" %% "play-test" % version % "test"
     val playMailer = "com.typesafe.play" %% "play-mailer" % "5.0.0"
     val playBootstrap = "com.adrianhurt" % "play-bootstrap_2.11" % "1.1-P25-B3"
+    val playWebjars = "org.webjars" %% "webjars-play" % "2.5.0-4"
+    val scalajsScripts = "com.vmunier" %% "scalajs-scripts" % "1.0.0"
   }
 
   object Akka {

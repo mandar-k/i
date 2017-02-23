@@ -35,5 +35,8 @@ class KeeperApplicationLoader extends LagomApplicationLoader {
   }
   override def loadDevMode(context: LagomApplicationContext) =
     new KeeperApplication(context) with LagomDevModeComponents
+  override def describeServices = List(
+    readDescriptor[KeeperService]
+  )
 
 }

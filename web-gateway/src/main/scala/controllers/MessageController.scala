@@ -14,7 +14,7 @@ import scala.concurrent.{ExecutionContext}
  * Created by shubham.k on 29-12-2016.
  */
 class MessageController(
-  messageService: ContentService,
+    messageService: ContentService,
     emailService: EmailNotificationsService,
     silhouette: Silhouette[DefaultEnv]
 )(implicit ec: ExecutionContext) extends AbstractController() {

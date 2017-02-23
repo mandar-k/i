@@ -1,10 +1,20 @@
+import com.lightbend.lagom.sbt.LagomImport.{lagomScaladslKafkaClient, lagomScaladslPersistenceCassandra}
 import com.lightbend.lagom.sbt.LagomScala
 import sbt.Keys._
 import sbt._
 
 object ConnectionsImpl {
+
+  private[this] val dependencies = {
+    Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaClient
+    )
+  }
+
   private[this] val connectionsImplSettings = Shared.commonSettings ++ Seq(
-    name := "connectionsImpl"
+    name := "connectionsImpl",
+    libraryDependencies ++= dependencies
     //    scapegoatIgnoredFiles := Seq(".*/JsonUtils.scala", ".*/JsonSerializers.scala")
   )
 

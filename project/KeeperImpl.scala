@@ -1,10 +1,19 @@
 import com.lightbend.lagom.sbt.LagomScala
 import sbt.Keys._
 import sbt._
+import com.lightbend.lagom.sbt.LagomImport.{lagomScaladslPersistenceCassandra,lagomScaladslKafkaBroker,lagomScaladslPubSub}
 
 object KeeperImpl {
+
+  private[this] val dependencies = {
+    Seq(
+      lagomScaladslPersistenceCassandra,
+      lagomScaladslKafkaBroker
+    )
+  }
   private[this] val keeperImplSettings = Shared.commonSettings ++ Seq(
-    name := "keeperImpl"
+    name := "keeperImpl",
+    libraryDependencies ++= dependencies
     //    scapegoatIgnoredFiles := Seq(".*/JsonUtils.scala", ".*/JsonSerializers.scala")
   )
 

@@ -24,16 +24,19 @@ import play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
+import webscalajs.WebScalaJS.autoImport._
+
 import webscalajs.WebScalaJS.autoImport.{scalaJSPipeline, devCommands, scalaJSProjects}
 
 object Server {
   private[this] val dependencies = {
     import Dependencies._
     Seq(
-      Cache.ehCache, Akka.actor, Akka.logging, Play.playFilters, Play.playWs,
+      Cache.ehCache, Akka.actor, Akka.logging, Play.playFilters, Play.playWs, Play.playWebjars, Play.playBootstrap,
       Authentication.silhouette, Authentication.hasher, Authentication.persistence, Authentication.crypto,
       WebJars.fontAwesome, WebJars.materialize, WebJars.moment, WebJars.mousetrap,
-      Utils.crypto, Utils.commonsIo, SharedDependencies.macwire, Akka.testkit, Play.playTest, SharedDependencies.scalaTest, lagomScaladslServer
+      Utils.crypto, Utils.commonsIo, SharedDependencies.macwire, Akka.testkit, Play.playTest,
+      SharedDependencies.scalaTest, lagomScaladslServer, Play.scalajsScripts
     )
   }
 
@@ -50,14 +53,14 @@ object Server {
     scalaJSProjects := Seq(Client.client),
     pipelineStages in Assets := Seq(scalaJSPipeline),
     pipelineStages := Seq(digest, gzip),
-    includeFilter in(Assets, LessKeys.less) := "main.less",
-    // compress CSS
-    LessKeys.compress in Assets := true,
     routesGenerator := InjectedRoutesGenerator,
     externalizeResources := false,
 
     // Sbt-Web
     JsEngineKeys.engineType := JsEngineKeys.EngineType.Node,
+    includeFilter in (Assets, LessKeys.less) := "*.less",
+    excludeFilter in (Assets, LessKeys.less) := "_*.less",
+    LessKeys.compress in Assets := true,
 
     // Fat-Jar Assembly
     fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value),
@@ -74,7 +77,8 @@ object Server {
     )
     .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
     .dependsOn(UserProfileApi.userProfileApi, ContentApi.contentApi,
-    ServiceSecurity.security, EmailNotificationsApi.emailNotificationsApi, KeeperApi.keeperApi, ConnectionsApi.connectionsApi)
+    ServiceSecurity.security, EmailNotificationsApi.emailNotificationsApi, KeeperApi.keeperApi, ConnectionsApi.connectionsApi,
+    Shared.sharedJvm)
     .settings(serverSettings: _*)
     .settings(Packaging.settings: _*)
 

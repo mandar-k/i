@@ -48,4 +48,4 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0") // scalariformFor
 addSbtPlugin("com.github.xuwei-k" % "sbt-class-diagram" % "0.1.7")
 
 // Lagom
-addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.3.0-RC1")
+addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.3.0")
