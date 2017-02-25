@@ -9,10 +9,9 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Sink
 import com.lightbend.lagom.scaladsl.api.ServiceCall
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
-import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraSession
 import com.lightbend.lagom.scaladsl.pubsub.{PubSubRegistry, TopicId}
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
-import com.livelygig.product.ResourceServerSecurity
+import com.livelygig.product.ServerSecurity
 import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.content.api.models.UserContent
 
@@ -26,7 +25,7 @@ class ContentServiceImpl(
     system: ActorSystem
 )(implicit ec: ExecutionContext, mat: Materializer) extends ContentService {
 
-  override def addMessage() = ResourceServerSecurity.authenticated((userUri, rh) => ServerServiceCall { content =>
+  override def addMessage() = ServerSecurity.authenticated(userUri => ServerServiceCall { content =>
     val msgUid = UUID.randomUUID()
     refFor(msgUid.toString).ask(AddContent(content)).map { _ => null }
   })
@@ -37,7 +36,7 @@ class ContentServiceImpl(
 
   //)
   //TODO make it user specific
-  override def getAllMessages() = ResourceServerSecurity.authenticated((userUri, rh) => ServerServiceCall { _ =>
+  override def getAllMessages() = ServerSecurity.authenticated(userUri => ServerServiceCall { _ =>
     val currentIdsQuery = PersistenceQuery(system).readJournalFor[CassandraReadJournal](CassandraReadJournal.Identifier)
     currentIdsQuery.currentPersistenceIds()
       .filter(_.startsWith("ContentEntity|"))

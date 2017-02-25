@@ -5,8 +5,6 @@ import java.util.UUID
 import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.keeper.api.models.{AuthorizationInfo, UserPermission, UserRole}
 import com.lightbend.lagom.scaladsl.api.transport.{Forbidden, RequestHeader}
-import com.livelygig.product.KeeperClientSecurity
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -73,7 +71,7 @@ class ConstraintAnalyser {
 class ContentAuthHandler(keeperService: KeeperService) {
   def getSubject[A](requestHeader: RequestHeader): Future[Subject] = {
     keeperService.authorize
-      .handleRequestHeader(KeeperClientSecurity.authenticate(UUID.randomUUID()))
+      //      .handleRequestHeader(KeeperClientSecurity.authenticate(UUID.randomUUID()))
       .invoke("")
       .map { e =>
         new Subject(e)
