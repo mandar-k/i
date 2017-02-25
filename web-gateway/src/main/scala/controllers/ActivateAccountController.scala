@@ -3,10 +3,10 @@ package controllers
 import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.keeper.api.models.{ActivateUserResponse, ErrorResponse, UserAuthRes}
 import com.mohiva.play.silhouette.api._
-import models.services.SilhouetteIdentityService
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Controller
+import silhouetteservices.SilhouetteIdentityService
 import utils.auth.DefaultEnv
 
 import scala.language.postfixOps

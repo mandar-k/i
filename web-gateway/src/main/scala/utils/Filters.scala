@@ -9,6 +9,6 @@ import play.filters.headers.SecurityHeadersFilter
 /**
  * Provides filters.
  */
-class Filters @Inject() (securityHeadersFilter: SecurityHeadersFilter) extends HttpFilters {
+class Filters(securityHeadersFilter: SecurityHeadersFilter) extends HttpFilters {
   override def filters: Seq[EssentialFilter] = Seq(securityHeadersFilter)
 }

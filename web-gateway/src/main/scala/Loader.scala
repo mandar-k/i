@@ -8,7 +8,7 @@ import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.userprofile.api.UserProfileService
-import models.services.SilhouetteIdentityServiceImpl
+import silhouetteservices.SilhouetteIdentityServiceImpl
 import com.mohiva.play.silhouette.api.{Silhouette, SilhouetteProvider}
 import play.api.i18n.I18nComponents
 import controllers.ActivateAccountController

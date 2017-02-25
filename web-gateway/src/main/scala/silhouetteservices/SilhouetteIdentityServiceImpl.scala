@@ -1,4 +1,4 @@
-package models.services
+package silhouetteservices
 
 import javax.inject.Inject
 

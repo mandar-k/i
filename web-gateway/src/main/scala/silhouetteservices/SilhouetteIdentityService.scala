@@ -1,4 +1,4 @@
-package models.services
+package silhouetteservices
 
 import com.mohiva.play.silhouette.api.services.IdentityService
 import models.UserIdentity

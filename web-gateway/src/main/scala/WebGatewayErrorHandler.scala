@@ -15,7 +15,7 @@ import scala.concurrent.Future
 /**
  * Created by shubham.k on 03-01-2017.
  */
-class WebGatewayErrorHandler @Inject() (
+class WebGatewayErrorHandler(
     env: play.api.Environment, config: Configuration,
     sourceMapper: Option[SourceMapper], router: Option[Router]
 ) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) {

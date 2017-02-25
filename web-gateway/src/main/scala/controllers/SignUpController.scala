@@ -1,18 +1,17 @@
 package controllers
 
-import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
 import forms.SignUpForm
-import models.services.SilhouetteIdentityService
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.mvc.Controller
 import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.keeper.api.models._
+import silhouetteservices.SilhouetteIdentityService
 import utils.auth.DefaultEnv
 
 import scala.concurrent.Future
@@ -27,7 +26,7 @@ import scala.concurrent.Future
  * @param avatarService          The avatar service implementation.
  * @param webJarAssets           The webjar assets implementation.
  */
-class SignUpController @Inject() (
+class SignUpController(
   val messagesApi: MessagesApi,
   silhouette: Silhouette[DefaultEnv],
   userService: SilhouetteIdentityService,

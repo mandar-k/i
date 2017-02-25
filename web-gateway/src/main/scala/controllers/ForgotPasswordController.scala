@@ -2,9 +2,9 @@ package controllers
 
 import com.mohiva.play.silhouette.api._
 import forms.ForgotPasswordForm
-import models.services.SilhouetteIdentityService
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.Controller
+import silhouetteservices.SilhouetteIdentityService
 import utils.auth.DefaultEnv
 
 import scala.concurrent.Future
