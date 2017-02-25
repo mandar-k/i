@@ -2,7 +2,8 @@ package com.livelygig.product.keeper.impl
 
 import com.livelygig.product.keeper.api.models.UserAuth
 import play.api.libs.json.{Format, Json}
-import com.livelygig.product.utils.JsonFormats._
+import com.livelygig.product.utils.JsonFormats.enumFormat
+
 /**
  * Created by shubham.k on 10-01-2017.
  */

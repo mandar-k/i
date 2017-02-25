@@ -2,7 +2,7 @@ package com.livelygig.product.userprofile.impl
 
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
-import com.livelygig.product.ResourceServerSecurity
+import com.livelygig.product.ServerSecurity
 import com.livelygig.product.userprofile.api.UserProfileService
 import com.livelygig.product.userprofile.api.models.{ProfileListResponse, UserConnectionProfile, UserProfile, UserProfileResponse}
 import scala.concurrent.{ExecutionContext, Future}
@@ -11,7 +11,7 @@ class UserProfileServiceImpl(registry: PersistentEntityRegistry)(implicit ec: Ex
 
   override def updateProfile = ???
 
-  override def getUserProfile = ResourceServerSecurity.authenticated((userUri, rh) => ServerServiceCall { _ =>
+  override def getUserProfile = ServerSecurity.authenticated(userUri => ServerServiceCall { _ =>
     refFor(userUri).ask(GetProfile)
   })
 
@@ -19,7 +19,7 @@ class UserProfileServiceImpl(registry: PersistentEntityRegistry)(implicit ec: Ex
    * Get the profile from the entity
    * @return
    */
-  override def getUserConnectionsProfile = ResourceServerSecurity.authenticated((userUri, rh) => ServerServiceCall { aliasUriList =>
+  override def getUserConnectionsProfile = ServerSecurity.authenticated(userUri => ServerServiceCall { aliasUriList =>
     val profileFutures = aliasUriList.map { aliasUri =>
       refFor(aliasUri).ask(GetProfile).map {
         e =>

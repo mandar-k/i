@@ -3,8 +3,8 @@ package com.livelygig.product.content.impl
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
 import com.livelygig.product.content.api.models.{UserContent}
-import com.livelygig.product.utils.JsonFormats.singletonFormat
 import play.api.libs.json.{Format, Json}
+import com.livelygig.product.utils.JsonFormats.singletonFormat
 
 /**
  * Created by shubham.k on 23-12-2016.

@@ -2,7 +2,7 @@ package com.livelygig.product.userprofile.impl
 
 import akka.Done
 import com.lightbend.lagom.scaladsl.persistence.PersistentEntity.ReplyType
-import com.livelygig.product.userprofile.api.models.{UserAlias, UserProfile, UserProfileResponse}
+import com.livelygig.product.userprofile.api.models.{UserProfile, UserProfileResponse}
 import com.livelygig.product.utils.JsonFormats.singletonFormat
 import play.api.libs.json.{Format, Json}
 

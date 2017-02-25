@@ -1,6 +1,6 @@
 package controllers
 
-import com.livelygig.product.ResourceClientSecurity
+import com.livelygig.product.ClientSecurity
 import com.livelygig.product.userprofile.api.UserProfileService
 import com.mohiva.play.silhouette.api.Silhouette
 import play.api.libs.json.Json
@@ -15,7 +15,7 @@ class UserController(silhouette: Silhouette[DefaultEnv], userProfileService: Use
 
   def getUserProfile = silhouette.SecuredAction.async { implicit request =>
     userProfileService.getUserProfile
-      .handleRequestHeader(ResourceClientSecurity.authenticate(request.identity.userUri))
+      .handleRequestHeader(ClientSecurity.authenticate(request.identity.userUri))
       .invoke()
       .map { res =>
         Ok(Json.toJson(res))

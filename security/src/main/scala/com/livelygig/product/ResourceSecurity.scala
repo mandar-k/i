@@ -3,9 +3,9 @@ package com.livelygig.product
 import java.security.Principal
 import javax.security.auth.Subject
 
-import com.lightbend.lagom.scaladsl.api.security._
+import com.lightbend.lagom.scaladsl.api.security.ServicePrincipal
 import com.lightbend.lagom.scaladsl.api.transport._
-import com.lightbend.lagom.scaladsl.server._
+import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 
 sealed trait UserPrincipal extends Principal {
   val userUri: String
@@ -29,16 +29,16 @@ object UserPrincipal {
   }
 }
 
-object ResourceSecurityHeaderFilter extends HeaderFilter {
+object SecurityHeaderFilter extends HeaderFilter {
   override def transformClientRequest(request: RequestHeader) = {
     request.principal match {
-      case Some(userPrincipal: UserPrincipal) => request.withHeader("userUri", userPrincipal.userUri)
+      case Some(userPrincipal: UserPrincipal) => request.withHeader("User-Id", userPrincipal.userUri)
       case other => request
     }
   }
 
   override def transformServerRequest(request: RequestHeader) = {
-    request.getHeader("userUri") match {
+    request.getHeader("User-Id") match {
       case Some(userUri) =>
         request.withPrincipal(UserPrincipal.of(userUri, request.principal))
       case None => request
@@ -49,31 +49,30 @@ object ResourceSecurityHeaderFilter extends HeaderFilter {
 
   override def transformClientResponse(response: ResponseHeader, request: RequestHeader) = response
 
-  lazy val Composed = HeaderFilter.composite(ResourceSecurityHeaderFilter, UserAgentHeaderFilter)
+  lazy val Composed = HeaderFilter.composite(SecurityHeaderFilter, UserAgentHeaderFilter)
 }
 
-object ResourceServerSecurity {
+object ServerSecurity {
 
-  def authenticated[Req, Response](serviceCall: (String, RequestHeader) => ServerServiceCall[Req, Response]) =
-
+  def authenticated[Request, Response](serviceCall: String => ServerServiceCall[Request, Response]) =
     ServerServiceCall.compose { requestHeader =>
-      val request = ResourceSecurityHeaderFilter.transformServerRequest(requestHeader)
-      request.principal match {
+      requestHeader.principal match {
         case Some(userPrincipal: UserPrincipal) =>
-          serviceCall(userPrincipal.userUri, requestHeader)
+          serviceCall(userPrincipal.userUri)
         case other =>
           throw Forbidden("User not authenticated")
       }
     }
+
 }
 
-object ResourceClientSecurity {
+object ClientSecurity {
 
   /**
-   * Authenticate a resource client request.
+   * Authenticate a client request.
    */
-  def authenticate(userUri: String): RequestHeader => RequestHeader = { requestHeader =>
-    val requestWithPrincipal = requestHeader.withPrincipal(UserPrincipal.of(userUri, requestHeader.principal))
-    ResourceSecurityHeaderFilter.transformClientRequest(requestWithPrincipal)
+  def authenticate(userUri: String): RequestHeader => RequestHeader = { request =>
+    request.withPrincipal(UserPrincipal.of(userUri, request.principal))
   }
 }
+

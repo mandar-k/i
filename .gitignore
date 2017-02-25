@@ -33,7 +33,7 @@ doc/_book
 # web hook/service
 #.travis.yml
 
-#node modules
+#node com.livelygig.product.gateway.modules
 node_modules/
 
 *.patch
