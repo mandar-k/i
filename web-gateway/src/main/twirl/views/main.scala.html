@@ -29,14 +29,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand topHeight" href="@routes.ApplicationController.index()">
+                    <a class="navbar-brand topHeight" href="@routes.ViewController.index()">
                         <img src=@routes.Assets.versioned("images/LivelyGig-logo-symbol.svg") class="logoImg">
                     </a>
                 </div>
                 <nav class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="@routes.SignInController.view">@Messages("sign.in")</a></li>
-                        <li><a href="@routes.SignUpController.view">@Messages("sign.up")</a></li>
+                        <li><a href="@routes.ViewController.signin">@Messages("sign.in")</a></li>
+                        <li><a href="@routes.ViewController.signup">@Messages("sign.up")</a></li>
                     </ul>
                 </nav>
             </div>

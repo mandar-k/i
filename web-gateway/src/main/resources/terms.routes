@@ -1,0 +1,7 @@
+
+# terms
+
+GET         /                                       controllers.terms.TermsController.terms()
+GET         /privacy                                controllers.terms.TermsController.privacy()
+GET         /copyrights                             controllers.terms.TermsController.copyrights()
+GET         /legal                                  controllers.terms.TermsController.legal()

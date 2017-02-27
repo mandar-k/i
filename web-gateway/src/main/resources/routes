@@ -2,38 +2,23 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#Modified routes
+
+# Views
+GET         /                                       controllers.ViewController.index
+GET         /about                                  controllers.ViewController.about
+GET         /app                                    controllers.ViewController.app
+GET         /signin                                 controllers.ViewController.signin
+GET         /signup                                 controllers.ViewController.signup
 
 
-# Home page
-GET         /                                controllers.ApplicationController.index
-GET         /copyrights                      controllers.ApplicationController.copyrights
-GET         /about                           controllers.ApplicationController.aboutLivelyGig
-GET         /legal                           controllers.ApplicationController.legal
+#terms
+->          /terms                                  terms.Routes
 
-GET         /app                             controllers.ApplicationController.app(x_auth_token: Option[String])
-GET         /signOut                         controllers.ApplicationController.signOut
-GET         /authenticate/:provider          controllers.SocialAuthController.authenticate(provider)
+# api
+->          /api/v1alpha                            api.v1.Routes
 
-GET         /signUp                          controllers.SignUpController.view
-POST        /signUp                          controllers.SignUpController.submit
-GET         /termsAndServices                controllers.SignUpController.termsAndServices
-GET         /policyAndPrivacy                controllers.SignUpController.policyAndPrivacy
-
-GET         /signIn                          controllers.SignInController.view
-POST        /signIn                          controllers.SignInController.submit
-
-GET         /password/forgot                 controllers.ForgotPasswordController.view
-POST        /password/forgot                 controllers.ForgotPasswordController.submit
-GET         /account/activate/:token         controllers.ActivateAccountController.activate(token: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /webjars/*file                   controllers.WebJarAssets.at(file)
-GET         /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)
-
-
-# Messages
-
-POST        /addMessage                       controllers.MessageController.addMessage
-
-# Logging
-POST        /logging                          controllers.ApplicationController.logging
+GET         /webjars/*file                          controllers.WebJarAssets.at(file)
+GET         /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)

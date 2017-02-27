@@ -1,0 +1,12 @@
+
+# v1.0 alpha 1 api
+
+POST        /auth/signin               controllers.api.v1.auth.AuthController.signin
+POST        /auth/signout              controllers.api.v1.auth.AuthController.signout
+POST        /auth/signup               controllers.api.v1.auth.RegistrationController.signup
+GET         /auth/activate/:token      controllers.api.v1.auth.AuthController.activate(token: String)
+GET         /user/profile              controllers.api.v1.UserController.getProfile
+GET         /user/connections          controllers.api.v1.UserController.getConnections
+GET         /user/cnxnprofiles         controllers.api.v1.UserController.getCnxnProfiles
+POST        /connect                   controllers.api.v1.MainController.connect
+GET         /logging                   controllers.api.v1.MainController.logging

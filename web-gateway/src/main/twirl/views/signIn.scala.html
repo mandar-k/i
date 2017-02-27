@@ -5,7 +5,7 @@
 @main(Messages("sign.in.title")) {
 <fieldset class="col-md-6 col-md-offset-3">
     <legend>@Messages("sign.in.credentials")</legend>
-    @helper.form(action = routes.SignInController.submit(),Symbol("data-toggle")-> "validator") {
+    @helper.form(action = controllers.api.v1.auth.AuthController.signin(),Symbol("data-toggle")-> "validator") {
     @b3.inputWrapped( "email", signInForm("email"), 'placeholder -> "example@mail.com" ,'class->"input-lg",Symbol("required")->"true",Symbol("data-error")->Messages("email.error")) { input =>
     @input
     <div  class="help-block with-errors"></div>
@@ -24,7 +24,7 @@
 
 
     <div>
-        <p class="not-a-member">@Messages("not.a.member")<a href="@routes.SignUpController.view">@Messages("sign.up.now")</a> | <a href="@routes.ForgotPasswordController.view()" title="@Messages("forgot.your.password")">@Messages("forgot.your.password")</a></p>
+        <p class="not-a-member">@Messages("not.a.member")<a href="@routes.ViewController.signup">@Messages("sign.up.now")</a> | <a href="" title="@Messages("forgot.your.password")">@Messages("forgot.your.password")</a></p>
     </div>
 
     @if(socialProviders.providers.nonEmpty) {
@@ -32,7 +32,7 @@
         <p>@Messages("or.use.social")</p>
         <div>
             @for(p <- socialProviders.providers if p.id != "clef") {
-            <a href="@routes.SocialAuthController.authenticate(p.id)" class="provider @p.id" title="@Messages(p.id)"><img src="@routes.Assets.versioned(s"images/providers/${p.id}.png")" width="64px" height="64px" alt="@Messages(p.id)"></a>
+            <a href="" class="provider @p.id" title="@Messages(p.id)"><img src="@routes.Assets.versioned(s"images/providers/${p.id}.png")" width="64px" height="64px" alt="@Messages(p.id)"></a>
             }
         </div>
         @defining(socialProviders.get[ClefProvider]) { clef =>

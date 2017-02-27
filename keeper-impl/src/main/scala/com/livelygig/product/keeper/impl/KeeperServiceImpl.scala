@@ -56,7 +56,7 @@ class KeeperServiceImpl(registry: PersistentEntityRegistry, keeperRepo: KeeperRe
       reply <- userFromUserName match {
         case Some(u) => Future.successful(u)
         case None => {
-          val agentUriToken = tokenGenerator.generateMD5Token(userModel.userAuth.email)
+          val agentUriToken = tokenGenerator.generateSHAToken(userModel.userAuth.email)
           val uri = "agent://" + agentUriToken
           registry.refFor[KeeperEntity](uri).ask(CreateUser(userModel))
         }

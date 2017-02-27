@@ -39,7 +39,7 @@ class KeeperEntity(tokenGenerator: TokenGenerator) extends PersistentEntity {
         case (CreateUser(user), ctx, _) =>
           // TODO use srp to secure the user login details
           // TODO create secure activation token
-          val activationToken = tokenGenerator.generateMD5Token(user.userAuth.username)
+          val activationToken = tokenGenerator.generateSHAToken(user.userAuth.username)
           ctx.thenPersist(UserCreated(user, activationToken))(_ => ctx.reply(UserAuthRes(MsgTypes.CREATE_USER_WAITING, CreateUserResponse("Waiting for activation."))))
       }.onEvent {
         case (UserCreated(user, token), state) => {

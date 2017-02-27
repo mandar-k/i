@@ -82,16 +82,16 @@ trait SilhouetteModule {
   object SilhouetteAuthenticatorService {
     def apply(fingerprintGenerator: FingerprintGenerator, cookieSigner: JcaCookieSigner,
       idGenerator: IDGenerator, authenticatorEncoder: AuthenticatorEncoder,
-      clock: Clock, configuration: Configuration): AuthenticatorService[JWTAuthenticator] = {
-      val config = configuration.underlying.as[JWTAuthenticatorSettings]("silhouette.jwt.authenticator")
-      new JWTAuthenticatorService(config, None, authenticatorEncoder, idGenerator, clock)
+      clock: Clock, configuration: Configuration): AuthenticatorService[CookieAuthenticator] = {
+      val config = configuration.underlying.as[CookieAuthenticatorSettings]("silhouette.authenticator")
+      new CookieAuthenticatorService(config, None, cookieSigner, authenticatorEncoder, fingerprintGenerator, idGenerator, clock)
     }
   }
 
   object SilhouetteEnvironment {
     def apply(
       userService: SilhouetteIdentityService,
-      authenticatorService: AuthenticatorService[JWTAuthenticator],
+      authenticatorService: AuthenticatorService[CookieAuthenticator],
       eventBus: EventBus
     ): Environment[DefaultEnv] = {
       Environment[DefaultEnv](userService, authenticatorService, Seq(), eventBus)
