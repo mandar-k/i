@@ -14,8 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 class ViewController(
   val messagesApi: MessagesApi,
-  silhouette: Silhouette[DefaultEnv],
-  socialProviderRegistry: SocialProviderRegistry
+  silhouette: Silhouette[DefaultEnv]
 )
     extends Controller {
 
@@ -36,7 +35,7 @@ class ViewController(
   }
 
   def signin = Action.async { implicit request =>
-    Future.successful(Ok(views.html.signIn(SignInForm.form, socialProviderRegistry)))
+    Future.successful(Ok(views.html.signIn(SignInForm.form)))
   }
 
 }

@@ -24,8 +24,6 @@ import play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt._
 import sbtassembly.AssemblyPlugin.autoImport._
-import webscalajs.WebScalaJS.autoImport._
-
 import webscalajs.WebScalaJS.autoImport.{scalaJSPipeline, devCommands, scalaJSProjects}
 
 object Server {

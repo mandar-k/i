@@ -36,7 +36,8 @@ class AuthController(
     clock: Clock, keeperService: KeeperService
 )(implicit val ec: ExecutionContext) extends AbstractController() {
   def signin = Action.async(parse.json) { implicit request =>
-    unmarshalJsValue[InitializeSession](request) { data =>
+    Future.successful(Ok(""))
+    /*unmarshalJsValue[InitializeSession](request) { data =>
       credentialsProvider.authenticate(Credentials(data.email, data.password)).flatMap { loginInfo =>
         silhouetteIdentityService.retrieve(loginInfo).flatMap {
           case Some(user) => for {
@@ -56,7 +57,7 @@ class AuthController(
     }.recoverTotal {
       case error =>
         Future.successful(Unauthorized(Json.obj("message" -> Messages("invalid.credentials"))))
-    }
+    }*/
   }
 
   private def authenticatorWithRememberMe(authenticator: CookieAuthenticator, rememberMe: Boolean) = {

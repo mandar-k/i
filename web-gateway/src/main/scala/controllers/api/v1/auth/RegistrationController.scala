@@ -9,14 +9,15 @@ import controllers.api.v1.AbstractController
 import play.api.mvc.Action
 import silhouetteservices.SilhouetteIdentityService
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * Created by shubham.k on 27-02-2017.
  */
-class RegistrationController(silhouetteIdentityService: SilhouetteIdentityService) extends AbstractController {
+class RegistrationController(silhouetteIdentityService: SilhouetteIdentityService)(implicit val ec: ExecutionContext) extends AbstractController {
   def signup = Action.async(parse.json) { implicit request =>
-    unmarshalJsValue[CreateUser](request) {
+    Future.successful(Ok(""))
+    /*unmarshalJsValue[CreateUser](request) {
       data =>
         {
           val loginInfo = LoginInfo(CredentialsProvider.ID, data.email.toLowerCase)
@@ -52,6 +53,6 @@ class RegistrationController(silhouetteIdentityService: SilhouetteIdentityServic
               }
           }
         }
-    }
+    }*/
   }
 }
