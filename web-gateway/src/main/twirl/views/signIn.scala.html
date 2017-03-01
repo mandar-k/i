@@ -5,7 +5,7 @@
 @main(Messages("sign.in.title")) {
 <fieldset class="col-md-6 col-md-offset-3">
     <legend>@Messages("sign.in.credentials")</legend>
-    @helper.form(action = controllers.api.v1.auth.AuthController.signin(),Symbol("data-toggle")-> "validator") {
+    @helper.form(action = controllers.api.v1.auth.routes.AuthController.signin(),Symbol("data-toggle")-> "validator") {
     @b3.inputWrapped( "email", signInForm("email"), 'placeholder -> "example@mail.com" ,'class->"input-lg",Symbol("required")->"true",Symbol("data-error")->Messages("email.error")) { input =>
     @input
     <div  class="help-block with-errors"></div>

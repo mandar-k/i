@@ -5,7 +5,7 @@
 @main(Messages("sign.up.title")) {
 <fieldset class="col-md-6 col-md-offset-3">
     <legend>@Messages("sign.up.account")</legend>
-    @helper.form(action = controllers.api.v1.auth.RegistrationController.signup(),Symbol("data-toggle")-> "validator") {
+    @helper.form(action = controllers.api.v1.auth.routes.RegistrationController.signup(),Symbol("data-toggle")-> "validator") {
     @b3.inputWrapped( "text", signUpForm("userName"), 'placeholder -> Messages("userName") ,'class->"input-lg",Symbol("required")->"true",Symbol("data-error")->Messages("userName.error")) { input =>
     @input
     <div  class="help-block with-errors"></div>

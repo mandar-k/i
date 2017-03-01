@@ -8,9 +8,7 @@ import com.livelygig.product.content.api.ContentService
 import com.livelygig.product.emailnotifications.api.EmailNotificationsService
 import com.livelygig.product.keeper.api.KeeperService
 import com.livelygig.product.userprofile.api.UserProfileService
-import com.mohiva.play.silhouette.api.{Silhouette, SilhouetteProvider}
 import silhouetteservices.SilhouetteIdentityService
-import play.api.i18n.I18nComponents
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Mode}
 import controllers.api.v1.auth._
 import controllers.api.v1._
@@ -25,7 +23,7 @@ import play.api.ApplicationLoader.Context
 import router.Routes
 
 abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext(context)
-    with I18nComponents
+
     with SilhouetteModule
     with LagomServiceClientComponents {
 
@@ -84,8 +82,4 @@ class WebGatewayLoader extends ApplicationLoader {
         override def serviceLocator = NoServiceLocator
       }.application
   }
-}
-
-trait ServiceWiring {
-
 }

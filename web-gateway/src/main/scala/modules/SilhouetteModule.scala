@@ -21,6 +21,7 @@ import utils.auth.DefaultEnv
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.services._
 import play.api.cache.{CacheApi, EhCacheComponents}
+import play.api.i18n.I18nComponents
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 

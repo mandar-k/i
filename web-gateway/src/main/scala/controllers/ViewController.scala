@@ -1,22 +1,22 @@
 package controllers
 
 import com.mohiva.play.silhouette.api.Silhouette
-import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import forms.{SignInForm, SignUpForm}
-import play.api.i18n.MessagesApi
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, Controller}
 import utils.auth.DefaultEnv
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{Future}
 
 /**
  * Created by shubham.k on 27-02-2017.
  */
 class ViewController(
   val messagesApi: MessagesApi,
-  silhouette: Silhouette[DefaultEnv]
+  silhouette: Silhouette[DefaultEnv],
+  implicit val webJarAssets: WebJarAssets
 )
-    extends Controller {
+    extends Controller with I18nSupport {
 
   def index = Action.async { implicit request =>
     Future.successful(Ok(views.html.home()))
